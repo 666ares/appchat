@@ -1,13 +1,12 @@
 package umu.tds.appchat.appchat;
 
-/**
- * Hello world!
- *
- */
+import gui.LoginView;
+
 public class App 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+    	LoginView login = new LoginView();
+    	login.mostrarVentana();
     }
 }
