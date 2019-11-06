@@ -24,9 +24,10 @@ public class LoginView {
 	private void initialize() {
 		frmLoginGestorEventos = new JFrame();
 		frmLoginGestorEventos.setTitle("Login AppChat");
-		frmLoginGestorEventos.setBounds(100, 100, 458, 301);
+		frmLoginGestorEventos.setBounds(100, 100, 458, 350);
 		frmLoginGestorEventos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginGestorEventos.getContentPane().setLayout(new BorderLayout(0, 0));
+		frmLoginGestorEventos.setResizable(false);
 		
 		JPanel panel_center = new JPanel();
 		frmLoginGestorEventos.getContentPane().add(panel_center, BorderLayout.CENTER);
@@ -37,7 +38,7 @@ public class LoginView {
 		gbl_panel_center.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_center.setLayout(gbl_panel_center);
 		
-		JLabel lblUsuario = new JLabel("Usuario : ");
+		JLabel lblUsuario = new JLabel("Usuario: ");
 		GridBagConstraints gbc_lblUsuario = new GridBagConstraints();
 		gbc_lblUsuario.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsuario.anchor = GridBagConstraints.EAST;
@@ -55,7 +56,7 @@ public class LoginView {
 		panel_center.add(textLogin, gbc_textLogin);
 		textLogin.setColumns(10);
 		
-		JLabel lblCalve = new JLabel("Clave : ");
+		JLabel lblCalve = new JLabel("Clave: ");
 		GridBagConstraints gbc_lblCalve = new GridBagConstraints();
 		gbc_lblCalve.anchor = GridBagConstraints.EAST;
 		gbc_lblCalve.insets = new Insets(0, 0, 5, 5);
