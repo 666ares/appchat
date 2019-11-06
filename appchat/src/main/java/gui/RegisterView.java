@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import com.toedter.calendar.JCalendar;
+
 @SuppressWarnings("serial")
 public class RegisterView extends JPanel {
 	static final int ANCHOW=400;
@@ -115,6 +117,9 @@ public class RegisterView extends JPanel {
 		linea_3.add(lblDNI); linea_3.add(txtDNI); linea_3.add(lblDNIError);
 		
 		/*linea 4*/
+		JCalendar cal = new JCalendar();
+		cal.setBounds(60, 20, 200, 150);
+		linea_4.add(cal);
 		lblEdad = new JLabel("Edad :",JLabel.RIGHT); fixedSize(lblEdad,75,20);
 		txtEdad = new JTextField(); fixedSize(txtEdad,60,20);
 		lblEdadError=new JLabel("La edad es obligatoria",JLabel.LEFT); fixedSize(lblEdadError,150,15);
