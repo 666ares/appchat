@@ -79,7 +79,8 @@ public class LoginView {
 				boolean login = true;
 				// TODO Comprobar si existe el usuario en la base de datos
 				if (login) {
-						PrincipalView window = new PrincipalView();
+						//PrincipalView window = new PrincipalView();
+						MainView window = new MainView();
 						window.setVisible(true);
 						frmLoginGestorEventos.dispose();
 				} else
