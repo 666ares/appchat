@@ -4,10 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +20,13 @@ import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
 import javax.swing.JList;
+import java.awt.Component;
+import javax.swing.JToggleButton;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import javax.swing.Box;
 
 public class MainView extends JFrame {
 
@@ -52,31 +62,84 @@ public class MainView extends JFrame {
 		layeredPane.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		
-		JButton btnNewButton = new JButton("New button");
+		ImageIcon icon = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\profile_picture.png");
+		Image imageIcon = icon.getImage();
+		Image newImage = imageIcon.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnNewButton = new JButton("Usuario");
+		btnNewButton.setIcon(new ImageIcon(newImage));
+		btnNewButton.setOpaque(false);
+		btnNewButton.setContentAreaFilled(false);
+		btnNewButton.setBorderPainted(false);
+		btnNewButton.setFocusPainted(false);
 		panel.add(btnNewButton);
 		
-		JButton btnNewButton_3 = new JButton("New button");
+		panel.add(Box.createHorizontalStrut(75));
+		
+		ImageIcon icon2 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\status_icon.png");
+		Image imageIcon2 = icon2.getImage();
+		Image newImage2 = imageIcon2.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnNewButton_3 = new JButton();
+		btnNewButton_3.setIcon(new ImageIcon(newImage2));
+		btnNewButton_3.setOpaque(false);
+		btnNewButton_3.setContentAreaFilled(false);
+		btnNewButton_3.setBorderPainted(false);
+		btnNewButton_3.setFocusPainted(false);
 		panel.add(btnNewButton_3);
 		
-		JButton btnNewButton_4 = new JButton("New button");
+		ImageIcon icon3 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\3dots.jpg");
+		Image imageIcon3 = icon3.getImage();
+		Image newImage3 = imageIcon3.getScaledInstance(5, 20, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnNewButton_4 = new JButton();
+		btnNewButton_4.setIcon(new ImageIcon(newImage3));
+		btnNewButton_4.setOpaque(false);
+		btnNewButton_4.setContentAreaFilled(false);
+		btnNewButton_4.setBorderPainted(false);
+		btnNewButton_4.setFocusPainted(false);
 		panel.add(btnNewButton_4);
 		
-		JSeparator separator = new JSeparator();
-		panel.add(separator);
+		panel.add(Box.createHorizontalStrut(350));
 		
-		JButton btnNewButton_5 = new JButton("New button");
+		JButton btnNewButton_5 = new JButton("Usuario Chat");
 		panel.add(btnNewButton_5);
 		
-		JButton btnNewButton_2 = new JButton("New button");
+		ImageIcon icon4 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\lupa.jpg");
+		Image imageIcon4 = icon4.getImage();
+		Image newImage4 = imageIcon4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnNewButton_2 = new JButton();
+		btnNewButton_2.setIcon(new ImageIcon(newImage4));
+		btnNewButton_2.setOpaque(false);
+		btnNewButton_2.setContentAreaFilled(false);
+		btnNewButton_2.setBorderPainted(false);
+		btnNewButton_2.setFocusPainted(false);
 		panel.add(btnNewButton_2);
 		
-		JButton btnNewButton_1 = new JButton("New button");
+		ImageIcon icon5 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\3dots.jpg");
+		Image imageIcon5 = icon5.getImage();
+		Image newImage5 = imageIcon5.getScaledInstance(5, 20, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnNewButton_1 = new JButton();
+		btnNewButton_1.setIcon(new ImageIcon(newImage5));
+		btnNewButton_1.setOpaque(false);
+		btnNewButton_1.setContentAreaFilled(false);
+		btnNewButton_1.setBorderPainted(false);
+		btnNewButton_1.setFocusPainted(false);
 		panel.add(btnNewButton_1);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 55, 277, 452);
 		layeredPane.add(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JButton btnChat = new JButton("Chat 1");
+		panel_1.add(btnChat);
+		
+		JButton btnChat_1 = new JButton("Chat 2                                 <hora>");
+		btnChat_1.setToolTipText("");
+		panel_1.add(btnChat_1);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(297, 55, 558, 452);
@@ -85,7 +148,7 @@ public class MainView extends JFrame {
 		
 		JTextPane txtpnBienvenidoAAppchat = new JTextPane();
 		txtpnBienvenidoAAppchat.setFont(new Font("Tahoma", Font.BOLD, 24));
-		txtpnBienvenidoAAppchat.setText("Bienvenido a AppChat");
+		txtpnBienvenidoAAppchat.setText("                       Bienvenido a AppChat");
 		panel_2.add(txtpnBienvenidoAAppchat);
 	}
 }
