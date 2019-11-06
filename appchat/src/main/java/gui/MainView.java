@@ -13,7 +13,10 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import tds.BubbleText;
 
 import java.awt.Font;
 import javax.swing.JSeparator;
@@ -26,7 +29,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
+import tds.BubbleText;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import javax.swing.JTextField;
 
 public class MainView extends JFrame {
 
@@ -35,6 +43,7 @@ public class MainView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JTextField textField;
 	/**
 	 * Create the application.
 	 */
@@ -141,14 +150,61 @@ public class MainView extends JFrame {
 		btnChat_1.setToolTipText("");
 		panel_1.add(btnChat_1);
 		
+		//---------------------------------------CHAT
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(297, 55, 558, 452);
-		layeredPane.add(panel_2);
-		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
+		panel_2.setBounds(297, 55, 558, 419);
 		
-		JTextPane txtpnBienvenidoAAppchat = new JTextPane();
-		txtpnBienvenidoAAppchat.setFont(new Font("Tahoma", Font.BOLD, 24));
-		txtpnBienvenidoAAppchat.setText("                       Bienvenido a AppChat");
-		panel_2.add(txtpnBienvenidoAAppchat);
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		panel_2.setBorder(blackline);
+		
+		layeredPane.add(panel_2);
+		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+		
+		Component verticalStrut = Box.createVerticalStrut(20);
+		panel_2.add(verticalStrut);
+		
+		BubbleText burbuja;
+		burbuja = new BubbleText(panel_2, "Viva España", Color.GRAY, "Mi padre  ", BubbleText.SENT);
+		panel_2.add(burbuja);
+		
+		BubbleText burbuja2;
+		burbuja2 = new BubbleText(panel_2, "Y viva VOX", Color.GREEN, "Franco", BubbleText.RECEIVED);
+		panel_2.add(burbuja2);
+		
+		//----------------------------------------TEXTO
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(297, 474, 558, 33);
+		
+		layeredPane.add(panel_3);
+		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
+		
+		ImageIcon icon6 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\emoji.png");
+		Image imageIcon6 = icon6.getImage();
+		Image newImage6 = imageIcon6.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnd = new JButton();
+		btnd.setIcon(new ImageIcon(newImage6));
+		btnd.setOpaque(false);
+		btnd.setContentAreaFilled(false);
+		btnd.setBorderPainted(false);
+		btnd.setFocusPainted(false);
+		panel_3.add(btnd);
+		
+		textField = new JTextField();
+		panel_3.add(textField);
+		textField.setColumns(10);
+		
+		ImageIcon icon7 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\send.png");
+		Image imageIcon7 = icon7.getImage();
+		Image newImage7 = imageIcon7.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		
+		JButton btnEnviar = new JButton();
+		btnEnviar.setIcon(new ImageIcon(newImage7));
+		btnEnviar.setOpaque(false);
+		btnEnviar.setContentAreaFilled(false);
+		btnEnviar.setBorderPainted(false);
+		btnEnviar.setFocusPainted(false);
+		panel_3.add(btnEnviar);
+		
 	}
 }
