@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 public class LoginView {
 	private JFrame frmLoginGestorEventos;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField textLogin;
 	private JPasswordField textPassword;
 
@@ -24,7 +23,7 @@ public class LoginView {
 	 */
 	private void initialize() {
 		frmLoginGestorEventos = new JFrame();
-		frmLoginGestorEventos.setTitle("Login Gestor Eventos");
+		frmLoginGestorEventos.setTitle("Login AppChat");
 		frmLoginGestorEventos.setBounds(100, 100, 458, 301);
 		frmLoginGestorEventos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginGestorEventos.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -76,14 +75,11 @@ public class LoginView {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean login;
-				if (buttonGroup.getSelection().getActionCommand() == "Empresa")
-					 login = false;
-				else 
-					 login = false;
+				boolean login = true;
+				// TODO Comprobar si existe el usuario en la base de datos
 				if (login) {
-						//GestionEventosMainView window = new GestionEventosMainView();
-						//window.setVisible(true);
+						PrincipalView window = new PrincipalView();
+						window.setVisible(true);
 						frmLoginGestorEventos.dispose();
 				} else
 						JOptionPane.showMessageDialog(frmLoginGestorEventos,
@@ -101,7 +97,7 @@ public class LoginView {
 		JButton btnRegistro = new JButton("Registro");
 		btnRegistro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					frmLoginGestorEventos.setTitle("Registro Asistente");	
+					frmLoginGestorEventos.setTitle("Registro de Usuario");	
 					new RegisterView(frmLoginGestorEventos);
 			}
 		});
@@ -130,9 +126,9 @@ public class LoginView {
 		flowLayout.setVgap(15);
 		frmLoginGestorEventos.getContentPane().add(panel_north, BorderLayout.NORTH);
 		
-		JLabel lblGestorDeEventos = new JLabel("Gestor de Eventos");
-		lblGestorDeEventos.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		lblGestorDeEventos.setForeground(Color.BLUE);
+		JLabel lblGestorDeEventos = new JLabel("AppChat");
+		lblGestorDeEventos.setFont(new Font("HelveticaNeue", Font.BOLD, 30));
+		lblGestorDeEventos.setForeground(Color.BLACK);
 		panel_north.add(lblGestorDeEventos);
 	}
 	public void mostrarVentana() {

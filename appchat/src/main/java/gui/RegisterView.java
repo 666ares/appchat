@@ -43,7 +43,7 @@ public class RegisterView extends JPanel {
 	private JLabel lblUsuarioError;
 	private JLabel lblPasswordError;
 	
-	public RegisterView(JFrame frame){
+	public RegisterView	(JFrame frame){
 		ventana=frame;
 		jpanelAnterior = (JPanel) ventana.getContentPane();
 		
@@ -55,7 +55,7 @@ public class RegisterView extends JPanel {
 		
 		JPanel datosPersonales = new JPanel ();
 		datosPersonales.setLayout(new BoxLayout(datosPersonales,BoxLayout.Y_AXIS));
-		tabbedPane.addTab("Datos Asistente", null, datosPersonales, null);
+		tabbedPane.addTab("Datos Usuario", null, datosPersonales, null);
 		
 		JPanel linea_1=new JPanel(); /*Nombre*/
 		linea_1.setLayout(new FlowLayout(FlowLayout.LEFT)); fixedSize(linea_1,ANCHOW,25);
