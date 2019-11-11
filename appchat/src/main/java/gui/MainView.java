@@ -3,6 +3,8 @@ package gui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -24,6 +26,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
 import javax.swing.JList;
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.JToggleButton;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
@@ -138,24 +142,37 @@ public class MainView extends JFrame {
 		btnNewButton_1.setFocusPainted(false);
 		panel.add(btnNewButton_1);
 		
+		//--------------------------------------LISTA DE CHATS
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 55, 277, 452);
 		layeredPane.add(panel_1);
-		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
-		JButton btnChat = new JButton("Chat 1");
-		panel_1.add(btnChat);
+		Box chat1 = UserChat("Pipi Estrada", "Ooole oleee es viernesss");
+		panel_1.add(chat1);
 		
-		JButton btnChat_1 = new JButton("Chat 2                                 <hora>");
-		btnChat_1.setToolTipText("");
-		panel_1.add(btnChat_1);
+		Box chat2 = UserChat("Ruben Ortega", "Guapo, atento y homosexual");
+		panel_1.add(chat2);
 		
+		/*
+		ChatPanel chat1 = new ChatPanel("Usuario 1", "Eyeyeyeye");
+		panel_1.add(chat1);
+		
+		ChatPanel chat2 = new ChatPanel("Usuario 2", "Hola");
+		panel_1.add(chat2);
+		
+		ChatPanel chat3 = new ChatPanel("Usuario 3", "...");
+		panel_1.add(chat3);
+		
+		ChatPanel chat4 = new ChatPanel("Usuario 4", "Crack");
+		panel_1.add(chat4);
+		*/
 		//---------------------------------------CHAT
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(297, 55, 558, 419);
 		
-		Border blackline = BorderFactory.createLineBorder(Color.black);
-		panel_2.setBorder(blackline);
+		Border blackline2 = BorderFactory.createLineBorder(Color.black);
+		panel_2.setBorder(blackline2);
 		
 		layeredPane.add(panel_2);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
@@ -164,11 +181,11 @@ public class MainView extends JFrame {
 		panel_2.add(verticalStrut);
 		
 		BubbleText burbuja;
-		burbuja = new BubbleText(panel_2, "Viva España", Color.GRAY, "Mi padre  ", BubbleText.SENT);
+		burbuja = new BubbleText(panel_2, "Hola", Color.GRAY, "Yo  ", BubbleText.SENT);
 		panel_2.add(burbuja);
 		
 		BubbleText burbuja2;
-		burbuja2 = new BubbleText(panel_2, "Y viva VOX", Color.GREEN, "Franco", BubbleText.RECEIVED);
+		burbuja2 = new BubbleText(panel_2, "Ey", Color.GREEN, "Usuario 2", BubbleText.RECEIVED);
 		panel_2.add(burbuja2);
 		
 		//----------------------------------------TEXTO
@@ -207,4 +224,32 @@ public class MainView extends JFrame {
 		panel_3.add(btnEnviar);
 		
 	}
+	
+	Box UserChat(String nombreUser, String lastMensaje) {
+		Box chat = Box.createHorizontalBox();
+		chat.setPreferredSize(new Dimension(250, 80));
+		chat.setMinimumSize(new Dimension(250, 80));
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		chat.setBorder(blackline);
+		
+		ImageIcon userPic = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\profile_picture.png");
+		Image newImage8 = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon userPic2 = new ImageIcon(newImage8);
+		JLabel imageLabel = new JLabel(userPic2);
+		chat.add(imageLabel);
+		
+		Box userinfo = Box.createVerticalBox();
+		JLabel label = new JLabel(nombreUser);
+		label.setFont(new Font("Tahoma", Font.BOLD, 16));
+		userinfo.add(label);
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(10);
+		userinfo.add(verticalStrut_1);
+		userinfo.add(new JLabel(lastMensaje));
+		chat.add(userinfo);
+		return chat;
+	}
+	
+	
+	
 }
