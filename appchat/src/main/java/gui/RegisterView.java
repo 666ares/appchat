@@ -8,6 +8,8 @@ import javax.swing.*;
 
 import com.toedter.calendar.JDateChooser;
 
+import controlador.ControladorUsuarios;
+
 @SuppressWarnings("serial")
 public class RegisterView extends JPanel {
 	
@@ -219,20 +221,20 @@ public class RegisterView extends JPanel {
 				OK = checkFields();
 				if (OK) {
 					boolean registrado = false;
-					/*
-					 * registrado = ControladorAsistentes.getUnicaInstancia().registrarAsistente(
-					 * txtNombre.getText(), txtApellidos.getText(), txtDNI.getText(),
-					 * Integer.parseInt(txtEdad.getText()), txtMovil.getText(), txtEmail.getText(),
-					 * txtUsuario.getText(), new String(txtPassword.getPassword()));
-					 */
+					registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
+							txtNombre.getText(), fecha.getDate().toString(), txtEmail.getText(), txtMovil.getText(),
+							txtUsuario.getText(), new String(txtPassword.getPassword()));
+							
 					if (registrado) {
-						JOptionPane.showMessageDialog(ventana, "Asistente registrado correctamente.", "Registro",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(ventana, "Usuario registrado correctamente.", 
+															   "Registro",
+															   JOptionPane.INFORMATION_MESSAGE);
 						ventana.setContentPane(jpanelAnterior);
 						ventana.revalidate();
 					} else
 						JOptionPane.showMessageDialog(ventana, "No se ha podido llevar a cabo el registro.\n",
-								"Registro", JOptionPane.ERROR_MESSAGE);
+															   "Registro", 
+															   JOptionPane.ERROR_MESSAGE);
 					ventana.setTitle("Login Gestor Eventos");
 				}
 			}
@@ -279,12 +281,11 @@ public class RegisterView extends JPanel {
 			lblPasswordError.setVisible(true);
 			salida = false;
 		}
-		/*
-		 * Comprobar que no exista otro usuario con igual login if
-		 * (ControladorAsistentes.getUnicaInstancia().esAsistenteRegistrado(txtUsuario.
-		 * getText())) { lblUsuarioError.setText("Ya existe ese usuario");
-		 * lblUsuarioError.setVisible(true); salida=false; }
-		 */
+		if (ControladorUsuarios.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
+			lblUsuarioError.setText("Ya existe ese usuario.");
+			lblUsuarioError.setVisible(true);
+			salida = false;
+		}
 		return salida;
 	}
 

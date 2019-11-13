@@ -1,8 +1,8 @@
-package umu.tds.appchat.appchat;
+package umu.tds;
 
 import gui.LoginView;
 
-public class App 
+public class Lanzador 
 {
     public static void main( String[] args )
     {

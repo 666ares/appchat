@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 
+import controlador.ControladorUsuarios;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -77,9 +79,9 @@ public class LoginView {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean login = true;
-				// TODO Comprobar si existe el usuario en la base de datos
+				login = ControladorUsuarios.getUnicaInstancia().loginUsuario(
+						textLogin.getText(), new String(textPassword.getPassword()));
 				if (login) {
-						//PrincipalView window = new PrincipalView();
 						MainView window = new MainView();
 						window.setVisible(true);
 						frmLoginGestorEventos.dispose();
@@ -99,7 +101,7 @@ public class LoginView {
 		JButton btnRegistro = new JButton("Registro");
 		btnRegistro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					frmLoginGestorEventos.setTitle("Registro de Usuario");	
+					frmLoginGestorEventos.setTitle("Registro de usuario");	
 					new RegisterView(frmLoginGestorEventos);
 			}
 		});

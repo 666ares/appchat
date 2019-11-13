@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,34 +9,20 @@ import java.awt.Image;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JTextPane;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import tds.BubbleText;
 
 import java.awt.Font;
-import javax.swing.JSeparator;
-import javax.swing.JScrollPane;
-import javax.swing.JScrollBar;
-import javax.swing.JList;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.JToggleButton;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import tds.BubbleText;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import javax.swing.JTextField;
 
 public class MainView extends JFrame {
@@ -75,7 +60,7 @@ public class MainView extends JFrame {
 		layeredPane.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		
-		ImageIcon icon = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\profile_picture.png");
+		ImageIcon icon = new ImageIcon("icons/profile_picture.png");
 		Image imageIcon = icon.getImage();
 		Image newImage = imageIcon.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		
@@ -89,7 +74,7 @@ public class MainView extends JFrame {
 		
 		panel.add(Box.createHorizontalStrut(75));
 		
-		ImageIcon icon2 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\status_icon.png");
+		ImageIcon icon2 = new ImageIcon("icons/status_icon.png");
 		Image imageIcon2 = icon2.getImage();
 		Image newImage2 = imageIcon2.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		
@@ -101,7 +86,7 @@ public class MainView extends JFrame {
 		btnNewButton_3.setFocusPainted(false);
 		panel.add(btnNewButton_3);
 		
-		ImageIcon icon3 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\3dots.jpg");
+		ImageIcon icon3 = new ImageIcon("icons/3dots.jpg");
 		Image imageIcon3 = icon3.getImage();
 		Image newImage3 = imageIcon3.getScaledInstance(5, 20, java.awt.Image.SCALE_SMOOTH);
 		
@@ -118,7 +103,7 @@ public class MainView extends JFrame {
 		JButton btnNewButton_5 = new JButton("Usuario Chat");
 		panel.add(btnNewButton_5);
 		
-		ImageIcon icon4 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\lupa.jpg");
+		ImageIcon icon4 = new ImageIcon("icons/lupa.jpg");
 		Image imageIcon4 = icon4.getImage();
 		Image newImage4 = imageIcon4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		
@@ -130,7 +115,7 @@ public class MainView extends JFrame {
 		btnNewButton_2.setFocusPainted(false);
 		panel.add(btnNewButton_2);
 		
-		ImageIcon icon5 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\3dots.jpg");
+		ImageIcon icon5 = new ImageIcon("icons/3dots.jpg");
 		Image imageIcon5 = icon5.getImage();
 		Image newImage5 = imageIcon5.getScaledInstance(5, 20, java.awt.Image.SCALE_SMOOTH);
 		
