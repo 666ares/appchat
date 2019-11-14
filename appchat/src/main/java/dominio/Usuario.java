@@ -19,15 +19,6 @@ public class Usuario {
 		this.usuario = usuario;
 		this.password = password;
 	}
-	
-	public Usuario(String nombre, String email, 
-			String telefono, String usuario, String password) {
-		this.nombre = nombre;
-		this.email = email;
-		this.telefono = telefono;
-		this.usuario = usuario;
-		this.password = password;
-	}
 
 	public int getId() {
 		return id;
@@ -46,7 +37,6 @@ public class Usuario {
 	}
 
 	public String getFechaNacimiento() {
-		if (fechaNacimiento == null) return "Fecha no especificada.";
 		return fechaNacimiento;
 	}
 

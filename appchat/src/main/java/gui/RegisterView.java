@@ -238,18 +238,14 @@ public class RegisterView extends JPanel {
 				if (OK) {
 					boolean registrado = false;
 					
-					// Si especificó la fecha de nacimiento llamamos al constructor que
-					// tiene como parámetro la fecha
-					if (fecha.getDate() != null)
-						registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
-								txtNombre.getText(), fecha.getDate().toString(), txtEmail.getText(), txtMovil.getText(),
-								txtUsuario.getText(), new String(txtPassword.getPassword()));
+					registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
+							txtNombre.getText(),
+							(fecha.getDate() != null) ? fecha.getDate().toString() : "",
+							txtEmail.getText(),
+							txtMovil.getText(),
+							txtUsuario.getText(),
+							new String(txtPassword.getPassword()));
 							
-					else
-						registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
-								txtNombre.getText(), txtEmail.getText(), txtMovil.getText(),
-								txtUsuario.getText(), new String(txtPassword.getPassword()));
-					
 					if (registrado) {
 						JOptionPane.showMessageDialog(ventana, "Usuario registrado correctamente.", 
 															   "Registro",

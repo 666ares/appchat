@@ -55,18 +55,6 @@ public class ControladorUsuarios {
 		return true;
 	}
 	
-	public boolean registrarUsuario(String nombre, String email,
-			String telefono, String login, String password) {
-		if (esUsuarioRegistrado(login)) return false;
-
-		Usuario usuario = new Usuario(nombre, email, telefono, login, password);
-		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
-		usuarioDAO.create(usuario);
-
-		CatalogoUsuarios.getUnicaInstancia().addUsuario(usuario);	
-		return true;
-	}
-	
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getUsuario())) 
 			return false;
