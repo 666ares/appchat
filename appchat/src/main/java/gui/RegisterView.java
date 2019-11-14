@@ -13,8 +13,8 @@ import controlador.ControladorUsuarios;
 @SuppressWarnings("serial")
 public class RegisterView extends JPanel {
 	
-	static final int ANCHOW = 400;
-	static final int ALTOW = 350;
+	static final int ANCHOW = 430;
+	static final int ALTOW = 300;
 
 	private JFrame ventana;
 	private JLabel lblNombre;
@@ -25,6 +25,7 @@ public class RegisterView extends JPanel {
 	private JLabel lblUsuario;
 	private JLabel lblPassword;
 	private JLabel lblPasswordChk;
+	private JLabel lblMensajeError;
 	private JTextField txtNombre;
 	private JTextField txtMovil;
 	private JTextField txtEmail;
@@ -36,11 +37,11 @@ public class RegisterView extends JPanel {
 
 	private JPanel jpanelAnterior;
 	private JLabel lblNombreError;
-	private JLabel lblEdadError;
 	private JLabel lblMovilError;
 	private JLabel lblEmailError;
 	private JLabel lblUsuarioError;
 	private JLabel lblPasswordError;
+	private JLabel lblPasswordChkError;
 
 	public RegisterView(JFrame frame) {
 		ventana = frame;
@@ -89,14 +90,20 @@ public class RegisterView extends JPanel {
 		/* Contraseña */
 		JPanel linea_6 = new JPanel();
 		linea_6.setLayout(new FlowLayout(FlowLayout.LEFT));
-		fixedSize(linea_6, ANCHOW, 25);
+		fixedSize(linea_6, ANCHOW, 35);
 		linea_6.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
 		/* Botones */
 		JPanel linea_7 = new JPanel();
 		linea_7.setLayout(new FlowLayout(FlowLayout.LEFT));
-		fixedSize(linea_7, ANCHOW, 50);
+		fixedSize(linea_7, ANCHOW, 35);
 		linea_7.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+		
+		/* Mensajes de error inferiores */
+		JPanel linea_8 = new JPanel();
+		linea_8.setLayout(new FlowLayout(FlowLayout.LEFT));
+		fixedSize(linea_8, ANCHOW, 25);
+		linea_8.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
 		///////////////////////////////////////////////
 		
@@ -104,32 +111,29 @@ public class RegisterView extends JPanel {
 		lblNombre = new JLabel("Nombre:", JLabel.RIGHT);
 		fixedSize(lblNombre, 75, 20);
 		txtNombre = new JTextField();
-		fixedSize(txtNombre, 270, 20);
-		lblNombreError = new JLabel("El nombre es obligatorio", JLabel.RIGHT);
-		fixedSize(lblNombreError, 224, 15);
+		fixedSize(txtNombre, 210, 20);
+		lblNombreError = new JLabel("*", JLabel.RIGHT);
+		fixedSize(lblNombreError, 7, 8);
 		lblNombreError.setForeground(Color.RED);
 		linea_1.add(lblNombre);
 		linea_1.add(txtNombre);
+		linea_1.add(lblNombreError);
 
 		/* linea 2 */
 		fecha = new JDateChooser();
 		fixedSize(fecha, 150, 20);
-		lblEdad = new JLabel("Edad:", JLabel.RIGHT);
+		lblEdad = new JLabel("Fecha nacimiento:", JLabel.RIGHT);
 		fixedSize(lblEdad, 75, 20);
-		lblEdadError = new JLabel("La edad es obligatoria", JLabel.RIGHT);
-		fixedSize(lblEdadError, 210, 15);
-		lblEdadError.setForeground(Color.RED);
 		linea_2.add(lblEdad);
 		linea_2.add(fecha);
-		linea_2.add(lblEdadError);
 
 		/* linea 3 */
 		lblEmail = new JLabel("Email:", JLabel.RIGHT);
 		fixedSize(lblEmail, 75, 20);
 		txtEmail = new JTextField();
-		fixedSize(txtEmail, 125, 20);
-		lblEmailError = new JLabel("El email es obligatorio", JLabel.RIGHT);
-		fixedSize(lblEmailError, 210, 15);
+		fixedSize(txtEmail, 210, 20);
+		lblEmailError = new JLabel("*", JLabel.RIGHT);
+		fixedSize(lblEmailError, 7, 8);
 		lblEmailError.setForeground(Color.RED);
 		linea_3.add(lblEmail);
 		linea_3.add(txtEmail);
@@ -139,9 +143,9 @@ public class RegisterView extends JPanel {
 		lblMovil = new JLabel("Teléfono:", JLabel.RIGHT);
 		fixedSize(lblMovil, 75, 20);
 		txtMovil = new JTextField();
-		fixedSize(txtMovil, 125, 20);
-		lblMovilError = new JLabel("El teléfono es obligatorio", JLabel.RIGHT);
-		fixedSize(lblMovilError, 224, 15);
+		fixedSize(txtMovil, 105, 20);
+		lblMovilError = new JLabel("*", JLabel.RIGHT);
+		fixedSize(lblMovilError, 7, 8);
 		lblMovilError.setForeground(Color.RED);
 		linea_4.add(lblMovil);
 		linea_4.add(txtMovil);
@@ -151,9 +155,9 @@ public class RegisterView extends JPanel {
 		lblUsuario = new JLabel("Usuario:", JLabel.RIGHT);
 		fixedSize(lblUsuario, 75, 20);
 		txtUsuario = new JTextField();
-		fixedSize(txtUsuario, 125, 20);
-		lblUsuarioError = new JLabel("El usuario ya existe", JLabel.RIGHT);
-		fixedSize(lblUsuarioError, 220, 15);
+		fixedSize(txtUsuario, 105, 20);
+		lblUsuarioError = new JLabel("*", JLabel.RIGHT);
+		fixedSize(lblUsuarioError, 7, 8);
 		lblUsuarioError.setForeground(Color.RED);
 		linea_5.add(lblUsuario);
 		linea_5.add(txtUsuario);
@@ -163,44 +167,56 @@ public class RegisterView extends JPanel {
 		lblPassword = new JLabel("Contraseña:", JLabel.RIGHT);
 		fixedSize(lblPassword, 75, 20);
 		txtPassword = new JPasswordField();
-		fixedSize(txtPassword, 100, 20);
+		fixedSize(txtPassword, 105, 20);
+		
 		lblPasswordChk = new JLabel("Repetir:", JLabel.RIGHT);
-		fixedSize(lblPasswordChk, 75, 20);
+		fixedSize(lblPasswordChk, 50, 20);
 		txtPasswordChk = new JPasswordField();
-		fixedSize(txtPasswordChk, 100, 20);
-		lblPasswordError = new JLabel("Error al introducir las contraseñas", JLabel.CENTER);
-		fixedSize(lblPasswordError, ANCHOW, 15);
+		fixedSize(txtPasswordChk, 105, 20);
+		
+		lblPasswordError = new JLabel("*", JLabel.CENTER);
+		fixedSize(lblPasswordError, 7, 8);
 		lblPasswordError.setForeground(Color.RED);
+		
+		lblPasswordChkError = new JLabel("*", JLabel.CENTER);
+		fixedSize(lblPasswordChkError, 7, 8);
+		lblPasswordChkError.setForeground(Color.RED);
+		
 		linea_6.add(lblPassword);
 		linea_6.add(txtPassword);
+		linea_6.add(lblPasswordError);
 		linea_6.add(lblPasswordChk);
 		linea_6.add(txtPasswordChk);
+		linea_6.add(lblPasswordChkError);
 
 		/* linea 7 */
 		btnVolver = new JButton("Volver");
-		fixedSize(btnVolver, 90, 30);
+		fixedSize(btnVolver, 105, 30);
 		btnRegistrar = new JButton("Registrar");
-		fixedSize(btnRegistrar, 90, 30);
+		fixedSize(btnRegistrar, 105, 30);
 		linea_7.add(Box.createHorizontalStrut(75));
 		linea_7.add(btnVolver);
-		linea_7.add(Box.createHorizontalStrut(80));
+		linea_7.add(Box.createHorizontalStrut(50));
 		linea_7.add(btnRegistrar);
+		
+		/* linea 8 */
+		lblMensajeError = new JLabel("* Los campos indicados son obligatorios", JLabel.RIGHT);
+		fixedSize(lblMensajeError, 315, 15);
+		lblMensajeError.setForeground(Color.RED);
+		linea_8.add(lblMensajeError);
+		
 
 		ocultarErrores();
 
+		datosPersonales.add(Box.createRigidArea(new Dimension(20, 20)));
 		datosPersonales.add(linea_1);
-		datosPersonales.add(lblNombreError);
 		datosPersonales.add(linea_2);
-		datosPersonales.add(lblEdadError);
 		datosPersonales.add(linea_3);
-		datosPersonales.add(lblEmailError);
 		datosPersonales.add(linea_4);
-		datosPersonales.add(lblMovilError);
 		datosPersonales.add(linea_5);
-		datosPersonales.add(lblUsuarioError);
 		datosPersonales.add(linea_6);
-		datosPersonales.add(lblPasswordError);
 		datosPersonales.add(linea_7);
+		datosPersonales.add(linea_8);
 
 		ventana.setContentPane(this);
 		ventana.revalidate(); /* redibujar con el nuevo JPanel */
@@ -221,10 +237,19 @@ public class RegisterView extends JPanel {
 				OK = checkFields();
 				if (OK) {
 					boolean registrado = false;
-					registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
-							txtNombre.getText(), fecha.getDate().toString(), txtEmail.getText(), txtMovil.getText(),
-							txtUsuario.getText(), new String(txtPassword.getPassword()));
+					
+					// Si especificó la fecha de nacimiento llamamos al constructor que
+					// tiene como parámetro la fecha
+					if (fecha.getDate() != null)
+						registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
+								txtNombre.getText(), fecha.getDate().toString(), txtEmail.getText(), txtMovil.getText(),
+								txtUsuario.getText(), new String(txtPassword.getPassword()));
 							
+					else
+						registrado = ControladorUsuarios.getUnicaInstancia().registrarUsuario(
+								txtNombre.getText(), txtEmail.getText(), txtMovil.getText(),
+								txtUsuario.getText(), new String(txtPassword.getPassword()));
+					
 					if (registrado) {
 						JOptionPane.showMessageDialog(ventana, "Usuario registrado correctamente.", 
 															   "Registro",
@@ -246,46 +271,70 @@ public class RegisterView extends JPanel {
 	 * Comprueba que los campos de registro estén bien
 	 */
 	private boolean checkFields() {
+		
 		boolean salida = true;
+		boolean todosCamposCompletados = true;
+		
 		/* borrar todos los errores en pantalla */
 		ocultarErrores();
+		
 		if (txtNombre.getText().trim().isEmpty()) {
 			lblNombreError.setVisible(true);
+			lblMensajeError.setVisible(true);
 			salida = false;
-		}
-		if (fecha.getDate() == null) {
-			lblEdadError.setVisible(true);
-			salida = false;
+			todosCamposCompletados = false;
 		}
 		if (txtEmail.getText().trim().isEmpty()) {
 			lblEmailError.setVisible(true);
+			lblMensajeError.setVisible(true);
 			salida = false;
+			todosCamposCompletados = false;
 		}
 		if (txtMovil.getText().trim().isEmpty()) {
 			lblMovilError.setVisible(true);
+			lblMensajeError.setVisible(true);
 			salida = false;
+			todosCamposCompletados = false;
 		}
 		if (txtUsuario.getText().trim().isEmpty()) {
-			lblUsuarioError.setText("El usuario es obligatorio");
 			lblUsuarioError.setVisible(true);
+			lblMensajeError.setVisible(true);
 			salida = false;
+			todosCamposCompletados = false;
 		}
+		
 		String password = new String(txtPassword.getPassword());
 		String password2 = new String(txtPasswordChk.getPassword());
+		
 		if (password.equals("")) {
-			lblPasswordError.setText("La contraseña no puede estar en blanco");
 			lblPasswordError.setVisible(true);
+			lblMensajeError.setVisible(true);
 			salida = false;
-		} else if (!password.equals(password2)) {
-			lblPasswordError.setText("Las contraseñas no coinciden");
-			lblPasswordError.setVisible(true);
+			todosCamposCompletados = false;
+		} 
+		
+		if (password2.equals("")) {
+			lblPasswordChkError.setVisible(true);
+			lblMensajeError.setVisible(true);
+			salida = false;
+			todosCamposCompletados = false;
+		}	
+		
+		if (todosCamposCompletados && !password.equals(password2)) {
+			lblMensajeError.setText("* Las contraseñas no coinciden");
+			fixedSize(lblMensajeError, 305, 15);
+			lblMensajeError.setVisible(true);
 			salida = false;
 		}
-		if (ControladorUsuarios.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
-			lblUsuarioError.setText("Ya existe ese usuario.");
-			lblUsuarioError.setVisible(true);
+		
+		if (todosCamposCompletados && ControladorUsuarios.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
+			lblMensajeError.setText("* Ese usuario ya existe");
+			fixedSize(lblMensajeError, 270, 15);
+			lblMensajeError.setVisible(true);
+
 			salida = false;
 		}
+		
 		return salida;
 	}
 
@@ -294,11 +343,12 @@ public class RegisterView extends JPanel {
 	 */
 	private void ocultarErrores() {
 		lblNombreError.setVisible(false);
-		lblEdadError.setVisible(false);
 		lblEmailError.setVisible(false);
 		lblMovilError.setVisible(false);
 		lblUsuarioError.setVisible(false);
 		lblPasswordError.setVisible(false);
+		lblPasswordChkError.setVisible(false);
+		lblMensajeError.setVisible(false);
 	}
 
 	/**
