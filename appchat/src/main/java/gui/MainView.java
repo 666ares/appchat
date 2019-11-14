@@ -180,7 +180,7 @@ public class MainView extends JFrame {
 		layeredPane.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		
-		ImageIcon icon6 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\emoji.png");
+		ImageIcon icon6 = new ImageIcon("icons/emoji.png");
 		Image imageIcon6 = icon6.getImage();
 		Image newImage6 = imageIcon6.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
 		
@@ -196,7 +196,7 @@ public class MainView extends JFrame {
 		panel_3.add(textField);
 		textField.setColumns(10);
 		
-		ImageIcon icon7 = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\send.png");
+		ImageIcon icon7 = new ImageIcon("icons/send.png");
 		Image imageIcon7 = icon7.getImage();
 		Image newImage7 = imageIcon7.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 		
@@ -217,7 +217,7 @@ public class MainView extends JFrame {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		chat.setBorder(blackline);
 		
-		ImageIcon userPic = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\profile_picture.png");
+		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
 		Image newImage8 = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage8);
 		JLabel imageLabel = new JLabel(userPic2);

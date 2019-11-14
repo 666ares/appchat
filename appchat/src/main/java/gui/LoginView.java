@@ -26,7 +26,7 @@ public class LoginView {
 	private void initialize() {
 		frmLoginGestorEventos = new JFrame();
 		frmLoginGestorEventos.setTitle("Login AppChat");
-		frmLoginGestorEventos.setBounds(100, 100, 458, 350);
+		frmLoginGestorEventos.setBounds(100, 100, 430, 300);
 		frmLoginGestorEventos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginGestorEventos.getContentPane().setLayout(new BorderLayout(0, 0));
 		frmLoginGestorEventos.setResizable(false);
