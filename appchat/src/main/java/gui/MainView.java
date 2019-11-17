@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -13,6 +15,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
+import gui.elements.BotonChat;
+import gui.elements.BoxChat;
+import gui.elements.Buscador;
+import gui.elements.Estados;
+import gui.elements.InfoUChat;
+import gui.elements.InfoUsuario;
+import gui.elements.OpcionesChat;
+import gui.elements.OpcionesUser;
 import tds.BubbleText;
 
 import java.awt.Font;
@@ -60,72 +70,69 @@ public class MainView extends JFrame {
 		layeredPane.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		
-		ImageIcon icon = new ImageIcon("icons/profile_picture.png");
-		Image imageIcon = icon.getImage();
-		Image newImage = imageIcon.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
-		
-		JButton btnNewButton = new JButton("Usuario");
-		btnNewButton.setIcon(new ImageIcon(newImage));
-		btnNewButton.setOpaque(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setFocusPainted(false);
-		panel.add(btnNewButton);
+		//Boton Mi Usuario
+		BotonChat boton1 = new BotonChat("icons/profile_picture.png", "Usuario");
+		boton1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				InfoUsuario infousuario = new InfoUsuario("Usuario", "Gang Gang");
+				infousuario.makeVisible();
+			}
+		});
+		panel.add(boton1);
 		
 		panel.add(Box.createHorizontalStrut(75));
 		
-		ImageIcon icon2 = new ImageIcon("icons/status_icon.png");
-		Image imageIcon2 = icon2.getImage();
-		Image newImage2 = imageIcon2.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		//Status
+		BotonChat boton2 = new BotonChat("icons/status_icon.png");
+		boton2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Estados estados = new Estados();
+				estados.makeVisible();
+			}
+		});
+		panel.add(boton2);
 		
-		JButton btnNewButton_3 = new JButton();
-		btnNewButton_3.setIcon(new ImageIcon(newImage2));
-		btnNewButton_3.setOpaque(false);
-		btnNewButton_3.setContentAreaFilled(false);
-		btnNewButton_3.setBorderPainted(false);
-		btnNewButton_3.setFocusPainted(false);
-		panel.add(btnNewButton_3);
+		//Opciones de Usuario
+		BotonChat boton3 = new BotonChat("icons/3dots.jpg", 5, 20);
+		boton3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OpcionesUser opciones = new OpcionesUser();
+				opciones.makeVisible();
+			}
+		});
+		panel.add(boton3);
 		
-		ImageIcon icon3 = new ImageIcon("icons/3dots.jpg");
-		Image imageIcon3 = icon3.getImage();
-		Image newImage3 = imageIcon3.getScaledInstance(5, 20, java.awt.Image.SCALE_SMOOTH);
+		panel.add(Box.createHorizontalStrut(310));
 		
-		JButton btnNewButton_4 = new JButton();
-		btnNewButton_4.setIcon(new ImageIcon(newImage3));
-		btnNewButton_4.setOpaque(false);
-		btnNewButton_4.setContentAreaFilled(false);
-		btnNewButton_4.setBorderPainted(false);
-		btnNewButton_4.setFocusPainted(false);
-		panel.add(btnNewButton_4);
+		//Boton Usuario Chat
+		BotonChat boton4 = new BotonChat("icons/profile_picture.png", "Usuario Chat");
+		boton4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				InfoUChat infochat = new InfoUChat("Usuario Chat", "Saludoss");
+				infochat.makeVisible();
+			}
+		});
+		panel.add(boton4);
 		
-		panel.add(Box.createHorizontalStrut(350));
+		//Boton Buscador
+		BotonChat boton5 = new BotonChat("icons/lupa.jpg");
+		boton5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Buscador buscador = new Buscador();
+				buscador.makeVisible();
+			}
+		});
+		panel.add(boton5);
 		
-		JButton btnNewButton_5 = new JButton("Usuario Chat");
-		panel.add(btnNewButton_5);
-		
-		ImageIcon icon4 = new ImageIcon("icons/lupa.jpg");
-		Image imageIcon4 = icon4.getImage();
-		Image newImage4 = imageIcon4.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
-		
-		JButton btnNewButton_2 = new JButton();
-		btnNewButton_2.setIcon(new ImageIcon(newImage4));
-		btnNewButton_2.setOpaque(false);
-		btnNewButton_2.setContentAreaFilled(false);
-		btnNewButton_2.setBorderPainted(false);
-		btnNewButton_2.setFocusPainted(false);
-		panel.add(btnNewButton_2);
-		
-		ImageIcon icon5 = new ImageIcon("icons/3dots.jpg");
-		Image imageIcon5 = icon5.getImage();
-		Image newImage5 = imageIcon5.getScaledInstance(5, 20, java.awt.Image.SCALE_SMOOTH);
-		
-		JButton btnNewButton_1 = new JButton();
-		btnNewButton_1.setIcon(new ImageIcon(newImage5));
-		btnNewButton_1.setOpaque(false);
-		btnNewButton_1.setContentAreaFilled(false);
-		btnNewButton_1.setBorderPainted(false);
-		btnNewButton_1.setFocusPainted(false);
-		panel.add(btnNewButton_1);
+		//Boton Opciones de Chat
+		BotonChat boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
+		boton6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OpcionesChat opciones = new OpcionesChat();
+				opciones.makeVisible();
+			}
+		});
+		panel.add(boton6);
 		
 		//--------------------------------------LISTA DE CHATS
 		JPanel panel_1 = new JPanel();
@@ -133,25 +140,12 @@ public class MainView extends JFrame {
 		layeredPane.add(panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
-		Box chat1 = UserChat("Pipi Estrada", "Ooole oleee es viernesss");
+		BoxChat chat1 = new BoxChat("Pipi Estrada", "Ooole oleee es viernesss");
 		panel_1.add(chat1);
 		
-		Box chat2 = UserChat("Ruben Ortega", "Guapo, atento y homosexual");
+		BoxChat chat2 = new BoxChat("Ruben Ortega", "Guapo, atento y homosexual");
 		panel_1.add(chat2);
 		
-		/*
-		ChatPanel chat1 = new ChatPanel("Usuario 1", "Eyeyeyeye");
-		panel_1.add(chat1);
-		
-		ChatPanel chat2 = new ChatPanel("Usuario 2", "Hola");
-		panel_1.add(chat2);
-		
-		ChatPanel chat3 = new ChatPanel("Usuario 3", "...");
-		panel_1.add(chat3);
-		
-		ChatPanel chat4 = new ChatPanel("Usuario 4", "Crack");
-		panel_1.add(chat4);
-		*/
 		//---------------------------------------CHAT
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(297, 55, 558, 419);
@@ -180,61 +174,16 @@ public class MainView extends JFrame {
 		layeredPane.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		
-		ImageIcon icon6 = new ImageIcon("icons/emoji.png");
-		Image imageIcon6 = icon6.getImage();
-		Image newImage6 = imageIcon6.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
-		
-		JButton btnd = new JButton();
-		btnd.setIcon(new ImageIcon(newImage6));
-		btnd.setOpaque(false);
-		btnd.setContentAreaFilled(false);
-		btnd.setBorderPainted(false);
-		btnd.setFocusPainted(false);
-		panel_3.add(btnd);
+		BotonChat boton7 = new BotonChat("icons/emoji.png", 25, 25);
+		panel_3.add(boton7);
 		
 		textField = new JTextField();
 		panel_3.add(textField);
 		textField.setColumns(10);
 		
-		ImageIcon icon7 = new ImageIcon("icons/send.png");
-		Image imageIcon7 = icon7.getImage();
-		Image newImage7 = imageIcon7.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
-		
-		JButton btnEnviar = new JButton();
-		btnEnviar.setIcon(new ImageIcon(newImage7));
-		btnEnviar.setOpaque(false);
-		btnEnviar.setContentAreaFilled(false);
-		btnEnviar.setBorderPainted(false);
-		btnEnviar.setFocusPainted(false);
-		panel_3.add(btnEnviar);
+		BotonChat boton8 = new BotonChat("icons/send.png");
+		panel_3.add(boton8);
 		
 	}
-	
-	Box UserChat(String nombreUser, String lastMensaje) {
-		Box chat = Box.createHorizontalBox();
-		chat.setPreferredSize(new Dimension(250, 80));
-		chat.setMinimumSize(new Dimension(250, 80));
-		Border blackline = BorderFactory.createLineBorder(Color.black);
-		chat.setBorder(blackline);
-		
-		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
-		Image newImage8 = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
-		ImageIcon userPic2 = new ImageIcon(newImage8);
-		JLabel imageLabel = new JLabel(userPic2);
-		chat.add(imageLabel);
-		
-		Box userinfo = Box.createVerticalBox();
-		JLabel label = new JLabel(nombreUser);
-		label.setFont(new Font("Tahoma", Font.BOLD, 16));
-		userinfo.add(label);
-		
-		Component verticalStrut_1 = Box.createVerticalStrut(10);
-		userinfo.add(verticalStrut_1);
-		userinfo.add(new JLabel(lastMensaje));
-		chat.add(userinfo);
-		return chat;
-	}
-	
-	
 	
 }
