@@ -10,10 +10,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
-public class BoxChat extends Box {
+public class BoxChat extends JButton {
 
 	/**
 	 * 
@@ -22,19 +23,18 @@ public class BoxChat extends Box {
 
 	public BoxChat(String nombreUser, String lastMensaje) {
 		//Constructor como un horizontalBox
-		super(BoxLayout.LINE_AXIS);
+		super();
 		
-		setPreferredSize(new Dimension(250, 80));
-		setMinimumSize(new Dimension(250, 80));
+		Box chat = new Box(BoxLayout.LINE_AXIS);
 		
-		Border blackline = BorderFactory.createLineBorder(Color.BLACK);
-		setBorder(blackline);
+		chat.setPreferredSize(new Dimension(277, 75));
+		chat.setMinimumSize(new Dimension(277, 75));
 		
 		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
 		Image newImage = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage);
 		JLabel imagelabel = new JLabel(userPic2);
-		add(imagelabel);
+		chat.add(imagelabel);
 		
 		Box userinfo = Box.createVerticalBox();
 		JLabel label = new JLabel(nombreUser);
@@ -44,23 +44,30 @@ public class BoxChat extends Box {
 		Component verticalStrut = Box.createVerticalStrut(10);
 		userinfo.add(verticalStrut);
 		userinfo.add(new JLabel(lastMensaje));
-		add(userinfo);	
+		chat.add(userinfo);	
+		
+		add(chat);
+		Border blackline = BorderFactory.createLineBorder(Color.BLACK);
+		setBorder(blackline);
+		
+		setOpaque(false);
+		setContentAreaFilled(false);
+		setFocusPainted(false);
 	}
 	
 	public BoxChat(ImageIcon userPic, String nombreUser, String lastMensaje) {
 		//Constructor como un horizontalBox
-		super(BoxLayout.LINE_AXIS);
+		super();
 		
-		setPreferredSize(new Dimension(250, 80));
-		setMinimumSize(new Dimension(250, 80));
+		Box chat = new Box(BoxLayout.LINE_AXIS);
 		
-		Border blackline = BorderFactory.createLineBorder(Color.BLACK);
-		setBorder(blackline);
+		chat.setPreferredSize(new Dimension(277, 75));
+		chat.setMinimumSize(new Dimension(277, 75));
 		
 		Image newImage = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage);
 		JLabel imagelabel = new JLabel(userPic2);
-		add(imagelabel);
+		chat.add(imagelabel);
 		
 		Box userinfo = Box.createVerticalBox();
 		JLabel label = new JLabel(nombreUser);
@@ -70,7 +77,28 @@ public class BoxChat extends Box {
 		Component verticalStrut = Box.createVerticalStrut(10);
 		userinfo.add(verticalStrut);
 		userinfo.add(new JLabel(lastMensaje));
-		add(userinfo);	
+		chat.add(userinfo);	
+		
+		add(chat);
+		Border blackline = BorderFactory.createLineBorder(Color.BLACK);
+		setBorder(blackline);
+		
+		setOpaque(false);
+		setContentAreaFilled(false);
+		setFocusPainted(false);
 	}
 
+	public void setResaltar(boolean ver) {
+		if(ver) {
+			setOpaque(true);
+			setContentAreaFilled(true);
+			setFocusPainted(true);
+			setBackground(Color.GRAY);
+		} else {
+			setOpaque(false);
+			setContentAreaFilled(false);
+			setFocusPainted(false);
+		}
+	}
+	
 }

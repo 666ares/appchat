@@ -8,9 +8,15 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.border.Border;
@@ -28,12 +34,16 @@ import tds.BubbleText;
 import java.awt.Font;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 public class MainView extends JFrame {
 
@@ -65,10 +75,11 @@ public class MainView extends JFrame {
 		JLayeredPane layeredPane = new JLayeredPane();
 		contentPane.add(layeredPane);
 		
+		//---------------------------------------Barra de tareas
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 0, 845, 55);
 		layeredPane.add(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		
 		//Boton Mi Usuario
 		BotonChat boton1 = new BotonChat("icons/profile_picture.png", "Usuario");
@@ -80,7 +91,7 @@ public class MainView extends JFrame {
 		});
 		panel.add(boton1);
 		
-		panel.add(Box.createHorizontalStrut(75));
+		//Espacio
 		
 		//Status
 		BotonChat boton2 = new BotonChat("icons/status_icon.png");
@@ -102,10 +113,8 @@ public class MainView extends JFrame {
 		});
 		panel.add(boton3);
 		
-		panel.add(Box.createHorizontalStrut(310));
-		
 		//Boton Usuario Chat
-		BotonChat boton4 = new BotonChat("icons/profile_picture.png", "Usuario Chat");
+		final BotonChat boton4 = new BotonChat("", "");
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InfoUChat infochat = new InfoUChat("Usuario Chat", "Saludoss");
@@ -114,58 +123,74 @@ public class MainView extends JFrame {
 		});
 		panel.add(boton4);
 		
+		panel.add(Box.createHorizontalStrut(320));
+		
 		//Boton Buscador
-		BotonChat boton5 = new BotonChat("icons/lupa.jpg");
+		final BotonChat boton5 = new BotonChat("icons/lupa.jpg");
 		boton5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Buscador buscador = new Buscador();
 				buscador.makeVisible();
 			}
 		});
+		boton5.makeVisible(false);
 		panel.add(boton5);
 		
 		//Boton Opciones de Chat
-		BotonChat boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
+		final BotonChat boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
 		boton6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				OpcionesChat opciones = new OpcionesChat();
 				opciones.makeVisible();
 			}
 		});
+		boton6.makeVisible(false);
 		panel.add(boton6);
 		
-		//--------------------------------------LISTA DE CHATS
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 55, 277, 452);
-		layeredPane.add(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
-		
-		BoxChat chat1 = new BoxChat("Pipi Estrada", "Ooole oleee es viernesss");
-		panel_1.add(chat1);
-		
-		BoxChat chat2 = new BoxChat("Ruben Ortega", "Guapo, atento y homosexual");
-		panel_1.add(chat2);
-		
-		//---------------------------------------CHAT
-		JPanel panel_2 = new JPanel();
+		//---------------------------------------CHAT INICIO
+		final JPanel panel_2 = new JPanel();
 		panel_2.setBounds(297, 55, 558, 419);
-		
 		Border blackline2 = BorderFactory.createLineBorder(Color.black);
 		panel_2.setBorder(blackline2);
-		
 		layeredPane.add(panel_2);
-		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
 		
-		Component verticalStrut = Box.createVerticalStrut(20);
-		panel_2.add(verticalStrut);
+		final JLabel texto_default = new JLabel("Selecciona un chat para empezar a hablar");
+		texto_default.setFont(new Font("Tahoma", Font.BOLD, 25));
+		panel_2.add(texto_default);
 		
-		BubbleText burbuja;
-		burbuja = new BubbleText(panel_2, "Hola", Color.GRAY, "Yo  ", BubbleText.SENT);
-		panel_2.add(burbuja);
+		//--------------------------------------LISTA DE CHATS
+		JScrollPane listaChat = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		listaChat.setBounds(10, 55, 277, 452);
+		layeredPane.add(listaChat);
 		
-		BubbleText burbuja2;
-		burbuja2 = new BubbleText(panel_2, "Ey", Color.GREEN, "Usuario 2", BubbleText.RECEIVED);
-		panel_2.add(burbuja2);
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 55, 277, 452);
+		panel_1.setPreferredSize(new Dimension(277, 75*10+20));//Calcular altura dependiendo de los chats que existan
+		listaChat.setViewportView(panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
+		
+		for(int i = 0; i<10; i++) { //10 Chats de prueba
+			final BoxChat chat = new BoxChat("Usuario "+i, "ultimo mensaje "+i); //Usuario y ultima mensaje del chat
+			chats.add(chat);
+			chat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//Actualizamos la información de la barra de botones
+					reiniciarPaneles(chats);
+					boton4.setText("Ruben Ortega"); //Obtener nombre del usuario del chat
+					boton4.changeIcon("icons/profile_picture.png", 30, 30); //Obtener imagen del usuario del chat
+					boton5.makeVisible(true);
+					boton6.makeVisible(true);
+					chat.setResaltar(true);
+					panel_2.removeAll();
+					panel_2.repaint();
+					//RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION -> Pasar los dos usuarios y lista de mensajes
+					rellenarChat(panel_2, "Hola ", "Respuesta de prueba");
+				}
+			});
+			panel_1.add(chat);
+		}
 		
 		//----------------------------------------TEXTO
 		JPanel panel_3 = new JPanel();
@@ -184,6 +209,35 @@ public class MainView extends JFrame {
 		BotonChat boton8 = new BotonChat("icons/send.png");
 		panel_3.add(boton8);
 		
+	}
+	
+	void rellenarChat(JPanel panel, String ... mensajes) {
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		Component verticalStrut = Box.createVerticalStrut(20);
+		panel.add(verticalStrut);
+		//Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
+		boolean propietario = true;
+		for (String mensaje : mensajes) {
+			if(propietario) {
+				BubbleText burbuja;
+				burbuja = new BubbleText(panel, mensaje, Color.GRAY, "Yo  ", BubbleText.SENT);
+				panel.add(burbuja);
+				propietario = false;
+			} else {
+				BubbleText burbuja;
+				burbuja = new BubbleText(panel, mensaje, Color.GREEN, "Otro Usuario", BubbleText.RECEIVED);
+				panel.add(burbuja);
+				propietario = true;
+			}
+			
+		}
+	}
+	
+	void reiniciarPaneles(LinkedList<BoxChat> chats) {
+		for (BoxChat boxChat : chats) {
+			boxChat.setResaltar(false);
+		}
 	}
 	
 }
