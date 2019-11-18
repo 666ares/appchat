@@ -5,22 +5,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.border.Border;
 
+import controlador.ControladorUsuarios;
+import dominio.Usuario;
 import gui.elements.BotonChat;
 import gui.elements.BoxChat;
 import gui.elements.Buscador;
@@ -36,11 +32,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
@@ -81,8 +75,15 @@ public class MainView extends JFrame {
 		layeredPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		
+		Usuario u = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+		String ruta_imagen = u.getImagenPerfil();
+		String nombre = u.getNombre();
+		
+		// !!!!! QUITAR NOMBRE, SÓLO TIENE QUE SALIR LA FOTO...
+		
+		
 		//Boton Mi Usuario
-		BotonChat boton1 = new BotonChat("icons/profile_picture.png", "Usuario");
+		BotonChat boton1 = new BotonChat(ruta_imagen, nombre);
 		boton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InfoUsuario infousuario = new InfoUsuario();

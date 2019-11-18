@@ -114,6 +114,7 @@ public class InfoUsuario extends JFrame{
 	    JPanel botones = new JPanel();
 	    botones.setLayout(new FlowLayout());
 	    
+	    /*
 	    JButton cambiarNombre = new JButton("Cambiar nombre");
 	    cambiarNombre.addActionListener(new ActionListener() {
 			
@@ -133,6 +134,7 @@ public class InfoUsuario extends JFrame{
 		});
 	    
 	    botones.add(cambiarNombre);
+	    */
 	    
 	    JButton cambiarSaludo = new JButton("Cambiar saludo  ");
 	    cambiarSaludo.addActionListener(new ActionListener() {
