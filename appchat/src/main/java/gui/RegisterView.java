@@ -273,6 +273,8 @@ public class RegisterView extends JPanel {
 		
 		/* borrar todos los errores en pantalla */
 		ocultarErrores();
+		lblMensajeError.setText("* Los campos indicados son obligatorios");
+		fixedSize(lblMensajeError, 315, 15);
 		
 		if (txtNombre.getText().trim().isEmpty()) {
 			lblNombreError.setVisible(true);
@@ -302,19 +304,12 @@ public class RegisterView extends JPanel {
 		String password = new String(txtPassword.getPassword());
 		String password2 = new String(txtPasswordChk.getPassword());
 		
-		if (password.equals("")) {
-			lblPasswordError.setVisible(true);
-			lblMensajeError.setVisible(true);
-			salida = false;
-			todosCamposCompletados = false;
-		} 
-		
-		if (password2.equals("")) {
+		if (password.equals("") || password2.equals("")) {
 			lblPasswordChkError.setVisible(true);
 			lblMensajeError.setVisible(true);
 			salida = false;
 			todosCamposCompletados = false;
-		}	
+		} 
 		
 		if (todosCamposCompletados && !password.equals(password2)) {
 			lblMensajeError.setText("* Las contraseñas no coinciden");
