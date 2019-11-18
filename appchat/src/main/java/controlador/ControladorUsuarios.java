@@ -44,10 +44,12 @@ public class ControladorUsuarios {
 	}
 	
 	public boolean registrarUsuario(String nombre, String fechaNacimiento, String email,
-									String telefono, String login, String password) {
+									String telefono, String login, String password,
+									String imagenPerfil, String saludo) {
 		if (esUsuarioRegistrado(login)) return false;
 		
-		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, telefono, login, password);
+		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, telefono,
+									  login, password, imagenPerfil, saludo);
 		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
 		usuarioDAO.create(usuario);
 		
@@ -63,6 +65,17 @@ public class ControladorUsuarios {
 		usuarioDAO.delete(usuario);
 		
 		CatalogoUsuarios.getUnicaInstancia().removeUsuario(usuario);
+		return true;
+	}
+	
+	public boolean updateUsuario(Usuario usuario) {
+		if (!esUsuarioRegistrado(usuario.getUsuario()))
+			return false;
+		
+		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
+		usuarioDAO.updatePerfil(usuario);
+		
+		CatalogoUsuarios.getUnicaInstancia().updateUsuario(usuario);
 		return true;
 	}
 	

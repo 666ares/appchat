@@ -85,7 +85,7 @@ public class MainView extends JFrame {
 		BotonChat boton1 = new BotonChat("icons/profile_picture.png", "Usuario");
 		boton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InfoUsuario infousuario = new InfoUsuario("Usuario", "Gang Gang");
+				InfoUsuario infousuario = new InfoUsuario();
 				infousuario.makeVisible();
 			}
 		});

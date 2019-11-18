@@ -26,8 +26,12 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String telefono = servPersistencia.recuperarPropiedadEntidad(eUsuario, "telefono");
 		String usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "usuario");
 		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
+		String imagenPerfil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagenPerfil");
+		String saludo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
 		
-		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, usuario, password);
+		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, usuario,
+								password, imagenPerfil, saludo);
+		
 		u.setId(eUsuario.getId());
 		return u;	
 	}
@@ -43,7 +47,9 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 						new Propiedad("email", usuario.getEmail()),
 						new Propiedad("telefono", usuario.getTelefono()),
 						new Propiedad("usuario", usuario.getUsuario()),
-						new Propiedad("password", usuario.getPassword())
+						new Propiedad("password", usuario.getPassword()),
+						new Propiedad("imagenPerfil", usuario.getImagenPerfil()),
+						new Propiedad("saludo", usuario.getSaludo())
 						))
 				);
 		
@@ -64,8 +70,15 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	
 	public void updatePerfil(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		servPersistencia.eliminarPropiedadEntidad(eUsuario, "password");
-		servPersistencia.anadirPropiedadEntidad(eUsuario, "password", usuario.getPassword());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "imagenPerfil");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "imagenPerfil", usuario.getImagenPerfil());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "nombre");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "nombre", usuario.getNombre());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "saludo");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "saludo", usuario.getSaludo());
 	}
 	
 	public Usuario get(int id) {

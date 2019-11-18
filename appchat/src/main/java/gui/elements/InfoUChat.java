@@ -1,6 +1,5 @@
 package gui.elements;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -13,9 +12,6 @@ import javax.swing.JPanel;
 
 public class InfoUChat extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	static final int ANCHOW = 260;

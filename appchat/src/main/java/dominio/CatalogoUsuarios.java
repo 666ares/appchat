@@ -56,4 +56,10 @@ public class CatalogoUsuarios {
 		usuariosPorID.remove(usuario.getId());
 		usuariosPorLogin.remove(usuario.getUsuario());
 	}
+
+	public void updateUsuario(Usuario usuario) {
+		removeUsuario(usuario);
+		addUsuario(usuario);
+		
+	}
 }
