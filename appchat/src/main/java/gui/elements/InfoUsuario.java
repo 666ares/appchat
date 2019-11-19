@@ -5,8 +5,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.swing.Box;
@@ -58,11 +56,30 @@ public class InfoUsuario extends JFrame{
 		ImageIcon icon2 = new ImageIcon(newImage);
 		final JLabel iconoUser = new JLabel();
 		iconoUser.setIcon(icon2);
-		
-		iconoUser.addMouseListener(new MouseListener() {
 			
-			public void mouseClicked(MouseEvent e) {
-				
+		icono.add(iconoUser);
+		getContentPane().add(icono);
+	    
+		/* Nombre del usuario */
+	    JPanel nombre = new JPanel();
+	    nombre.setLayout(new GridLayout(0, 1, 0, 0));
+	    final JLabel nombreUsuario = new JLabel("      Nombre: " + nombreUser);
+	    nombre.add(nombreUsuario);
+	    
+	    /* Saludo del usuario */
+	    final JLabel saludoUser = new JLabel("      Saludo: " + saludo);
+	    nombre.add(saludoUser);
+	    
+	    getContentPane().add(nombre);
+	    
+	    /* Botones para cambiar imagen y saludo */
+	    JPanel botones = new JPanel();
+	    botones.setLayout(new FlowLayout());
+	    
+	    JButton cambiarImagen = new JButton("Cambiar imagen");
+	    cambiarImagen.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
 				int returnValue = jfc.showOpenDialog(null);
@@ -87,54 +104,9 @@ public class InfoUsuario extends JFrame{
 				}
 				
 			}
-			
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			
-		});
-		
-		icono.add(iconoUser);
-		getContentPane().add(icono);
-	    
-		/* Nombre del usuario */
-	    JPanel nombre = new JPanel();
-	    nombre.setLayout(new GridLayout(0, 1, 0, 0));
-	    final JLabel nombreUsuario = new JLabel("      Nombre: " + nombreUser);
-	    nombre.add(nombreUsuario);
-	    
-	    /* Saludo del usuario */
-	    final JLabel saludoUser = new JLabel("      Saludo: " + saludo);
-	    nombre.add(saludoUser);
-	    
-	    getContentPane().add(nombre);
-	    
-	    /* Botones para cambiar nombre y saludo */
-	    JPanel botones = new JPanel();
-	    botones.setLayout(new FlowLayout());
-	    
-	    /*
-	    JButton cambiarNombre = new JButton("Cambiar nombre");
-	    cambiarNombre.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				String nuevoNombre = JOptionPane.showInputDialog(
-						"Introduce el nuevo nombre:");
-				
-				if (!nuevoNombre.equals("")) {
-					Usuario act = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-					act.setNombre(nuevoNombre);
-				
-					if (ControladorUsuarios.getUnicaInstancia().updateUsuario(act))
-						nombreUsuario.setText("      Nombre: " + nuevoNombre);
-				}
-				
-			}
 		});
 	    
-	    botones.add(cambiarNombre);
-	    */
+	    botones.add(cambiarImagen);
 	    
 	    JButton cambiarSaludo = new JButton("Cambiar saludo  ");
 	    cambiarSaludo.addActionListener(new ActionListener() {
