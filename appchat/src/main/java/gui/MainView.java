@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.LinkedList;
 
 import javax.swing.JLayeredPane;
@@ -44,23 +43,16 @@ import javax.swing.ScrollPaneConstants;
 
 public class MainView extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
-	/**
-	 * Create the application.
-	 */
+
 	public MainView() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
+		
 		setTitle("AppChat");
 		setBounds(100, 100, 881, 557);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,20 +64,24 @@ public class MainView extends JFrame {
 		JLayeredPane layeredPane = new JLayeredPane();
 		contentPane.add(layeredPane);
 		
-		//---------------------------------------Barra de tareas
+		// ==========================
+		// Barra de opciones superior
+		// ==========================
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 0, 845, 55);
 		layeredPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		
+		// Llamada al controlador para recuperar el nombre y la
+		// foto de perfil del usuario.
 		Usuario u = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 		String ruta_imagen = u.getImagenPerfil();
 		String nombre = u.getNombre();
 		
-		// !!!!! QUITAR NOMBRE, SÓLO TIENE QUE SALIR LA FOTO...
 		
-		
-		//Boton Mi Usuario
+		// ===================
+		// Botón de mi usuario
+		// ===================
 		final BotonChat boton1 = new BotonChat(ruta_imagen, nombre);
 		boton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -95,19 +91,24 @@ public class MainView extends JFrame {
 					
 					@Override
 					public void windowClosing(WindowEvent e) {
-						// TODO Auto-generated method stub
-						boton1.changeIcon(ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getImagenPerfil(), 30, 30);
+						boton1.changeIcon(
+								ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getImagenPerfil(), 
+								30, 
+								30);
 						boton1.repaint();	
 					}
 					
 				});
 			}
 		});
+		
 		panel.add(boton1);
 		
 		//Espacio
 		
-		//Status
+		// ========
+		// Estados
+		// ========
 		BotonChat boton2 = new BotonChat("icons/status_icon.png");
 		boton2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,9 +116,12 @@ public class MainView extends JFrame {
 				estados.makeVisible();
 			}
 		});
+		
 		panel.add(boton2);
 		
-		//Opciones de Usuario
+		// ===================
+		// Opciones de usuario
+		// ===================
 		BotonChat boton3 = new BotonChat("icons/3dots.jpg", 5, 20);
 		boton3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,9 +129,12 @@ public class MainView extends JFrame {
 				opciones.makeVisible();
 			}
 		});
+		
 		panel.add(boton3);
 		
-		//Boton Usuario Chat
+		// ======================
+		// Botón del otro usuario
+		// ======================
 		final BotonChat boton4 = new BotonChat("", "");
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -135,11 +142,13 @@ public class MainView extends JFrame {
 				infochat.makeVisible();
 			}
 		});
-		panel.add(boton4);
 		
+		panel.add(boton4);
 		panel.add(Box.createHorizontalStrut(320));
 		
-		//Boton Buscador
+		// ===============
+		// Buscador (lupa)
+		// ===============
 		final BotonChat boton5 = new BotonChat("icons/lupa.jpg");
 		boton5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,10 +156,13 @@ public class MainView extends JFrame {
 				buscador.makeVisible();
 			}
 		});
+		
 		boton5.makeVisible(false);
 		panel.add(boton5);
 		
-		//Boton Opciones de Chat
+		// =================
+		// Opciones de chat
+		// =================
 		final BotonChat boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
 		boton6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -158,10 +170,13 @@ public class MainView extends JFrame {
 				opciones.makeVisible();
 			}
 		});
+		
 		boton6.makeVisible(false);
 		panel.add(boton6);
 		
-		//---------------------------------------CHAT INICIO
+		// ====================================
+		// Chat de inicio (ninguno al comienzo)
+		// ====================================
 		final JPanel panel_2 = new JPanel();
 		panel_2.setBounds(297, 55, 558, 419);
 		Border blackline2 = BorderFactory.createLineBorder(Color.black);
@@ -169,44 +184,60 @@ public class MainView extends JFrame {
 		layeredPane.add(panel_2);
 		
 		final JLabel texto_default = new JLabel("Selecciona un chat para empezar a hablar");
-		texto_default.setFont(new Font("Tahoma", Font.BOLD, 25));
+		texto_default.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel_2.add(texto_default);
 		
-		//--------------------------------------LISTA DE CHATS
-		JScrollPane listaChat = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		// ==========================
+		// Lista de chats del usuario
+		// ==========================
+		JScrollPane listaChat = new JScrollPane(
+								ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+								ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		listaChat.setBounds(10, 55, 277, 452);
 		layeredPane.add(listaChat);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 55, 277, 452);
-		panel_1.setPreferredSize(new Dimension(277, 75*10+20));//Calcular altura dependiendo de los chats que existan
+		
+		// Calcular altura dependiendo de los chats que existan
+		panel_1.setPreferredSize(new Dimension(277, 75*10+20));
 		listaChat.setViewportView(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
 		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
 		
-		for(int i = 0; i<10; i++) { //10 Chats de prueba
-			final BoxChat chat = new BoxChat("Usuario "+i, "ultimo mensaje "+i); //Usuario y ultima mensaje del chat
+		for (int i = 0; i < 10; i++) {
+			final BoxChat chat = new BoxChat("Usuario " + i, "ultimo mensaje " + i); //Usuario y ultima mensaje del chat
 			chats.add(chat);
 			chat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//Actualizamos la información de la barra de botones
+					// Actualizamos la información de la barra de botones
 					reiniciarPaneles(chats);
-					boton4.setText("Pipi estrada vieja puta viva españa el nieto de franco"); //Obtener nombre del usuario del chat
-					boton4.changeIcon("icons/profile_picture.png", 30, 30); //Obtener imagen del usuario del chat
+					
+					// Obtener nombre del usuario del chat
+					boton4.setText("Pipi estrada vieja puta viva españa el nieto de franco");
+					
+					// Obtener imagen del usuario del chat
+					boton4.changeIcon("icons/profile_picture.png", 30, 30);
 					boton5.makeVisible(true);
 					boton6.makeVisible(true);
 					chat.setResaltar(true);
 					panel_2.removeAll();
 					panel_2.repaint();
-					//RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION -> Pasar los dos usuarios y lista de mensajes
+					
+					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
+					// -> Pasar los dos usuarios y lista de mensajes
 					rellenarChat(panel_2, "Hola ", "Respuesta de prueba");
 				}
 			});
+			
 			panel_1.add(chat);
 		}
 		
-		//----------------------------------------TEXTO
+		// =================================
+		// Barra inferior de la conversación
+		// Icono 'enviar' y 'emojis'
+		// =================================
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(297, 474, 558, 33);
 		
@@ -230,10 +261,10 @@ public class MainView extends JFrame {
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		panel.add(verticalStrut);
-		//Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
+		// TODO: Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
 		boolean propietario = true;
 		for (String mensaje : mensajes) {
-			if(propietario) {
+			if (propietario) {
 				BubbleText burbuja;
 				burbuja = new BubbleText(panel, mensaje, Color.GRAY, "Yo  ", BubbleText.SENT);
 				panel.add(burbuja);

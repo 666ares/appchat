@@ -8,9 +8,6 @@ import javax.swing.JButton;
 
 public class BotonChat extends JButton {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public BotonChat(String imagen, String data) {

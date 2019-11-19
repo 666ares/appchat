@@ -77,8 +77,5 @@ public class ControladorUsuarios {
 		
 		CatalogoUsuarios.getUnicaInstancia().updateUsuario(usuario);
 		return true;
-	}
-	
-	
-		
+	}	
 }

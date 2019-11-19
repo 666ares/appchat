@@ -1,5 +1,8 @@
 package dominio;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Usuario {
 
 	private int id;
@@ -11,6 +14,8 @@ public class Usuario {
 	private String password;
 	private String imagenPerfil;
 	private String saludo;
+	private List<Contacto> contactos;
+	private List<Grupo> gruposAdmin;
 	
 	public Usuario(String nombre, String fechaNacimiento, String email, 
 			String telefono, String usuario, String password,
@@ -23,6 +28,8 @@ public class Usuario {
 		this.password = password;
 		this.imagenPerfil = imagenPerfil;
 		this.saludo = saludo;
+		this.contactos = new LinkedList<Contacto>();
+		this.gruposAdmin = new LinkedList<Grupo>();
 	}
 	
 	public String 	getSaludo() 			{ return saludo; }
@@ -34,6 +41,14 @@ public class Usuario {
 	public String 	getTelefono() 			{ return telefono; }
 	public String 	getUsuario() 			{ return usuario; }
 	public String 	getPassword() 			{ return password; }
+	
+	public List<Contacto> getContactos() { 
+		return new LinkedList<Contacto>(contactos); 
+	}
+	
+	public List<Grupo> getGruposAdmin() {
+		return new LinkedList<Grupo>(gruposAdmin);
+	}
 
 	public void setSaludo(String saludo) {
 		this.saludo = saludo;

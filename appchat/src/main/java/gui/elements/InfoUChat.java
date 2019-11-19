@@ -18,7 +18,9 @@ public class InfoUChat extends JFrame{
 	static final int ALTOW = 250;
 	
 	public InfoUChat(String nombreUser, String telefono) {
+		
 		super();
+		
 		setTitle(nombreUser);
 		setBounds(100, 100, ANCHOW, ALTOW);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -30,28 +32,34 @@ public class InfoUChat extends JFrame{
 		
 		getContentPane().add(Box.createVerticalStrut(10));
 		
-		JPanel icono = new JPanel();
+		JPanel panelImagen = new JPanel();
 	    
-	    ImageIcon icon = new ImageIcon("icons/profile_picture.png");
-		Image imageIcon = icon.getImage();
-		Image newImage = imageIcon.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH);
-		ImageIcon icon2 = new ImageIcon(newImage);
+	    ImageIcon imageIcon = new ImageIcon("icons/profile_picture.png");
+		Image image = imageIcon.getImage();
+		Image newImage = image.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon imageIcon2 = new ImageIcon(newImage);
 		JLabel iconoUser = new JLabel();
-		iconoUser.setIcon(icon2);
-		icono.add(iconoUser);
+		iconoUser.setIcon(imageIcon2);
+		panelImagen.add(iconoUser);
 		
-		getContentPane().add(icono);
+		getContentPane().add(panelImagen);
 	    
-	    JPanel nombre = new JPanel();
-	    nombre.setLayout(new GridLayout(0, 1, 0, 0));
+	    JPanel panelNombreTelefono = new JPanel();
+	    panelNombreTelefono.setLayout(new GridLayout(0, 1, 0, 0));
 	    
+	    // ==============
+	    // Label 'Nombre'
+	    // ==============
 	    JLabel nombreUsuario = new JLabel("      Nombre: " + nombreUser);
-	    nombre.add(nombreUsuario);
+	    panelNombreTelefono.add(nombreUsuario);
 	    
+	    // ================
+	    // Label 'Telefono'
+	    // ================
 	    JLabel telefonoUser = new JLabel("      Teléfono: " + telefono);
-	    nombre.add(telefonoUser);
+	    panelNombreTelefono.add(telefonoUser);
 	    
-	    getContentPane().add(nombre);
+	    getContentPane().add(panelNombreTelefono);
 	    getContentPane().add(Box.createVerticalStrut(10));
 		
 	}

@@ -34,7 +34,7 @@ public class OpcionesChat extends JFrame{
 		JButton boton1 = new JButton("Eliminar mensajes");
 		botones.add(boton1, BorderLayout.CENTER);
 		
-		JButton boton2 = new JButton("Eliminar Contacto");
+		JButton boton2 = new JButton("Eliminar contacto");
 		botones.add(boton2, BorderLayout.CENTER);
 		
 		getContentPane().add(botones);

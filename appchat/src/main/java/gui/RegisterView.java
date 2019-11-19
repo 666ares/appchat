@@ -14,7 +14,7 @@ import controlador.ControladorUsuarios;
 public class RegisterView extends JPanel {
 	
 	static final int ANCHOW = 430;
-	static final int ALTOW = 350;
+	static final int ALTOW = 320;
 
 	private JFrame ventana;
 	private JLabel lblNombre;
@@ -43,7 +43,6 @@ public class RegisterView extends JPanel {
 	private JLabel lblEmailError;
 	private JLabel lblUsuarioError;
 	private JLabel lblPasswordError;
-	private JLabel lblPasswordChkError;
 
 	public RegisterView(JFrame frame) {
 		ventana = frame;
@@ -92,7 +91,7 @@ public class RegisterView extends JPanel {
 		/* Contraseña */
 		JPanel linea_6 = new JPanel();
 		linea_6.setLayout(new FlowLayout(FlowLayout.LEFT));
-		fixedSize(linea_6, ANCHOW, 35);
+		fixedSize(linea_6, ANCHOW, 25);
 		linea_6.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
 		/* Botones */
@@ -170,14 +169,6 @@ public class RegisterView extends JPanel {
 		linea_5.add(lblUsuario);
 		linea_5.add(txtUsuario);
 		linea_5.add(lblUsuarioError);
-
-		/* linea 9 */
-		lblSaludo = new JLabel("Saludo:", JLabel.RIGHT);
-		fixedSize(lblSaludo, 75, 20);
-		txtSaludo = new JTextField();
-		fixedSize(txtSaludo, 105, 20);
-		linea_9.add(lblSaludo);
-		linea_9.add(txtSaludo);
 		
 		/* linea 6 */
 		lblPassword = new JLabel("Contraseña:", JLabel.RIGHT);
@@ -194,17 +185,20 @@ public class RegisterView extends JPanel {
 		fixedSize(lblPasswordError, 7, 8);
 		lblPasswordError.setForeground(Color.RED);
 		
-		lblPasswordChkError = new JLabel("*", JLabel.CENTER);
-		fixedSize(lblPasswordChkError, 7, 8);
-		lblPasswordChkError.setForeground(Color.RED);
-		
 		linea_6.add(lblPassword);
 		linea_6.add(txtPassword);
-		linea_6.add(lblPasswordError);
 		linea_6.add(lblPasswordChk);
 		linea_6.add(txtPasswordChk);
-		linea_6.add(lblPasswordChkError);
+		linea_6.add(lblPasswordError);
 
+		/* linea 9 */
+		lblSaludo = new JLabel("Saludo:", JLabel.RIGHT);
+		fixedSize(lblSaludo, 75, 20);
+		txtSaludo = new JTextField();
+		fixedSize(txtSaludo, 105, 20);
+		linea_9.add(lblSaludo);
+		linea_9.add(txtSaludo);
+		
 		/* linea 7 */
 		btnVolver = new JButton("Volver");
 		fixedSize(btnVolver, 105, 30);
@@ -229,8 +223,8 @@ public class RegisterView extends JPanel {
 		datosPersonales.add(linea_3);
 		datosPersonales.add(linea_4);
 		datosPersonales.add(linea_5);
-		datosPersonales.add(linea_9);
 		datosPersonales.add(linea_6);
+		datosPersonales.add(linea_9);
 		datosPersonales.add(linea_7);
 		datosPersonales.add(linea_8);
 		
@@ -324,7 +318,7 @@ public class RegisterView extends JPanel {
 		String password2 = new String(txtPasswordChk.getPassword());
 		
 		if (password.equals("") || password2.equals("")) {
-			lblPasswordChkError.setVisible(true);
+			lblPasswordError.setVisible(true);
 			lblMensajeError.setVisible(true);
 			salida = false;
 			todosCamposCompletados = false;
@@ -357,7 +351,6 @@ public class RegisterView extends JPanel {
 		lblMovilError.setVisible(false);
 		lblUsuarioError.setVisible(false);
 		lblPasswordError.setVisible(false);
-		lblPasswordChkError.setVisible(false);
 		lblMensajeError.setVisible(false);
 	}
 

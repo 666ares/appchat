@@ -48,7 +48,9 @@ public class InfoUsuario extends JFrame{
 		
 		getContentPane().add(Box.createVerticalStrut(10));
 		
-		/* Imagen del usuario */
+		// ============================
+		// Imagen de perfil del usuario
+		// ============================
 		JPanel icono = new JPanel();
 	    ImageIcon icon = new ImageIcon(ruta_imagen);
 		Image imageIcon = icon.getImage();
@@ -60,22 +62,27 @@ public class InfoUsuario extends JFrame{
 		icono.add(iconoUser);
 		getContentPane().add(icono);
 	    
-		/* Nombre del usuario */
-	    JPanel nombre = new JPanel();
-	    nombre.setLayout(new GridLayout(0, 1, 0, 0));
+		// =============================
+		// Panel con 'nombre' y 'saludo'
+		// =============================
+	    JPanel panelNombreSaludo = new JPanel();
+	    panelNombreSaludo.setLayout(new GridLayout(0, 1, 0, 0));
+	    
 	    final JLabel nombreUsuario = new JLabel("      Nombre: " + nombreUser);
-	    nombre.add(nombreUsuario);
-	    
-	    /* Saludo del usuario */
+	    panelNombreSaludo.add(nombreUsuario);
+
 	    final JLabel saludoUser = new JLabel("      Saludo: " + saludo);
-	    nombre.add(saludoUser);
+	    panelNombreSaludo.add(saludoUser);
 	    
-	    getContentPane().add(nombre);
+	    getContentPane().add(panelNombreSaludo);
 	    
 	    /* Botones para cambiar imagen y saludo */
 	    JPanel botones = new JPanel();
 	    botones.setLayout(new FlowLayout());
 	    
+	    // ======================
+	    // Botón 'Cambiar imagen'
+	    // ======================
 	    JButton cambiarImagen = new JButton("Cambiar imagen");
 	    cambiarImagen.addActionListener(new ActionListener() {
 			
@@ -108,6 +115,9 @@ public class InfoUsuario extends JFrame{
 	    
 	    botones.add(cambiarImagen);
 	    
+	    // ======================
+	    // Botón 'Cambiar saludo'
+	    // ======================
 	    JButton cambiarSaludo = new JButton("Cambiar saludo  ");
 	    cambiarSaludo.addActionListener(new ActionListener() {
 			

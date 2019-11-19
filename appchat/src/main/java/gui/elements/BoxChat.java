@@ -16,13 +16,11 @@ import javax.swing.border.Border;
 
 public class BoxChat extends JButton {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public BoxChat(String nombreUser, String lastMensaje) {
-		//Constructor como un horizontalBox
+		
+		// Constructor como un horizontalBox
 		super();
 		
 		Box chat = new Box(BoxLayout.LINE_AXIS);
@@ -56,7 +54,8 @@ public class BoxChat extends JButton {
 	}
 	
 	public BoxChat(ImageIcon userPic, String nombreUser, String lastMensaje) {
-		//Constructor como un horizontalBox
+		
+		// Constructor como un horizontalBox
 		super();
 		
 		Box chat = new Box(BoxLayout.LINE_AXIS);
@@ -89,7 +88,8 @@ public class BoxChat extends JButton {
 	}
 
 	public void setResaltar(boolean ver) {
-		if(ver) {
+		
+		if (ver) {
 			setOpaque(true);
 			setContentAreaFilled(true);
 			setFocusPainted(true);

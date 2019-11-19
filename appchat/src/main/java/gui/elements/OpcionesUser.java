@@ -3,30 +3,24 @@ package gui.elements;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.text.FlowView.FlowStrategy;
 
-public class OpcionesUser extends JFrame{
+public class OpcionesUser extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	static final int ANCHOW = 430;
 	static final int ALTOW = 300;
 	
 	public OpcionesUser() {
+		
 		super();
 		setTitle("Opciones");
 		setBounds(150, 150, 430, 387);
@@ -37,55 +31,80 @@ public class OpcionesUser extends JFrame{
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		setContentPane(contentPane);
 		
-		//Boton Crear Contacto
-		JButton boton1 = new JButton("Crear Contacto");
+		// ======================
+		// Botón 'Crear contacto'
+		// ======================
+		JButton boton1 = new JButton("Añadir contacto");
 		boton1.setPreferredSize(new Dimension(430, 50));
 		boton1.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				JTextField username = new JTextField();
-				JTextField password = new JPasswordField();
-				Object[] message = {
-				    "Nombre Contacto:", username,
-				    "Teléfono:", password
+				
+				JTextField txtNombre = new JTextField();
+				JTextField txtTelefono = new JTextField();
+				Object[] campos = {
+				    "Nombre del contacto:", txtNombre,
+				    "Número de teléfono: ", txtTelefono
 				};
 				
-				JOptionPane.showConfirmDialog(null, message, "Añadir Contacto", JOptionPane.OK_CANCEL_OPTION);
-				//Comprobar si el contacto ya existe
-				//Si no existe se añade a la lista de contactos
+				JOptionPane.showConfirmDialog(null, campos, "Añadir contacto", JOptionPane.OK_CANCEL_OPTION);
+				
+				// String nombre = txtNombre.getText();
+				// String telefono = txtTelefono.getText();
 				
 			}
 		});
+		
 		contentPane.add(boton1, BorderLayout.CENTER);
 		
-		//Boton Modificar Contacto
-		JButton boton4 = new JButton("Mostrar Contactos");
-		boton4.setPreferredSize(new Dimension(430, 50));
-		contentPane.add(boton4, BorderLayout.CENTER);
-		
-		//Boton Crear Grupo
-		JButton boton2 = new JButton("Crear Grupo");
+		// =========================
+		// Botón 'Mostrar contactos'
+		// =========================
+		JButton boton2 = new JButton("Mostrar contactos");
 		boton2.setPreferredSize(new Dimension(430, 50));
 		contentPane.add(boton2, BorderLayout.CENTER);
 		
-		//Boton Modificar Grupo
-		JButton boton3 = new JButton("Modificar Grupo");
+		// ===================
+		// Botón 'Crear grupo'
+		// ===================
+		JButton boton3 = new JButton("Crear grupo");
 		boton3.setPreferredSize(new Dimension(430, 50));
 		contentPane.add(boton3, BorderLayout.CENTER);
 		
-		//Boton Ver Estadisticas
-		JButton boton5 = new JButton("Ver Estadisticas");
+		// =======================
+		// Botón 'Modificar grupo'
+		// =======================
+		JButton boton4 = new JButton("Modificar grupo");
+		boton4.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton4, BorderLayout.CENTER);
+		
+		// ========================
+		// Botón 'Ver estadísticas'
+		// ========================
+		JButton boton5 = new JButton("Ver estadísticas");
 		boton5.setPreferredSize(new Dimension(430, 50));
 		contentPane.add(boton5, BorderLayout.CENTER);
 		
-		//Boton Premium
-		JButton boton6 = new JButton("Convertirse Premium");
+		// =======================
+		// Botón 'Hacerse premium'
+		// =======================
+		JButton boton6 = new JButton("Hacerse premium");
 		boton6.setPreferredSize(new Dimension(430, 50));
 		contentPane.add(boton6, BorderLayout.CENTER);
 		
-		//Boton Cerrar Sesion
-		JButton boton7 = new JButton("Cerrar Sesión");
+		// =====================
+		// Botón 'Cerrar sesión'
+		// =====================
+		JButton boton7 = new JButton("Cerrar sesión");
 		boton7.setPreferredSize(new Dimension(430, 50));
+		boton7.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+				
+			}
+		});
+		
 		contentPane.add(boton7, BorderLayout.CENTER);
 		
 	}
