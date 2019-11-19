@@ -7,6 +7,9 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.LinkedList;
 
 import javax.swing.JLayeredPane;
@@ -83,11 +86,21 @@ public class MainView extends JFrame {
 		
 		
 		//Boton Mi Usuario
-		BotonChat boton1 = new BotonChat(ruta_imagen, nombre);
+		final BotonChat boton1 = new BotonChat(ruta_imagen, nombre);
 		boton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InfoUsuario infousuario = new InfoUsuario();
 				infousuario.makeVisible();
+				infousuario.addWindowListener(new WindowAdapter() {
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						boton1.changeIcon(ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getImagenPerfil(), 30, 30);
+						boton1.repaint();	
+					}
+					
+				});
 			}
 		});
 		panel.add(boton1);
@@ -118,7 +131,7 @@ public class MainView extends JFrame {
 		final BotonChat boton4 = new BotonChat("", "");
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InfoUChat infochat = new InfoUChat("Usuario Chat", "Saludoss");
+				InfoUChat infochat = new InfoUChat("Usuario Chat", "698574891");
 				infochat.makeVisible();
 			}
 		});
@@ -179,7 +192,7 @@ public class MainView extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					//Actualizamos la información de la barra de botones
 					reiniciarPaneles(chats);
-					boton4.setText("Ruben Ortega"); //Obtener nombre del usuario del chat
+					boton4.setText("Pipi estrada vieja puta viva españa el nieto de franco"); //Obtener nombre del usuario del chat
 					boton4.changeIcon("icons/profile_picture.png", 30, 30); //Obtener imagen del usuario del chat
 					boton5.makeVisible(true);
 					boton6.makeVisible(true);

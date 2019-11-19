@@ -1,12 +1,20 @@
 package gui.elements;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.text.FlowView.FlowStrategy;
 
 public class OpcionesUser extends JFrame{
 
@@ -21,39 +29,65 @@ public class OpcionesUser extends JFrame{
 	public OpcionesUser() {
 		super();
 		setTitle("Opciones");
-		setBounds(100, 100, 430, 300);
+		setBounds(150, 150, 430, 387);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		
-		JPanel contentPane = new JPanel();
-		contentPane.setLayout(new BorderLayout(0, 0));
+		final JPanel contentPane = new JPanel();
+		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		setContentPane(contentPane);
 		
-		JPanel botones = new JPanel();
-		botones.setLayout(new GridLayout(0, 1, 0, 0));
-		
+		//Boton Crear Contacto
 		JButton boton1 = new JButton("Crear Contacto");
-		botones.add(boton1, BorderLayout.CENTER);
+		boton1.setPreferredSize(new Dimension(430, 50));
+		boton1.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				JTextField username = new JTextField();
+				JTextField password = new JPasswordField();
+				Object[] message = {
+				    "Nombre Contacto:", username,
+				    "Teléfono:", password
+				};
+				
+				JOptionPane.showConfirmDialog(null, message, "Añadir Contacto", JOptionPane.OK_CANCEL_OPTION);
+				//Comprobar si el contacto ya existe
+				//Si no existe se añade a la lista de contactos
+				
+			}
+		});
+		contentPane.add(boton1, BorderLayout.CENTER);
 		
-		JButton boton2 = new JButton("Crear Grupo");
-		botones.add(boton2, BorderLayout.CENTER);
-		
-		JButton boton3 = new JButton("Modificar Grupo");
-		botones.add(boton3, BorderLayout.CENTER);
-		
+		//Boton Modificar Contacto
 		JButton boton4 = new JButton("Mostrar Contactos");
-		botones.add(boton4, BorderLayout.CENTER);
+		boton4.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton4, BorderLayout.CENTER);
 		
+		//Boton Crear Grupo
+		JButton boton2 = new JButton("Crear Grupo");
+		boton2.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton2, BorderLayout.CENTER);
+		
+		//Boton Modificar Grupo
+		JButton boton3 = new JButton("Modificar Grupo");
+		boton3.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton3, BorderLayout.CENTER);
+		
+		//Boton Ver Estadisticas
 		JButton boton5 = new JButton("Ver Estadisticas");
-		botones.add(boton5, BorderLayout.CENTER);
+		boton5.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton5, BorderLayout.CENTER);
 		
+		//Boton Premium
 		JButton boton6 = new JButton("Convertirse Premium");
-		botones.add(boton6, BorderLayout.CENTER);
+		boton6.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton6, BorderLayout.CENTER);
 		
+		//Boton Cerrar Sesion
 		JButton boton7 = new JButton("Cerrar Sesión");
-		botones.add(boton7, BorderLayout.CENTER);
+		boton7.setPreferredSize(new Dimension(430, 50));
+		contentPane.add(boton7, BorderLayout.CENTER);
 		
-		getContentPane().add(botones);
 	}
 	
 	public void makeVisible() {

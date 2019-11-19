@@ -17,7 +17,7 @@ public class InfoUChat extends JFrame{
 	static final int ANCHOW = 260;
 	static final int ALTOW = 250;
 	
-	public InfoUChat(String nombreUser, String saludo) {
+	public InfoUChat(String nombreUser, String telefono) {
 		super();
 		setTitle(nombreUser);
 		setBounds(100, 100, ANCHOW, ALTOW);
@@ -48,8 +48,8 @@ public class InfoUChat extends JFrame{
 	    JLabel nombreUsuario = new JLabel("      Nombre: " + nombreUser);
 	    nombre.add(nombreUsuario);
 	    
-	    JLabel saludoUser = new JLabel("      Saludo: " + saludo);
-	    nombre.add(saludoUser);
+	    JLabel telefonoUser = new JLabel("      Teléfono: " + telefono);
+	    nombre.add(telefonoUser);
 	    
 	    getContentPane().add(nombre);
 	    getContentPane().add(Box.createVerticalStrut(10));

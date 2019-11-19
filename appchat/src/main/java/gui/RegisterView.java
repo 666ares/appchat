@@ -14,7 +14,7 @@ import controlador.ControladorUsuarios;
 public class RegisterView extends JPanel {
 	
 	static final int ANCHOW = 430;
-	static final int ALTOW = 300;
+	static final int ALTOW = 350;
 
 	private JFrame ventana;
 	private JLabel lblNombre;
@@ -26,10 +26,12 @@ public class RegisterView extends JPanel {
 	private JLabel lblPassword;
 	private JLabel lblPasswordChk;
 	private JLabel lblMensajeError;
+	private JLabel lblSaludo;
 	private JTextField txtNombre;
 	private JTextField txtMovil;
 	private JTextField txtEmail;
 	private JTextField txtUsuario;
+	private JTextField txtSaludo;
 	private JPasswordField txtPassword;
 	private JPasswordField txtPasswordChk;
 	private JButton btnRegistrar;
@@ -104,6 +106,12 @@ public class RegisterView extends JPanel {
 		linea_8.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_8, ANCHOW, 25);
 		linea_8.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+		
+		/* Saludo */
+		JPanel linea_9 = new JPanel();
+		linea_9.setLayout(new FlowLayout(FlowLayout.LEFT));
+		fixedSize(linea_9, ANCHOW, 25);
+		linea_9.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
 		///////////////////////////////////////////////
 		
@@ -163,6 +171,14 @@ public class RegisterView extends JPanel {
 		linea_5.add(txtUsuario);
 		linea_5.add(lblUsuarioError);
 
+		/* linea 9 */
+		lblSaludo = new JLabel("Saludo:", JLabel.RIGHT);
+		fixedSize(lblSaludo, 75, 20);
+		txtSaludo = new JTextField();
+		fixedSize(txtSaludo, 105, 20);
+		linea_9.add(lblSaludo);
+		linea_9.add(txtSaludo);
+		
 		/* linea 6 */
 		lblPassword = new JLabel("Contraseña:", JLabel.RIGHT);
 		fixedSize(lblPassword, 75, 20);
@@ -205,7 +221,6 @@ public class RegisterView extends JPanel {
 		lblMensajeError.setForeground(Color.RED);
 		linea_8.add(lblMensajeError);
 		
-
 		ocultarErrores();
 
 		datosPersonales.add(Box.createRigidArea(new Dimension(20, 20)));
@@ -214,9 +229,11 @@ public class RegisterView extends JPanel {
 		datosPersonales.add(linea_3);
 		datosPersonales.add(linea_4);
 		datosPersonales.add(linea_5);
+		datosPersonales.add(linea_9);
 		datosPersonales.add(linea_6);
 		datosPersonales.add(linea_7);
 		datosPersonales.add(linea_8);
+		
 
 		ventana.setContentPane(this);
 		ventana.revalidate(); /* redibujar con el nuevo JPanel */
@@ -246,7 +263,7 @@ public class RegisterView extends JPanel {
 							txtUsuario.getText(),
 							new String(txtPassword.getPassword()),
 							"icons/profile_picture.png",
-							"Hey there! I'm using AppChat");
+							(txtSaludo.getText() != null) ? txtSaludo.getText() : "Hey there!, Im using AppChat" );
 							
 					if (registrado) {
 						JOptionPane.showMessageDialog(ventana, "Usuario registrado correctamente.", 
