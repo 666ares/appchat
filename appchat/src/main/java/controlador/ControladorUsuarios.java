@@ -1,9 +1,16 @@
 package controlador;
 
+import java.util.List;
+
+import dao.ContactoIndividualDAO;
 import dao.DAOException;
 import dao.FactoriaDAO;
+import dao.GrupoDAO;
 import dao.UsuarioDAO;
 import dominio.CatalogoUsuarios;
+import dominio.Contacto;
+import dominio.ContactoIndividual;
+import dominio.Grupo;
 import dominio.Usuario;
 
 public class ControladorUsuarios {
@@ -45,9 +52,9 @@ public class ControladorUsuarios {
 	}
 	
 	public boolean registrarUsuario(String nombre, String fechaNacimiento,
-									String email, String telefono, 
-									String login, String password,
-									String imagenPerfil, String saludo) {
+								     String email, String telefono, 
+									 String login, String password,
+									 String imagenPerfil, String saludo) {
 		if (esUsuarioRegistrado(login)) 
 			return false;
 		
@@ -70,6 +77,44 @@ public class ControladorUsuarios {
 		
 		CatalogoUsuarios.getUnicaInstancia().removeUsuario(usuario);
 		return true;
+	}
+	
+	public Usuario buscarUsuario(String login) {
+		if (!esUsuarioRegistrado(login))
+			return null;
+		
+		return CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+	}
+	
+	public List<Contacto> mostrarContactos(String login) {
+		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+		
+		List<Contacto> contactos = usuario.getContactos();
+		
+		return contactos;
+	}
+	
+	public boolean añadirContacto(String login, Contacto c) {
+		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+		
+		if (usuario.añadirUsuario(c)) {
+			UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
+			usuarioDAO.updatePerfil(usuario);
+			
+			if (c instanceof ContactoIndividualDAO) {
+				ContactoIndividual cInd = (ContactoIndividual) c;
+				ContactoIndividualDAO cIndDAO = factoria.getContactoIndividualDAO();
+				cIndDAO.create(cInd);
+			}
+			else if (c instanceof GrupoDAO) {
+				Grupo g = (Grupo) c;
+				GrupoDAO grupoDAO = factoria.getGrupoDAO();
+				grupoDAO.create(g);
+			}
+			CatalogoUsuarios.getUnicaInstancia().updateUsuario(usuario);
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean updateUsuario(Usuario usuario) {

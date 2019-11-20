@@ -27,10 +27,8 @@ private ServicioPersistencia servPersistencia;
 		String usuario = servPersistencia.recuperarPropiedadEntidad(eContInd, "usuario");
 		
 		int id = Integer.parseInt(usuario);
-		
 		Usuario u = CatalogoUsuarios.getUnicaInstancia().getUsuario(id);
-
-		ContactoIndividual ci = new ContactoIndividual(nombre, u, telefono);
+		ContactoIndividual ci = new ContactoIndividual(nombre, telefono, u);
 		
 		return ci;	
 	}

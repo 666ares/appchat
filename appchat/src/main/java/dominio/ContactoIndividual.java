@@ -6,15 +6,15 @@ public class ContactoIndividual extends Contacto {
 	private Usuario usuario;
 	private String telefono;
 	
-	public ContactoIndividual(String nombre, Usuario usuario,
-							  String telefono) {
+	public ContactoIndividual(String nombre, String telefono,
+							   Usuario usuario) {
 		super(nombre);
 		this.telefono = telefono;
 		this.usuario = usuario;
 	}
 
 	// Getters
-	public int 		getId()			{ return id; }
+	public int 	getId()			{ return id; }
 	public Usuario 	getUsuario() 	{ return usuario; }
 	public String 	getTelefono() 	{ return telefono; }
 	

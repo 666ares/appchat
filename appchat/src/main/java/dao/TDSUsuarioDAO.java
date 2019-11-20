@@ -28,7 +28,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		String imagenPerfil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagenPerfil");
 		String saludo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
-		
+
 		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, login,
 								password, imagenPerfil, saludo);
 		

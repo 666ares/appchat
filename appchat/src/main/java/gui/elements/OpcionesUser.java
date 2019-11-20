@@ -5,12 +5,18 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import controlador.ControladorUsuarios;
+import dominio.Contacto;
+import dominio.ContactoIndividual;
+import dominio.Usuario;
 
 public class OpcionesUser extends JFrame {
 
@@ -53,9 +59,21 @@ public class OpcionesUser extends JFrame {
 											  "Añadir contacto", 
 											  JOptionPane.OK_CANCEL_OPTION);
 				
-				// String nombre = txtNombre.getText();
-				// String telefono = txtTelefono.getText();
+				String nombre = txtNombre.getText();
+				String telefono = txtTelefono.getText();
 				
+				Usuario uAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				ContactoIndividual ci = new ContactoIndividual(nombre, telefono, uAct);
+				
+				boolean registrado = false;
+				
+				registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(uAct.getLogin(), ci);
+				if (registrado)
+					JOptionPane.showConfirmDialog(null, "Contacto añadido correctamente",
+												  null, JOptionPane.OK_CANCEL_OPTION);
+				else
+					JOptionPane.showConfirmDialog(null, "No se pudo añadir el contacto", 
+												  null, JOptionPane.OK_CANCEL_OPTION);
 			}
 		});
 		
@@ -69,8 +87,15 @@ public class OpcionesUser extends JFrame {
 		boton2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-
+				Usuario uAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				List<Contacto> contactos = uAct.getContactos();
 				
+				for (Contacto c : contactos) {
+					if (c instanceof ContactoIndividual) {
+						ContactoIndividual ci = (ContactoIndividual) c;
+						System.out.println("[Nombre: " + ci.getNombre() + ", teléfono: " + ci.getTelefono() + "]");
+					}
+				}
 			}
 		});
 		
