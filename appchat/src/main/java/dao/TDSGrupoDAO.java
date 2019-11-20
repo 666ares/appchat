@@ -1,5 +1,5 @@
 package dao;
 
-public class TDSGrupoDAO {
+public final class TDSGrupoDAO implements GrupoDAO {
 
 }

@@ -1,5 +1,5 @@
 package dao;
 
-public class TDSMensajeDAO {
+public final class TDSMensajeDAO implements MensajeDAO {
 
 }

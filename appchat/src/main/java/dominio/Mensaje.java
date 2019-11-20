@@ -26,6 +26,7 @@ public class Mensaje {
 		this.hora = LocalDate.now();
 	}
 
+	// Getters
 	public Usuario 		getEmisor()		{ return emisor; }
 	public Contacto 	getReceptor()	{ return receptor; }
 	public String 		getTexto() 		{ return texto; }

@@ -18,8 +18,8 @@ public class Grupo extends Contacto {
 	
 	public Usuario getAdmin() { return admin; }
 	
-	public List<ContactoIndividual> getMiembros() {
-		return new LinkedList<ContactoIndividual>(miembros);
+	public List<ContactoIndividual> getMiembros() 	{ 
+		return new LinkedList<ContactoIndividual>(miembros); 
 	}
 
 }

@@ -58,70 +58,90 @@ public class RegisterView extends JPanel {
 		datosPersonales.setLayout(new BoxLayout(datosPersonales, BoxLayout.Y_AXIS));
 		tabbedPane.addTab("Datos del usuario", null, datosPersonales, null);
 
-		/* Nombre y apellidos */
+		// ==================
+		// Nombre y apellidos
+		// ==================
 		JPanel linea_1 = new JPanel();
 		linea_1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_1, ANCHOW, 25);
 		linea_1.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		/* Fecha de nacimiento */
+		// ================
+		// Fecha nacimiento
+		// ================
 		JPanel linea_2 = new JPanel();
 		linea_2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_2, ANCHOW, 25);
 		linea_2.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		/* Email */
+		// =====
+		// Email
+		// =====
 		JPanel linea_3 = new JPanel();
 		linea_3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_3, ANCHOW, 25);
 		linea_3.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		/* Número de teléfono */
+		// ==================
+		// Número de teléfono
+		// ==================
 		JPanel linea_4 = new JPanel();
 		linea_4.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_4, ANCHOW, 25);
 		linea_4.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		/* Usuario */
+		// =======
+		// Usuario
+		// =======
 		JPanel linea_5 = new JPanel();
 		linea_5.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_5, ANCHOW, 25);
 		linea_5.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		/* Contraseña */
+		// ==========
+		// Contraseña
+		// ==========
 		JPanel linea_6 = new JPanel();
 		linea_6.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_6, ANCHOW, 25);
 		linea_6.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		/* Botones */
+		// =======
+		// Botones
+		// =======
 		JPanel linea_7 = new JPanel();
 		linea_7.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_7, ANCHOW, 35);
 		linea_7.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 		
-		/* Mensajes de error inferiores */
+		// =========================
+		// Mensaje de error inferior
+		// =========================
 		JPanel linea_8 = new JPanel();
 		linea_8.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_8, ANCHOW, 25);
 		linea_8.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 		
-		/* Saludo */
+		// ======
+		// Saludo
+		// ======
 		JPanel linea_9 = new JPanel();
 		linea_9.setLayout(new FlowLayout(FlowLayout.LEFT));
 		fixedSize(linea_9, ANCHOW, 25);
 		linea_9.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 
-		///////////////////////////////////////////////
 		
 		/* linea 1 */
 		lblNombre = new JLabel("Nombre:", JLabel.RIGHT);
 		fixedSize(lblNombre, 75, 20);
+		
 		txtNombre = new JTextField();
 		fixedSize(txtNombre, 210, 20);
+		
 		lblNombreError = new JLabel("*", JLabel.RIGHT);
 		fixedSize(lblNombreError, 7, 8);
 		lblNombreError.setForeground(Color.RED);
+		
 		linea_1.add(lblNombre);
 		linea_1.add(txtNombre);
 		linea_1.add(lblNombreError);
@@ -129,19 +149,24 @@ public class RegisterView extends JPanel {
 		/* linea 2 */
 		fecha = new JDateChooser();
 		fixedSize(fecha, 150, 20);
+		
 		lblEdad = new JLabel("Fecha nacimiento:", JLabel.RIGHT);
 		fixedSize(lblEdad, 75, 20);
+		
 		linea_2.add(lblEdad);
 		linea_2.add(fecha);
 
 		/* linea 3 */
 		lblEmail = new JLabel("Email:", JLabel.RIGHT);
 		fixedSize(lblEmail, 75, 20);
+		
 		txtEmail = new JTextField();
 		fixedSize(txtEmail, 210, 20);
+		
 		lblEmailError = new JLabel("*", JLabel.RIGHT);
 		fixedSize(lblEmailError, 7, 8);
 		lblEmailError.setForeground(Color.RED);
+		
 		linea_3.add(lblEmail);
 		linea_3.add(txtEmail);
 		linea_3.add(lblEmailError);
@@ -149,11 +174,14 @@ public class RegisterView extends JPanel {
 		/* linea 4 */
 		lblMovil = new JLabel("Teléfono:", JLabel.RIGHT);
 		fixedSize(lblMovil, 75, 20);
+		
 		txtMovil = new JTextField();
 		fixedSize(txtMovil, 105, 20);
+		
 		lblMovilError = new JLabel("*", JLabel.RIGHT);
 		fixedSize(lblMovilError, 7, 8);
 		lblMovilError.setForeground(Color.RED);
+		
 		linea_4.add(lblMovil);
 		linea_4.add(txtMovil);
 		linea_4.add(lblMovilError);
@@ -161,11 +189,14 @@ public class RegisterView extends JPanel {
 		/* linea 5 */
 		lblUsuario = new JLabel("Usuario:", JLabel.RIGHT);
 		fixedSize(lblUsuario, 75, 20);
+		
 		txtUsuario = new JTextField();
 		fixedSize(txtUsuario, 105, 20);
+		
 		lblUsuarioError = new JLabel("*", JLabel.RIGHT);
 		fixedSize(lblUsuarioError, 7, 8);
 		lblUsuarioError.setForeground(Color.RED);
+		
 		linea_5.add(lblUsuario);
 		linea_5.add(txtUsuario);
 		linea_5.add(lblUsuarioError);
@@ -173,11 +204,13 @@ public class RegisterView extends JPanel {
 		/* linea 6 */
 		lblPassword = new JLabel("Contraseña:", JLabel.RIGHT);
 		fixedSize(lblPassword, 75, 20);
+		
 		txtPassword = new JPasswordField();
 		fixedSize(txtPassword, 105, 20);
 		
 		lblPasswordChk = new JLabel("Repetir:", JLabel.RIGHT);
 		fixedSize(lblPasswordChk, 50, 20);
+		
 		txtPasswordChk = new JPasswordField();
 		fixedSize(txtPasswordChk, 105, 20);
 		
@@ -190,20 +223,14 @@ public class RegisterView extends JPanel {
 		linea_6.add(lblPasswordChk);
 		linea_6.add(txtPasswordChk);
 		linea_6.add(lblPasswordError);
-
-		/* linea 9 */
-		lblSaludo = new JLabel("Saludo:", JLabel.RIGHT);
-		fixedSize(lblSaludo, 75, 20);
-		txtSaludo = new JTextField();
-		fixedSize(txtSaludo, 105, 20);
-		linea_9.add(lblSaludo);
-		linea_9.add(txtSaludo);
 		
 		/* linea 7 */
 		btnVolver = new JButton("Volver");
 		fixedSize(btnVolver, 105, 30);
+		
 		btnRegistrar = new JButton("Registrar");
 		fixedSize(btnRegistrar, 105, 30);
+		
 		linea_7.add(Box.createHorizontalStrut(75));
 		linea_7.add(btnVolver);
 		linea_7.add(Box.createHorizontalStrut(50));
@@ -213,7 +240,18 @@ public class RegisterView extends JPanel {
 		lblMensajeError = new JLabel("* Los campos indicados son obligatorios", JLabel.RIGHT);
 		fixedSize(lblMensajeError, 315, 15);
 		lblMensajeError.setForeground(Color.RED);
+		
 		linea_8.add(lblMensajeError);
+		
+		/* linea 9 */
+		lblSaludo = new JLabel("Saludo:", JLabel.RIGHT);
+		fixedSize(lblSaludo, 75, 20);
+		
+		txtSaludo = new JTextField();
+		fixedSize(txtSaludo, 105, 20);
+		
+		linea_9.add(lblSaludo);
+		linea_9.add(txtSaludo);
 		
 		ocultarErrores();
 
@@ -236,7 +274,7 @@ public class RegisterView extends JPanel {
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ventana.setContentPane(jpanelAnterior);
-				ventana.setTitle("Login Gestor Eventos");
+				ventana.setTitle("Login AppChat");
 				ventana.revalidate();
 			}
 		});
@@ -257,7 +295,7 @@ public class RegisterView extends JPanel {
 							txtUsuario.getText(),
 							new String(txtPassword.getPassword()),
 							"icons/profile_picture.png",
-							(txtSaludo.getText() != null) ? txtSaludo.getText() : "Hey there!, Im using AppChat" );
+							(txtSaludo.getText() != null) ? txtSaludo.getText() : "Hey there!, Im using AppChat");
 							
 					if (registrado) {
 						JOptionPane.showMessageDialog(ventana, "Usuario registrado correctamente.", 

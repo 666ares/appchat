@@ -16,7 +16,8 @@ public class CatalogoUsuarios {
 	private HashMap<String, Usuario> usuariosPorLogin;
 
 	public static CatalogoUsuarios getUnicaInstancia() {
-		if (unicaInstancia == null) unicaInstancia = new CatalogoUsuarios();
+		if (unicaInstancia == null) 
+			unicaInstancia = new CatalogoUsuarios();
 		return unicaInstancia;
 	}
 	
@@ -30,7 +31,7 @@ public class CatalogoUsuarios {
 			List<Usuario> listaUsuarios = factoria.getUsuarioDAO().getAll();
 			for (Usuario usuario : listaUsuarios) {
 				usuariosPorID.put(usuario.getId(), usuario);
-				usuariosPorLogin.put(usuario.getUsuario(), usuario);
+				usuariosPorLogin.put(usuario.getLogin(), usuario);
 			}
 		} catch (DAOException eDAO) { eDAO.printStackTrace(); }
 	}
@@ -49,12 +50,12 @@ public class CatalogoUsuarios {
 	
 	public void addUsuario(Usuario usuario) {
 		usuariosPorID.put(usuario.getId(), usuario);
-		usuariosPorLogin.put(usuario.getUsuario(), usuario);
+		usuariosPorLogin.put(usuario.getLogin(), usuario);
 	}
 	
 	public void removeUsuario(Usuario usuario) {
 		usuariosPorID.remove(usuario.getId());
-		usuariosPorLogin.remove(usuario.getUsuario());
+		usuariosPorLogin.remove(usuario.getLogin());
 	}
 
 	public void updateUsuario(Usuario usuario) {

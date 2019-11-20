@@ -56,6 +56,7 @@ public class MainView extends JFrame {
 		setTitle("AppChat");
 		setBounds(100, 100, 881, 557);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
@@ -103,8 +104,6 @@ public class MainView extends JFrame {
 		});
 		
 		panel.add(boton1);
-		
-		//Espacio
 		
 		// ========
 		// Estados
@@ -193,7 +192,7 @@ public class MainView extends JFrame {
 		JScrollPane listaChat = new JScrollPane(
 								ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
 								ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		listaChat.setBounds(10, 55, 277, 452);
+		listaChat.setBounds(10, 55, 277, 463);
 		layeredPane.add(listaChat);
 		
 		JPanel panel_1 = new JPanel();
@@ -207,7 +206,7 @@ public class MainView extends JFrame {
 		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
 		
 		for (int i = 0; i < 10; i++) {
-			final BoxChat chat = new BoxChat("Usuario " + i, "ultimo mensaje " + i); //Usuario y ultima mensaje del chat
+			final BoxChat chat = new BoxChat("Usuario " + i, "ultimo mensaje " + i); // Usuario y ultima mensaje del chat
 			chats.add(chat);
 			chat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -216,12 +215,14 @@ public class MainView extends JFrame {
 					
 					// Obtener nombre del usuario del chat
 					boton4.setText("Pipi estrada vieja puta viva españa el nieto de franco");
-					
 					// Obtener imagen del usuario del chat
-					boton4.changeIcon("icons/profile_picture.png", 30, 30);
+					boton4.changeIcon("icons/profile_picture.png", 20, 20);
+					
 					boton5.makeVisible(true);
 					boton6.makeVisible(true);
+					
 					chat.setResaltar(true);
+					
 					panel_2.removeAll();
 					panel_2.repaint();
 					
@@ -239,13 +240,16 @@ public class MainView extends JFrame {
 		// Icono 'enviar' y 'emojis'
 		// =================================
 		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(297, 474, 558, 33);
+		panel_3.setBounds(297, 484, 558, 33);
 		
 		layeredPane.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		
+		
 		BotonChat boton7 = new BotonChat("icons/emoji.png", 25, 25);
 		panel_3.add(boton7);
+		
+		panel_3.add(Box.createVerticalStrut(40));
 		
 		textField = new JTextField();
 		panel_3.add(textField);

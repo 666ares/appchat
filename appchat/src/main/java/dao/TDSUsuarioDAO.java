@@ -24,12 +24,12 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento");
 		String email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
 		String telefono = servPersistencia.recuperarPropiedadEntidad(eUsuario, "telefono");
-		String usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "usuario");
+		String login = servPersistencia.recuperarPropiedadEntidad(eUsuario, "login");
 		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		String imagenPerfil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagenPerfil");
 		String saludo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
 		
-		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, usuario,
+		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, login,
 								password, imagenPerfil, saludo);
 		
 		u.setId(eUsuario.getId());
@@ -46,7 +46,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 						new Propiedad("fechaNacimiento", usuario.getFechaNacimiento()),
 						new Propiedad("email", usuario.getEmail()),
 						new Propiedad("telefono", usuario.getTelefono()),
-						new Propiedad("usuario", usuario.getUsuario()),
+						new Propiedad("login", usuario.getLogin()),
 						new Propiedad("password", usuario.getPassword()),
 						new Propiedad("imagenPerfil", usuario.getImagenPerfil()),
 						new Propiedad("saludo", usuario.getSaludo())
@@ -73,10 +73,8 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "imagenPerfil");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "imagenPerfil", usuario.getImagenPerfil());
-		
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "nombre", usuario.getNombre());
-		
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "saludo");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "saludo", usuario.getSaludo());
 	}

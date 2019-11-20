@@ -25,23 +25,36 @@ public class BoxChat extends JButton {
 		
 		Box chat = new Box(BoxLayout.LINE_AXIS);
 		
-		chat.setPreferredSize(new Dimension(277, 75));
-		chat.setMinimumSize(new Dimension(277, 75));
+		chat.setPreferredSize(new Dimension(277, 65));
+		chat.setMinimumSize(new Dimension(277, 65));
 		
+
+		// Imagen por defecto
 		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
-		Image newImage = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
+		Image newImage = userPic.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage);
 		JLabel imagelabel = new JLabel(userPic2);
+		
+		/* 
+		 * Mover la imagen, el nombre y el último mensaje un poco hacia
+		 * la derecha, para que no esté tan pegado al borde 
+		 * */
+		chat.add(Box.createHorizontalStrut(8));
 		chat.add(imagelabel);
+		chat.add(Box.createHorizontalStrut(5));
 		
 		Box userinfo = Box.createVerticalBox();
+		
 		JLabel label = new JLabel(nombreUser);
-		label.setFont(new Font("Tahome", Font.BOLD, 16));
+		label.setFont(new Font("Arial", Font.BOLD, 13));
 		userinfo.add(label);
 		
-		Component verticalStrut = Box.createVerticalStrut(10);
+		Component verticalStrut = Box.createVerticalStrut(6);
 		userinfo.add(verticalStrut);
-		userinfo.add(new JLabel(lastMensaje));
+		JLabel label2 = new JLabel(lastMensaje);
+		label2.setFont(new Font("Arial", Font.PLAIN, 12));
+		userinfo.add(label2);
+		
 		chat.add(userinfo);	
 		
 		add(chat);
@@ -60,22 +73,27 @@ public class BoxChat extends JButton {
 		
 		Box chat = new Box(BoxLayout.LINE_AXIS);
 		
-		chat.setPreferredSize(new Dimension(277, 75));
-		chat.setMinimumSize(new Dimension(277, 75));
+		chat.setPreferredSize(new Dimension(277, 65));
+		chat.setMinimumSize(new Dimension(277, 65));
 		
-		Image newImage = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
+		Image newImage = userPic.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage);
 		JLabel imagelabel = new JLabel(userPic2);
+		
+		chat.add(Box.createHorizontalStrut(8));
 		chat.add(imagelabel);
+		chat.add(Box.createHorizontalStrut(5));
 		
 		Box userinfo = Box.createVerticalBox();
 		JLabel label = new JLabel(nombreUser);
-		label.setFont(new Font("Tahome", Font.BOLD, 16));
+		label.setFont(new Font("Arial", Font.BOLD, 13));
 		userinfo.add(label);
 		
-		Component verticalStrut = Box.createVerticalStrut(10);
+		Component verticalStrut = Box.createVerticalStrut(6);
 		userinfo.add(verticalStrut);
-		userinfo.add(new JLabel(lastMensaje));
+		JLabel label2 = new JLabel(lastMensaje);
+		label2.setFont(new Font("Arial", Font.PLAIN, 12));
+		userinfo.add(label2);
 		chat.add(userinfo);	
 		
 		add(chat);

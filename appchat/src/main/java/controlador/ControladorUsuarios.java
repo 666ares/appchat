@@ -22,7 +22,8 @@ public class ControladorUsuarios {
 	}
 	
 	public static ControladorUsuarios getUnicaInstancia() {
-		if (unicaInstancia == null) unicaInstancia = new ControladorUsuarios();
+		if (unicaInstancia == null) 
+			unicaInstancia = new ControladorUsuarios();
 		return unicaInstancia;
 	}
 	
@@ -34,8 +35,8 @@ public class ControladorUsuarios {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(login) != null;
 	}
 	
-	public boolean loginUsuario(String nombre, String password) {
-		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(nombre);
+	public boolean loginUsuario(String login, String password) {
+		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
 		if (usuario != null && usuario.getPassword().equals(password)) {
 			this.usuarioActual = usuario;
 			return true;
@@ -43,13 +44,16 @@ public class ControladorUsuarios {
 		return false;
 	}
 	
-	public boolean registrarUsuario(String nombre, String fechaNacimiento, String email,
-									String telefono, String login, String password,
+	public boolean registrarUsuario(String nombre, String fechaNacimiento,
+									String email, String telefono, 
+									String login, String password,
 									String imagenPerfil, String saludo) {
-		if (esUsuarioRegistrado(login)) return false;
+		if (esUsuarioRegistrado(login)) 
+			return false;
 		
-		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, telefono,
-									  login, password, imagenPerfil, saludo);
+		Usuario usuario = new Usuario(nombre, fechaNacimiento, email,
+									  telefono, login, password,
+									  imagenPerfil, saludo);
 		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
 		usuarioDAO.create(usuario);
 		
@@ -58,7 +62,7 @@ public class ControladorUsuarios {
 	}
 	
 	public boolean borrarUsuario(Usuario usuario) {
-		if (!esUsuarioRegistrado(usuario.getUsuario())) 
+		if (!esUsuarioRegistrado(usuario.getLogin())) 
 			return false;
 		
 		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
@@ -69,7 +73,7 @@ public class ControladorUsuarios {
 	}
 	
 	public boolean updateUsuario(Usuario usuario) {
-		if (!esUsuarioRegistrado(usuario.getUsuario()))
+		if (!esUsuarioRegistrado(usuario.getLogin()))
 			return false;
 		
 		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();

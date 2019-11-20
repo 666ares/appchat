@@ -42,12 +42,16 @@ public class OpcionesUser extends JFrame {
 				
 				JTextField txtNombre = new JTextField();
 				JTextField txtTelefono = new JTextField();
+				
 				Object[] campos = {
 				    "Nombre del contacto:", txtNombre,
 				    "Número de teléfono: ", txtTelefono
 				};
 				
-				JOptionPane.showConfirmDialog(null, campos, "Añadir contacto", JOptionPane.OK_CANCEL_OPTION);
+				JOptionPane.showConfirmDialog(null,
+											  campos,
+											  "Añadir contacto", 
+											  JOptionPane.OK_CANCEL_OPTION);
 				
 				// String nombre = txtNombre.getText();
 				// String telefono = txtTelefono.getText();
@@ -62,13 +66,29 @@ public class OpcionesUser extends JFrame {
 		// =========================
 		JButton boton2 = new JButton("Mostrar contactos");
 		boton2.setPreferredSize(new Dimension(430, 50));
-		contentPane.add(boton2, BorderLayout.CENTER);
+		boton2.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+
+				
+			}
+		});
 		
+		contentPane.add(boton2, BorderLayout.CENTER);
+
 		// ===================
 		// Botón 'Crear grupo'
 		// ===================
 		JButton boton3 = new JButton("Crear grupo");
 		boton3.setPreferredSize(new Dimension(430, 50));
+		boton3.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+
+				
+			}
+		});
+		
 		contentPane.add(boton3, BorderLayout.CENTER);
 		
 		// =======================
@@ -76,6 +96,14 @@ public class OpcionesUser extends JFrame {
 		// =======================
 		JButton boton4 = new JButton("Modificar grupo");
 		boton4.setPreferredSize(new Dimension(430, 50));
+		boton4.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+
+				
+			}
+		});
+
 		contentPane.add(boton4, BorderLayout.CENTER);
 		
 		// ========================
@@ -83,6 +111,14 @@ public class OpcionesUser extends JFrame {
 		// ========================
 		JButton boton5 = new JButton("Ver estadísticas");
 		boton5.setPreferredSize(new Dimension(430, 50));
+		boton5.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+
+				
+			}
+		});
+
 		contentPane.add(boton5, BorderLayout.CENTER);
 		
 		// =======================
@@ -90,6 +126,14 @@ public class OpcionesUser extends JFrame {
 		// =======================
 		JButton boton6 = new JButton("Hacerse premium");
 		boton6.setPreferredSize(new Dimension(430, 50));
+		boton6.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+
+				
+			}
+		});
+
 		contentPane.add(boton6, BorderLayout.CENTER);
 		
 		// =====================
@@ -101,7 +145,6 @@ public class OpcionesUser extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
-				
 			}
 		});
 		
@@ -109,13 +152,7 @@ public class OpcionesUser extends JFrame {
 		
 	}
 	
-	public void makeVisible() {
-		setVisible(true);
-	}
-	
-	public void makeInvisible() {
-		setVisible(false);
-	}
-	
+	public void makeVisible() 	{ setVisible(true); }
+	public void makeInvisible() { setVisible(false); }
 
 }
