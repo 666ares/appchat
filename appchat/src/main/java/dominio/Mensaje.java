@@ -34,6 +34,9 @@ public class Mensaje {
 	public String 		getEmoticono() 	{ return emoticono; }
 	
 	// Setters
-	public void			setId(int id)	{ this.id = id; }
+	public void			setId(int id)			       { this.id = id; }
+	public void			setEmisor(Usuario usuario)     { this.emisor = usuario; }
+	public void 		setReceptor(Contacto contacto) { this.receptor = contacto; }
+	public void 		setHora(LocalDate hora)		   { this.hora = hora; }
 	
 }

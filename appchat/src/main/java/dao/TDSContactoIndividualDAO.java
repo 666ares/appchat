@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
 import dominio.ContactoIndividual;
+import dominio.Mensaje;
 import dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
@@ -40,6 +42,7 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		String telefono;
 		String usuario_id;
 		Usuario u;
+		List<Mensaje> m;
 
 		eIndividual = servPersistencia.recuperarEntidad(codigo);
 
@@ -59,6 +62,11 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		u = adaptadorU.recuperarUsuario(Integer.parseInt(usuario_id));
 		
 		ci.setUsuario(u);
+		
+		m = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eIndividual, "mensajes"));
+		for(Mensaje mensaje : m) {
+			ci.addMensaje(mensaje);
+		}
 		
 		return ci;	
 	}
@@ -88,7 +96,8 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 				new ArrayList<Propiedad>(Arrays.asList(
 						new Propiedad("nombre", contInd.getNombre()),
 						new Propiedad("telefono", contInd.getTelefono()),
-						new Propiedad("usuario", String.valueOf(contInd.getUsuario().getId()))
+						new Propiedad("usuario", String.valueOf(contInd.getUsuario().getId())),
+						new Propiedad("mensajes", obtenerCodigosMensajes(contInd.getMensajes()))
 						))
 				);
 		
@@ -98,6 +107,15 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		contInd.setId(eContInd.getId());
 	}
 	
+	public void modificarIndividual(ContactoIndividual cInd) {
+		
+		Entidad eConEntidad = servPersistencia.recuperarEntidad(cInd.getId());
+		
+		String mensajes = obtenerCodigosMensajes(cInd.getMensajes());
+		servPersistencia.eliminarPropiedadEntidad(eConEntidad, "mensajes");
+		servPersistencia.anadirPropiedadEntidad(eConEntidad, "mensajes", mensajes);
+		
+	}
 	
 	public void borrarIndividual(ContactoIndividual cInd) {
 		Entidad eContInd = servPersistencia.recuperarEntidad(cInd.getId());
@@ -113,6 +131,31 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 			contInd.add(recuperarIndividual(eContInd.getId()));
 		
 		return contInd;
+	}
+	
+	private String obtenerCodigosMensajes(List<Mensaje> mensajes) {
+		String aux = "";
+		for (Mensaje m : mensajes) {
+			aux += m.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Mensaje> obtenerMensajesDesdeCodigos(String cMensajes) {
+		List<Mensaje> listaMensajes = new LinkedList<Mensaje>();
+		
+		if (cMensajes == null || cMensajes.equals(""))
+			return listaMensajes;
+		
+		StringTokenizer strTok = new StringTokenizer(cMensajes, " ");
+		
+		TDSMensajeDAO adaptadorM = TDSMensajeDAO.getUnicaInstancia();
+		
+		while (strTok.hasMoreTokens()) {
+			listaMensajes.add(
+					adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaMensajes;
 	}
 	
 }

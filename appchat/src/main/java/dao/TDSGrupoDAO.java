@@ -10,6 +10,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import dominio.ContactoIndividual;
 import dominio.Grupo;
+import dominio.Mensaje;
 import dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
@@ -61,7 +62,8 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		eGrupo.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 										new Propiedad("nombre", grupo.getNombre()),
 										new Propiedad("admin", String.valueOf(grupo.getId())),
-										new Propiedad("miembros", obtenerCodigosMiembros(grupo.getMiembros()))
+										new Propiedad("miembros", obtenerCodigosMiembros(grupo.getMiembros())),
+										new Propiedad("mensajes", obtenerCodigosMensajes(grupo.getMensajes()))
 										))
 				);
 		
@@ -84,6 +86,7 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		Usuario admin;
 		String admin_id;
 		List<ContactoIndividual> miembros;
+		List<Mensaje> m;
 		
 		// Recuperar entidad
 		eGrupo = servPersistencia.recuperarEntidad(codigo);
@@ -112,6 +115,12 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		for (ContactoIndividual ci : miembros)
 			grupo.addMiembro(ci);
 		
+		/* Grupos */
+		m = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes"));
+		for(Mensaje mensaje : m) {
+			grupo.addMensaje(mensaje);
+		}
+		
 		return grupo;
 	}
 	
@@ -131,6 +140,10 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		String miembros = obtenerCodigosMiembros(grupo.getMiembros());
 		servPersistencia.eliminarPropiedadEntidad(eGrupo, "miembros");
 		servPersistencia.anadirPropiedadEntidad(eGrupo, "miembros", miembros);
+		
+		String mensajes = obtenerCodigosMensajes(grupo.getMensajes());
+		servPersistencia.eliminarPropiedadEntidad(eGrupo, "mensajes");
+		servPersistencia.anadirPropiedadEntidad(eGrupo, "mensajes", mensajes);
 	}
 
 	public List<Grupo> recuperarTodosGrupos() {
@@ -166,5 +179,30 @@ public final class TDSGrupoDAO implements GrupoDAO {
 			aux += c.getId() +  " ";
 		
 		return aux.trim();
+	}
+	
+	private String obtenerCodigosMensajes(List<Mensaje> mensajes) {
+		String aux = "";
+		for (Mensaje m : mensajes) {
+			aux += m.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Mensaje> obtenerMensajesDesdeCodigos(String cMensajes) {
+		List<Mensaje> listaMensajes = new LinkedList<Mensaje>();
+		
+		if (cMensajes == null || cMensajes.equals(""))
+			return listaMensajes;
+		
+		StringTokenizer strTok = new StringTokenizer(cMensajes, " ");
+		
+		TDSMensajeDAO adaptadorM = TDSMensajeDAO.getUnicaInstancia();
+		
+		while (strTok.hasMoreTokens()) {
+			listaMensajes.add(
+					adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaMensajes;
 	}
 }

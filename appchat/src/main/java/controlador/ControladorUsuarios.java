@@ -11,11 +11,13 @@ import dao.ContactoIndividualDAO;
 import dao.DAOException;
 import dao.FactoriaDAO;
 import dao.GrupoDAO;
+import dao.MensajeDAO;
 import dao.UsuarioDAO;
 import dominio.CatalogoUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Grupo;
+import dominio.Mensaje;
 import dominio.Usuario;
 
 public class ControladorUsuarios {
@@ -26,6 +28,7 @@ public class ControladorUsuarios {
 	private ContactoIndividualDAO 	adaptadorIndividual;
 	private GrupoDAO 				adaptadorGrupo;
 	private CatalogoUsuarios 		catalogoUsuarios;
+	private MensajeDAO				adaptadorMensaje;
 	private Usuario 				usuarioActual;
 	
 	private ControladorUsuarios() {
@@ -152,6 +155,23 @@ public class ControladorUsuarios {
 		return false;
 	}
 	
+	public void enviarMensaje(Mensaje mensaje) {
+		Contacto contacto = mensaje.getReceptor();
+		
+		if (contacto instanceof ContactoIndividual) {
+			ContactoIndividual cInd = (ContactoIndividual) contacto;
+			cInd.addMensaje(mensaje);
+			adaptadorIndividual.modificarIndividual(cInd);
+		}
+		else if (contacto instanceof Grupo) {
+			Grupo g = (Grupo) contacto;
+			g.addMensaje(mensaje);
+			adaptadorGrupo.modificarGrupo(g);
+		}
+		
+		adaptadorMensaje.registrarMensaje(mensaje);
+	}
+	
 	public boolean updateUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getLogin()))
 			return false;
@@ -172,6 +192,7 @@ public class ControladorUsuarios {
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorIndividual = factoria.getContactoIndividualDAO();
 		adaptadorGrupo = factoria.getGrupoDAO();
+		adaptadorMensaje = factoria.getMensajeDAO();
 	}
 	
 	private void inicializarCatalogo() {

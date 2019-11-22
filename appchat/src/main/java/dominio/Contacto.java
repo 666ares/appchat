@@ -13,6 +13,10 @@ public abstract class Contacto {
 		this.mensajes = new LinkedList<Mensaje>();
 	}
 	
+	public void addMensaje(Mensaje mensaje) {
+		this.mensajes.add(mensaje);
+	}
+	
 	// Getters
 	public String 			getNombre() 	{ return nombre; }
 	public List<Mensaje> 	getMensajes() 	{ return new LinkedList<Mensaje>(mensajes);  }
