@@ -124,7 +124,7 @@ public class OpcionesUser extends JFrame {
 				
 				JFrame ventanaTabla = new JFrame();
 				ventanaTabla.setTitle("Lista de contactos");    
-				ventanaTabla.setBounds(100, 100, 355, (contactos.size() * 60) + 52);
+				ventanaTabla.setBounds(100, 100, 375, (contactos.size() * 60) + 52);
 				ventanaTabla.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				ventanaTabla.setVisible(true);
 				ventanaTabla.setResizable(false);

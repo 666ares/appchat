@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -18,6 +19,8 @@ import javax.swing.BoxLayout;
 import javax.swing.border.Border;
 
 import controlador.ControladorUsuarios;
+import dominio.CatalogoUsuarios;
+import dominio.Contacto;
 import dominio.Usuario;
 import gui.elements.BotonChat;
 import gui.elements.BoxChat;
@@ -137,7 +140,8 @@ public class MainView extends JFrame {
 		final BotonChat boton4 = new BotonChat("", "");
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InfoUChat infochat = new InfoUChat("Usuario Chat", "698574891");
+				// TODO obtener el numero y foto del contacto con el nombre del boton4
+				InfoUChat infochat = new InfoUChat(boton4.getText(), "698574891");
 				infochat.makeVisible();
 			}
 		});
@@ -198,24 +202,34 @@ public class MainView extends JFrame {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 55, 277, 452);
 		
+		// =================================
+		// Obtener los contactos del usuario actual
+		// =================================
+		Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+		List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
+		
+		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
+		for(int i = 0; i<contactos.size(); i++) {
+			BoxChat chat = new BoxChat(contactos.get(i).getNombre() + " ", "ultimo mensaje");
+			chats.add(chat);
+		}
+		
 		// Calcular altura dependiendo de los chats que existan
-		panel_1.setPreferredSize(new Dimension(277, 75*10+20));
+		panel_1.setPreferredSize(new Dimension(277, 75*contactos.size()+20));
 		listaChat.setViewportView(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
-		// Lista de chats
-		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
+		// =================================
+		// Lista de Chats
+		// =================================
 		
-		for (int i = 0; i < 10; i++) {
-			final BoxChat chat = new BoxChat("Usuario " + i, "ultimo mensaje " + i); // Usuario y ultima mensaje del chat
-			chats.add(chat);
+		for(BoxChat chat : chats) {
 			chat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					// Actualizamos la información de la barra de botones
 					reiniciarPaneles(chats);
 					
-					// Obtener nombre del usuario del chat
-					boton4.setText("Pipi estrada vieja puta viva españa el nieto de franco");
+					boton4.setText(chat.getContacto());
 					// Obtener imagen del usuario del chat
 					boton4.changeIcon("icons/profile_picture.png", 20, 20);
 					
@@ -228,8 +242,9 @@ public class MainView extends JFrame {
 					panel_2.repaint();
 					
 					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
-					// -> Pasar los dos usuarios y lista de mensajes
-					rellenarChat(panel_2, "Hola ", "Respuesta de prueba");
+					// -> Pasar los dos usuarios y lista de mensajes (Usuario Actual y Concacto)
+					
+					rellenarChat(panel_2, chat.getContacto(), usuarioAct,  "Hola ", "Respuesta de prueba");
 				}
 			});
 			
@@ -261,7 +276,7 @@ public class MainView extends JFrame {
 		
 	}
 	
-	void rellenarChat(JPanel panel, String ... mensajes) {
+	void rellenarChat(JPanel panel, String contacto,Usuario user, String ... mensajes) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
@@ -271,12 +286,12 @@ public class MainView extends JFrame {
 		for (String mensaje : mensajes) {
 			if (propietario) {
 				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje, Color.GRAY, "Yo  ", BubbleText.SENT);
+				burbuja = new BubbleText(panel, mensaje, Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
 				panel.add(burbuja);
 				propietario = false;
 			} else {
 				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje, Color.GREEN, "Otro Usuario", BubbleText.RECEIVED);
+				burbuja = new BubbleText(panel, mensaje, Color.GREEN, contacto, BubbleText.RECEIVED);
 				panel.add(burbuja);
 				propietario = true;
 			}

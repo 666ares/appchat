@@ -18,10 +18,14 @@ public class BoxChat extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
+	private String contacto;
+	
 	public BoxChat(String nombreUser, String lastMensaje) {
 		
 		// Constructor como un horizontalBox
 		super();
+		
+		this.contacto = nombreUser;
 		
 		Box chat = new Box(BoxLayout.LINE_AXIS);
 		
@@ -117,6 +121,10 @@ public class BoxChat extends JButton {
 			setContentAreaFilled(false);
 			setFocusPainted(false);
 		}
+	}
+	
+	public String getContacto() {
+		return this.contacto;
 	}
 	
 }
