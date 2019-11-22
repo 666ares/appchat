@@ -4,7 +4,7 @@ public abstract class FactoriaDAO {
 
 	public static final String DAO_TDS = "dao.TDSFactoriaDAO";
 	
-	private static FactoriaDAO unicaInstancia = null;
+	private static FactoriaDAO unicaInstancia;
 	
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException {
 		if (unicaInstancia == null)

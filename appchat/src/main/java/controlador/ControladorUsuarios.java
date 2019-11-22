@@ -1,6 +1,11 @@
 package controlador;
 
+import java.awt.Image;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import javax.swing.ImageIcon;
 
 import dao.ContactoIndividualDAO;
 import dao.DAOException;
@@ -15,17 +20,17 @@ import dominio.Usuario;
 
 public class ControladorUsuarios {
 
-	private Usuario usuarioActual;
 	private static ControladorUsuarios unicaInstancia;
-	private FactoriaDAO factoria;
+	
+	private UsuarioDAO 				adaptadorUsuario;
+	private ContactoIndividualDAO 	adaptadorIndividual;
+	private GrupoDAO 				adaptadorGrupo;
+	private CatalogoUsuarios 		catalogoUsuarios;
+	private Usuario 				usuarioActual;
 	
 	private ControladorUsuarios() {
-		usuarioActual = null;
-		try {
-			factoria = FactoriaDAO.getInstancia();
-		} catch (DAOException eDAO) {
-			eDAO.printStackTrace();
-		}
+		inicializarAdaptadores();
+		inicializarCatalogo();
 	}
 	
 	public static ControladorUsuarios getUnicaInstancia() {
@@ -34,16 +39,33 @@ public class ControladorUsuarios {
 		return unicaInstancia;
 	}
 	
+	public boolean registrarUsuario(String nombre, String fechaNacimiento,
+		     						String email, String telefono, 
+		     						String login, String password,
+		     						String imagenPerfil, String saludo) {
+		if (esUsuarioRegistrado(login)) 
+			return false;
+
+		Usuario usuario = new Usuario(nombre, fechaNacimiento, email,
+									  telefono, login, password,
+									  imagenPerfil, saludo);
+		adaptadorUsuario.registrarUsuario(usuario);
+		catalogoUsuarios.addUsuario(usuario);
+		return true;
+	}
+	
+	
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
 	
 	public boolean esUsuarioRegistrado(String login) {
-		return CatalogoUsuarios.getUnicaInstancia().getUsuario(login) != null;
+		return catalogoUsuarios.getUsuario(login) != null;
 	}
 	
 	public boolean loginUsuario(String login, String password) {
-		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+		Usuario usuario = catalogoUsuarios.getUsuario(login);
+		
 		if (usuario != null && usuario.getPassword().equals(password)) {
 			this.usuarioActual = usuario;
 			return true;
@@ -51,31 +73,13 @@ public class ControladorUsuarios {
 		return false;
 	}
 	
-	public boolean registrarUsuario(String nombre, String fechaNacimiento,
-								     String email, String telefono, 
-									 String login, String password,
-									 String imagenPerfil, String saludo) {
-		if (esUsuarioRegistrado(login)) 
-			return false;
-		
-		Usuario usuario = new Usuario(nombre, fechaNacimiento, email,
-									  telefono, login, password,
-									  imagenPerfil, saludo);
-		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
-		usuarioDAO.create(usuario);
-		
-		CatalogoUsuarios.getUnicaInstancia().addUsuario(usuario);
-		return true;
-	}
 	
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getLogin())) 
 			return false;
 		
-		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
-		usuarioDAO.delete(usuario);
-		
-		CatalogoUsuarios.getUnicaInstancia().removeUsuario(usuario);
+		adaptadorUsuario.borrarUsuario(usuario);
+		catalogoUsuarios.removeUsuario(usuario);
 		return true;
 	}
 	
@@ -83,35 +87,66 @@ public class ControladorUsuarios {
 		if (!esUsuarioRegistrado(login))
 			return null;
 		
-		return CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+		return catalogoUsuarios.getUsuario(login);
 	}
 	
-	public List<Contacto> mostrarContactos(String login) {
-		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+	public Usuario _buscarUsuario(String telefono) {
+		return catalogoUsuarios._getUsuario(telefono);
+	}
+	
+	public List<Contacto> obtenerContactos(String login) {
+		Usuario usuario = catalogoUsuarios.getUsuario(login);
 		
 		List<Contacto> contactos = usuario.getContactos();
 		
 		return contactos;
 	}
 	
-	public boolean añadirContacto(String login, Contacto c) {
-		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+	public Object[][] contactosATabla(List<Contacto> contactos) {
 		
-		if (usuario.añadirUsuario(c)) {
-			UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
-			usuarioDAO.updatePerfil(usuario);
+		Object[][] datos = new Object[contactos.size()][3];
+		
+		Comparator<Contacto> ordenarPorNombre 
+			= (Contacto c1, Contacto c2) -> c1.getNombre().compareTo(c2.getNombre());
 			
-			if (c instanceof ContactoIndividualDAO) {
+		Collections.sort(contactos, ordenarPorNombre);
+		
+		int index = 0;
+		for (Contacto c : contactos) {
+			
+			if (c instanceof ContactoIndividual) {
+				ContactoIndividual ci = (ContactoIndividual) c;
+				datos[index][0] = ci.getNombre();
+				
+				ImageIcon icon = new ImageIcon(ci.getUsuario().getImagenPerfil());
+				Image imageIcon = icon.getImage();
+				Image newImage = imageIcon.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+				ImageIcon icon2 = new ImageIcon(newImage);
+				
+				datos[index][1] = icon2;
+				datos[index][2] = ci.getTelefono();
+				index++;
+			}		
+		}
+		
+		return datos;
+	}
+	
+	public boolean añadirContacto(String login, Contacto c) {
+		
+		Usuario usuario = catalogoUsuarios.getUsuario(login);
+		
+		if (usuario.addContacto(c)) {
+			
+			if (c instanceof ContactoIndividual) {
 				ContactoIndividual cInd = (ContactoIndividual) c;
-				ContactoIndividualDAO cIndDAO = factoria.getContactoIndividualDAO();
-				cIndDAO.create(cInd);
+				adaptadorIndividual.registrarIndividual(cInd);
 			}
-			else if (c instanceof GrupoDAO) {
+			else if (c instanceof Grupo) {
 				Grupo g = (Grupo) c;
-				GrupoDAO grupoDAO = factoria.getGrupoDAO();
-				grupoDAO.create(g);
+				adaptadorGrupo.registrarGrupo(g);
 			}
-			CatalogoUsuarios.getUnicaInstancia().updateUsuario(usuario);
+			updateUsuario(usuario);
 			return true;
 		}
 		return false;
@@ -121,10 +156,25 @@ public class ControladorUsuarios {
 		if (!esUsuarioRegistrado(usuario.getLogin()))
 			return false;
 		
-		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
-		usuarioDAO.updatePerfil(usuario);
-		
-		CatalogoUsuarios.getUnicaInstancia().updateUsuario(usuario);
+		adaptadorUsuario.modificarUsuario(usuario);
+		catalogoUsuarios.updateUsuario(usuario);
 		return true;
 	}	
+	
+	private void inicializarAdaptadores() {
+		FactoriaDAO factoria = null;
+		try {
+			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		
+		adaptadorUsuario = factoria.getUsuarioDAO();
+		adaptadorIndividual = factoria.getContactoIndividualDAO();
+		adaptadorGrupo = factoria.getGrupoDAO();
+	}
+	
+	private void inicializarCatalogo() {
+		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+	}
 }

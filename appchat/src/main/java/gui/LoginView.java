@@ -80,7 +80,8 @@ public class LoginView {
 			public void actionPerformed(ActionEvent e) {
 				boolean login = true;
 				login = ControladorUsuarios.getUnicaInstancia().loginUsuario(
-						textLogin.getText(), new String(textPassword.getPassword()));
+																		textLogin.getText(),
+																		new String(textPassword.getPassword()));
 				if (login) {
 						MainView window = new MainView();
 						window.setVisible(true);

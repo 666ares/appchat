@@ -5,22 +5,22 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	public TDSFactoriaDAO() { }
 	
 	@Override
-	public TDSUsuarioDAO getUsuarioDAO() {
+	public UsuarioDAO getUsuarioDAO() {
 		return new TDSUsuarioDAO();
 	}
 	
 	@Override
-	public TDSContactoIndividualDAO getContactoIndividualDAO() {
+	public ContactoIndividualDAO getContactoIndividualDAO() {
 		return new TDSContactoIndividualDAO();
 	}
 
 	@Override
-	public TDSGrupoDAO getGrupoDAO() {
+	public GrupoDAO getGrupoDAO() {
 		return new TDSGrupoDAO();
 	}
 
 	@Override
-	public TDSMensajeDAO getMensajeDAO() {
+	public MensajeDAO getMensajeDAO() {
 		return new TDSMensajeDAO();
 	}
 }

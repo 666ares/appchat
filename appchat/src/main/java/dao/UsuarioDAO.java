@@ -6,9 +6,9 @@ import dominio.Usuario;
 
 public interface UsuarioDAO {
 
-	void 			create(Usuario usuario);
-	boolean 		delete(Usuario usuario);
-	void 			updatePerfil(Usuario usuario);
-	Usuario 		get(int id);
-	List<Usuario> 	getAll();
+	void 			registrarUsuario(Usuario usuario);
+	void 			borrarUsuario(Usuario usuario);
+	void 			modificarUsuario(Usuario usuario);
+	Usuario 		recuperarUsuario(int id);
+	List<Usuario> 	recuperarTodosUsuarios();
 }

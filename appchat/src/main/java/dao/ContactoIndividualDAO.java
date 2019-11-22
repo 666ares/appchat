@@ -6,9 +6,9 @@ import dominio.ContactoIndividual;
 
 public interface ContactoIndividualDAO {
 
-	void 						create(ContactoIndividual cInd);
-	boolean 					delete(ContactoIndividual cInd);
-	ContactoIndividual 			get(int id);
-	List<ContactoIndividual> 	getAll();
+	void 						registrarIndividual(ContactoIndividual cInd);
+	void 						borrarIndividual(ContactoIndividual cInd);
+	ContactoIndividual 			recuperarIndividual(int id);
+	List<ContactoIndividual> 	recuperarTodosIndividuales();
 
 }

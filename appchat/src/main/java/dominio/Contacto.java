@@ -16,7 +16,7 @@ public abstract class Contacto {
 	// Getters
 	public String 			getNombre() 	{ return nombre; }
 	public List<Mensaje> 	getMensajes() 	{ return new LinkedList<Mensaje>(mensajes);  }
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

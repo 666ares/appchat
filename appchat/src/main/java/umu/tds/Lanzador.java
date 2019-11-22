@@ -1,6 +1,7 @@
 package umu.tds;
 
 import java.awt.EventQueue;
+
 import gui.LoginView;
 
 public class Lanzador {

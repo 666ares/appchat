@@ -203,6 +203,7 @@ public class MainView extends JFrame {
 		listaChat.setViewportView(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
+		// Lista de chats
 		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
 		
 		for (int i = 0; i < 10; i++) {

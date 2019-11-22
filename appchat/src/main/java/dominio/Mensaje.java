@@ -2,15 +2,14 @@ package dominio;
 
 import java.time.LocalDate;
 
-import javax.swing.ImageIcon;
-
 public class Mensaje {
 
+	private int id;
 	private Usuario emisor;
 	private Contacto receptor;
 	private String texto;
 	private LocalDate hora;
-	private ImageIcon emoticono;
+	private String emoticono;
 	
 	public Mensaje(Usuario emisor, Contacto receptor, String texto) {
 		this.emisor = emisor;
@@ -19,7 +18,7 @@ public class Mensaje {
 		this.hora = LocalDate.now();
 	}
 	
-	public Mensaje(Usuario emisor, Contacto receptor, ImageIcon emoticono) {
+	public Mensaje(String emoticono, Usuario emisor, Contacto receptor) {
 		this.emisor = emisor;
 		this.receptor = receptor;
 		this.emoticono = emoticono;
@@ -27,10 +26,14 @@ public class Mensaje {
 	}
 
 	// Getters
+	public int			getId()			{ return id; }
 	public Usuario 		getEmisor()		{ return emisor; }
 	public Contacto 	getReceptor()	{ return receptor; }
 	public String 		getTexto() 		{ return texto; }
 	public LocalDate 	getHora() 		{ return hora; }
-	public ImageIcon 	getEmoticono() 	{ return emoticono; }
+	public String 		getEmoticono() 	{ return emoticono; }
+	
+	// Setters
+	public void			setId(int id)	{ this.id = id; }
 	
 }

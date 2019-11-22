@@ -6,9 +6,10 @@ import dominio.Grupo;
 
 public interface GrupoDAO {
 
-	void 			create(Grupo g);
-	boolean 		delete(Grupo g);
-	Grupo 			get(int id);
-	List<Grupo> 	getAll();
+	void 			registrarGrupo(Grupo grupo);
+	void 			borrarGrupo(Grupo grupo);
+	void			modificarGrupo(Grupo grupo);
+	Grupo 			recuperarGrupo(int id);
+	List<Grupo> 	recuperarTodosGrupos();
 }
 
