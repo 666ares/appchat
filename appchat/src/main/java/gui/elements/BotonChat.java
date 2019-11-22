@@ -6,9 +6,13 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import dominio.Contacto;
+
 public class BotonChat extends JButton {
 
 	private static final long serialVersionUID = 1L;
+	
+	private Contacto contacto;
 
 	public BotonChat(String imagen, String data) {
 		super(data);
@@ -66,5 +70,14 @@ public class BotonChat extends JButton {
 	public void makeVisible(boolean ver) {
 		setVisible(ver);
 	}
+	
+	public void setContacto(Contacto contacto) {
+		this.contacto = contacto;
+	}
+	
+	public Contacto getContacto() {
+		return this.contacto;
+	}
+	
 	
 }

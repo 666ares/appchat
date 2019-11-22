@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle.Control;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -21,6 +22,7 @@ import javax.swing.border.Border;
 import controlador.ControladorUsuarios;
 import dominio.CatalogoUsuarios;
 import dominio.Contacto;
+import dominio.ContactoIndividual;
 import dominio.Usuario;
 import gui.elements.BotonChat;
 import gui.elements.BoxChat;
@@ -129,6 +131,13 @@ public class MainView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				OpcionesUser opciones = new OpcionesUser();
 				opciones.makeVisible();
+				opciones.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Actualizar lista de contactos
+						
+					}
+				});
 			}
 		});
 		
@@ -137,11 +146,16 @@ public class MainView extends JFrame {
 		// ======================
 		// Botón del otro usuario
 		// ======================
+		
 		final BotonChat boton4 = new BotonChat("", "");
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO obtener el numero y foto del contacto con el nombre del boton4
-				InfoUChat infochat = new InfoUChat(boton4.getText(), "698574891");
+				Contacto contacto = boton4.getContacto();
+				String tlf = "";
+				if(contacto instanceof ContactoIndividual) 
+					tlf = ((ContactoIndividual) contacto).getTelefono();
+							
+				InfoUChat infochat = new InfoUChat(boton4.getText(), tlf);
 				infochat.makeVisible();
 			}
 		});
@@ -210,7 +224,7 @@ public class MainView extends JFrame {
 		
 		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
 		for(int i = 0; i<contactos.size(); i++) {
-			BoxChat chat = new BoxChat(contactos.get(i).getNombre() + " ", "ultimo mensaje");
+			BoxChat chat = new BoxChat(contactos.get(i), "ultimo mensaje");
 			chats.add(chat);
 		}
 		
@@ -229,7 +243,8 @@ public class MainView extends JFrame {
 					// Actualizamos la información de la barra de botones
 					reiniciarPaneles(chats);
 					
-					boton4.setText(chat.getContacto());
+					boton4.setText(chat.getContacto().getNombre());
+					boton4.setContacto(chat.getContacto());
 					// Obtener imagen del usuario del chat
 					boton4.changeIcon("icons/profile_picture.png", 20, 20);
 					
@@ -242,9 +257,9 @@ public class MainView extends JFrame {
 					panel_2.repaint();
 					
 					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
-					// -> Pasar los dos usuarios y lista de mensajes (Usuario Actual y Concacto)
+					// TODO Obtener la lista de mensajes
 					
-					rellenarChat(panel_2, chat.getContacto(), usuarioAct,  "Hola ", "Respuesta de prueba");
+					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  "Hola ", "Respuesta de prueba");
 				}
 			});
 			

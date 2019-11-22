@@ -14,18 +14,20 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
+import dominio.Contacto;
+
 public class BoxChat extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
-	private String contacto;
+	private Contacto contacto;
 	
-	public BoxChat(String nombreUser, String lastMensaje) {
+	public BoxChat(Contacto contacto, String lastMensaje) {
 		
 		// Constructor como un horizontalBox
 		super();
 		
-		this.contacto = nombreUser;
+		this.contacto = contacto;
 		
 		Box chat = new Box(BoxLayout.LINE_AXIS);
 		
@@ -49,7 +51,7 @@ public class BoxChat extends JButton {
 		
 		Box userinfo = Box.createVerticalBox();
 		
-		JLabel label = new JLabel(nombreUser);
+		JLabel label = new JLabel(contacto.getNombre() + "  ");
 		label.setFont(new Font("Arial", Font.BOLD, 13));
 		userinfo.add(label);
 		
@@ -123,7 +125,7 @@ public class BoxChat extends JButton {
 		}
 	}
 	
-	public String getContacto() {
+	public Contacto getContacto() {
 		return this.contacto;
 	}
 	
