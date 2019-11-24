@@ -295,18 +295,20 @@ public class RegisterView extends JPanel {
 							txtUsuario.getText(),
 							new String(txtPassword.getPassword()),
 							"icons/profile_picture.png",
-							(txtSaludo.getText() != null) ? txtSaludo.getText() : "Hey there!, Im using AppChat");
+							(txtSaludo.getText().equals("")) ? txtSaludo.getText() : "Hey there!, Im using AppChat");
 							
 					if (registrado) {
-						JOptionPane.showMessageDialog(ventana, "Usuario registrado correctamente.", 
-															   "Registro",
-															   JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(ventana, 
+													  "Usuario registrado correctamente.", 
+													  "Registro",
+													  JOptionPane.INFORMATION_MESSAGE);
 						ventana.setContentPane(jpanelAnterior);
 						ventana.revalidate();
 					} else
-						JOptionPane.showMessageDialog(ventana, "No se ha podido llevar a cabo el registro.\n",
-															   "Registro", 
-															   JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(ventana, 
+													  "No se ha podido llevar a cabo el registro.\n",
+													  "Registro", 
+													  JOptionPane.ERROR_MESSAGE);
 					ventana.setTitle("Login Gestor Eventos");
 				}
 			}

@@ -39,7 +39,7 @@ public class ChatPanel extends JPanel {
 		layeredPane.add(panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		ImageIcon userPic = new ImageIcon("C:\\Users\\Juanjo\\Desktop\\Apuntes\\TDS\\proyecto\\appchat\\appchat\\icons\\profile_picture.png");
+		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
 		Image newImage = userPic.getImage().getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage);
 		JLabel imageLabel = new JLabel(userPic2);

@@ -33,7 +33,6 @@ public class BoxChat extends JButton {
 		
 		chat.setPreferredSize(new Dimension(277, 65));
 		chat.setMinimumSize(new Dimension(277, 65));
-		
 
 		// Imagen por defecto
 		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
@@ -44,7 +43,7 @@ public class BoxChat extends JButton {
 		/* 
 		 * Mover la imagen, el nombre y el último mensaje un poco hacia
 		 * la derecha, para que no esté tan pegado al borde 
-		 * */
+		 */
 		chat.add(Box.createHorizontalStrut(8));
 		chat.add(imagelabel);
 		chat.add(Box.createHorizontalStrut(5));

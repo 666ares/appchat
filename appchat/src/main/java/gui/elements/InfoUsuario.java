@@ -139,9 +139,6 @@ public class InfoUsuario extends JFrame{
 	    botones.add(cambiarSaludo);
 	    
 	    getContentPane().add(botones);
-	    
-		
-		
 	}
 	
 	public void makeVisible() {
@@ -151,6 +148,4 @@ public class InfoUsuario extends JFrame{
 	public void makeInvisible() {
 		setVisible(false);
 	}
-	
-
 }

@@ -65,6 +65,14 @@ public class OpcionesUser extends JFrame {
 				String nombre = txtNombre.getText();
 				String telefono = txtTelefono.getText();
 				
+				if (nombre.equals("") || telefono.equals("")) {
+					JOptionPane.showMessageDialog(null,
+												  "El nombre o teléfono no pueden estar vacíos",
+												  "Se ha producido un error",
+												  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				// Crear objeto con el contacto
 				ContactoIndividual ci = new ContactoIndividual(nombre, telefono);
 				// Obtener el usuario que está intentando registrar un contacto
@@ -91,12 +99,13 @@ public class OpcionesUser extends JFrame {
 					JOptionPane.showMessageDialog(null, 
 												  "El contacto se ha añadido correctamente",
 												  "Contacto añadido", 
-												  JOptionPane.OK_CANCEL_OPTION);
+												  JOptionPane.INFORMATION_MESSAGE);
 				else
 					JOptionPane.showMessageDialog(null, 
 												  "Ya existe un contacto con el mismo nombre y teléfono", 
 												  "Se ha producido un error", 
 												  JOptionPane.ERROR_MESSAGE);
+				
 			}
 		});
 		
@@ -116,6 +125,15 @@ public class OpcionesUser extends JFrame {
 				// Obtenemos la lista de contactos del usuario actual
 				List<Contacto> contactos 
 					= ControladorUsuarios.getUnicaInstancia().obtenerContactos(uAct.getLogin());
+				
+				if (contactos.size() == 0) {
+
+					JOptionPane.showMessageDialog(null,
+												  "Tu lista de contactos está vacía",
+												  "Se ha producido un error",
+												  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
 				// Obtenemos un objeto de tipo String[][] con los campos de cada contacto
 				// que se deben mostrar en la tabla

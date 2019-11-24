@@ -1,6 +1,5 @@
 package gui;
 
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -11,7 +10,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle.Control;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -20,9 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.border.Border;
 
 import controlador.ControladorUsuarios;
-import dominio.CatalogoUsuarios;
 import dominio.Contacto;
-import dominio.ContactoIndividual;
 import dominio.Usuario;
 import gui.elements.BotonChat;
 import gui.elements.BoxChat;
@@ -49,15 +45,33 @@ import javax.swing.ScrollPaneConstants;
 public class MainView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
 	private JPanel contentPane;
-	private JTextField textField;
-
+	private JPanel panel;
+	private JPanel panel_1;
+	private JPanel panel_2;
+	private JPanel panel_3;
+	
+	private JLayeredPane layeredPane;
+	
+	private BotonChat boton1;
+	private BotonChat boton2;
+	private BotonChat boton3;
+	private BotonChat boton4;
+	private BotonChat boton5;
+	private BotonChat boton6;
+	private BotonChat boton7;
+	private BotonChat boton8;
+	
+	private JLabel texto_default;
+	private JScrollPane listaChat;
+	private JTextField 	textField;
+	
 	public MainView() {
 		initialize();
 	}
 
 	private void initialize() {
-		
 		setTitle("AppChat");
 		setBounds(100, 100, 881, 557);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,28 +81,28 @@ public class MainView extends JFrame {
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		setContentPane(contentPane);
 		
-		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane = new JLayeredPane();
 		contentPane.add(layeredPane);
 		
 		// ==========================
 		// Barra de opciones superior
 		// ==========================
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBounds(10, 0, 845, 55);
 		layeredPane.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		
+		// ===================
+		// Botón de mi usuario
+		// ===================
 		
 		// Llamada al controlador para recuperar el nombre y la
 		// foto de perfil del usuario.
 		Usuario u = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 		String ruta_imagen = u.getImagenPerfil();
 		String nombre = u.getNombre();
-		
-		
-		// ===================
-		// Botón de mi usuario
-		// ===================
-		final BotonChat boton1 = new BotonChat(ruta_imagen, nombre);
+				
+		boton1 = new BotonChat(ruta_imagen, nombre);
 		boton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InfoUsuario infousuario = new InfoUsuario();
@@ -113,7 +127,7 @@ public class MainView extends JFrame {
 		// ========
 		// Estados
 		// ========
-		BotonChat boton2 = new BotonChat("icons/status_icon.png");
+		boton2 = new BotonChat("icons/status_icon.png");
 		boton2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Estados estados = new Estados();
@@ -126,16 +140,29 @@ public class MainView extends JFrame {
 		// ===================
 		// Opciones de usuario
 		// ===================
-		BotonChat boton3 = new BotonChat("icons/3dots.jpg", 5, 20);
+		boton3 = new BotonChat("icons/3dots.jpg", 5, 20);
 		boton3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Obtener número de contactos del usuario antes de que se cierre
+				// la ventana para añadir un nuevo contacto
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
+				int size = contactos.size();
+				
 				OpcionesUser opciones = new OpcionesUser();
 				opciones.makeVisible();
 				opciones.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
-						// TODO Actualizar lista de contactos
+						// Obtener número de contactos después de cerrar la ventana para
+						// añadir un contacto
+						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
 						
+						// Si el número de contactos es distinto es porque se agregó uno nuevo
+						// Hay que repintar la lista de chats
+						if (contactos.size() == size + 1)
+							mostrarChats();
 					}
 				});
 			}
@@ -146,16 +173,13 @@ public class MainView extends JFrame {
 		// ======================
 		// Botón del otro usuario
 		// ======================
-		
-		final BotonChat boton4 = new BotonChat("", "");
+		boton4 = new BotonChat("", "");
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Al llamar a mostrarChats(), para cada chat, se guardará
+				// el contacto en el botón4
 				Contacto contacto = boton4.getContacto();
-				String tlf = "";
-				if(contacto instanceof ContactoIndividual) 
-					tlf = ((ContactoIndividual) contacto).getTelefono();
-							
-				InfoUChat infochat = new InfoUChat(boton4.getText(), tlf);
+				InfoUChat infochat = new InfoUChat(contacto);
 				infochat.makeVisible();
 			}
 		});
@@ -166,7 +190,7 @@ public class MainView extends JFrame {
 		// ===============
 		// Buscador (lupa)
 		// ===============
-		final BotonChat boton5 = new BotonChat("icons/lupa.jpg");
+		boton5 = new BotonChat("icons/lupa.jpg");
 		boton5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Buscador buscador = new Buscador();
@@ -180,7 +204,7 @@ public class MainView extends JFrame {
 		// =================
 		// Opciones de chat
 		// =================
-		final BotonChat boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
+		boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
 		boton6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				OpcionesChat opciones = new OpcionesChat();
@@ -194,101 +218,104 @@ public class MainView extends JFrame {
 		// ====================================
 		// Chat de inicio (ninguno al comienzo)
 		// ====================================
-		final JPanel panel_2 = new JPanel();
+		panel_2 = new JPanel();
 		panel_2.setBounds(297, 55, 558, 419);
 		Border blackline2 = BorderFactory.createLineBorder(Color.black);
 		panel_2.setBorder(blackline2);
 		layeredPane.add(panel_2);
 		
-		final JLabel texto_default = new JLabel("Selecciona un chat para empezar a hablar");
+		texto_default = new JLabel("Selecciona un chat para empezar a hablar");
 		texto_default.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel_2.add(texto_default);
 		
 		// ==========================
 		// Lista de chats del usuario
 		// ==========================
-		JScrollPane listaChat = new JScrollPane(
-								ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
-								ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		listaChat = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+									ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		listaChat.setBounds(10, 55, 277, 463);
 		layeredPane.add(listaChat);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 55, 277, 452);
-		
-		// =================================
-		// Obtener los contactos del usuario actual
-		// =================================
-		Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-		List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
-		
-		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
-		for(int i = 0; i<contactos.size(); i++) {
-			BoxChat chat = new BoxChat(contactos.get(i), "ultimo mensaje");
-			chats.add(chat);
-		}
-		
-		// Calcular altura dependiendo de los chats que existan
-		panel_1.setPreferredSize(new Dimension(277, 75*contactos.size()+20));
-		listaChat.setViewportView(panel_1);
-		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
-		// =================================
-		// Lista de Chats
-		// =================================
-		
-		for(BoxChat chat : chats) {
-			chat.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					// Actualizamos la información de la barra de botones
-					reiniciarPaneles(chats);
-					
-					boton4.setText(chat.getContacto().getNombre());
-					boton4.setContacto(chat.getContacto());
-					// Obtener imagen del usuario del chat
-					boton4.changeIcon("icons/profile_picture.png", 20, 20);
-					
-					boton5.makeVisible(true);
-					boton6.makeVisible(true);
-					
-					chat.setResaltar(true);
-					
-					panel_2.removeAll();
-					panel_2.repaint();
-					
-					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
-					// TODO Obtener la lista de mensajes
-					
-					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  "Hola ", "Respuesta de prueba");
-				}
-			});
-			
-			panel_1.add(chat);
-		}
+		// ===================================
+		// Mostrar la lista de chats recientes
+		// ===================================
+		mostrarChats();
 		
 		// =================================
 		// Barra inferior de la conversación
 		// Icono 'enviar' y 'emojis'
 		// =================================
-		JPanel panel_3 = new JPanel();
+		panel_3 = new JPanel();
 		panel_3.setBounds(297, 484, 558, 33);
 		
 		layeredPane.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		
-		
-		BotonChat boton7 = new BotonChat("icons/emoji.png", 25, 25);
+		boton7 = new BotonChat("icons/emoji.png", 25, 25);
 		panel_3.add(boton7);
-		
 		panel_3.add(Box.createVerticalStrut(40));
 		
 		textField = new JTextField();
 		panel_3.add(textField);
 		textField.setColumns(10);
 		
-		BotonChat boton8 = new BotonChat("icons/send.png");
+		boton8 = new BotonChat("icons/send.png");
 		panel_3.add(boton8);
 		
+	}
+	
+	void mostrarChats() {
+		// Creamos de nuevo el panel que contiene los chats, de modo que cuando se llame
+		// a la función después de agregar un nuevo contacto, no se duplicarán los chats
+		// que ya existían antes de agregar al contacto
+		panel_1 = new JPanel();
+		panel_1.setBounds(10, 55, 277, 452);
+		
+		Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+		List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
+			
+		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
+		for (int i = 0; i < contactos.size(); i++) {
+			BoxChat chat = new BoxChat(contactos.get(i), "ultimo mensaje");
+			chats.add(chat);
+		}
+			
+		// Calcular altura dependiendo de los chats que existan
+		panel_1.setPreferredSize(new Dimension(277, (75 * (contactos.size() - 1)) + 20));
+		listaChat.setViewportView(panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+	
+		// =================================
+		// Lista de Chats
+		// =================================
+		for (BoxChat chat : chats) {		
+			chat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					reiniciarPaneles(chats);
+						
+					boton4.setText(chat.getContacto().getNombre());
+					boton4.setContacto(chat.getContacto());
+					
+					// Obtener imagen del usuario del chat
+					boton4.changeIcon("icons/profile_picture.png", 20, 20);
+						
+					boton5.makeVisible(true);
+					boton6.makeVisible(true);
+						
+					chat.setResaltar(true);
+						
+					panel_2.removeAll();
+					panel_2.repaint();
+						
+					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
+					// TODO Obtener la lista de mensajes
+						
+					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  "Hola ", "Respuesta de prueba");
+				}
+			});
+			panel_1.add(chat);
+		}		
 	}
 	
 	void rellenarChat(JPanel panel, String contacto,Usuario user, String ... mensajes) {
@@ -306,7 +333,7 @@ public class MainView extends JFrame {
 				propietario = false;
 			} else {
 				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje, Color.GREEN, contacto, BubbleText.RECEIVED);
+				burbuja = new BubbleText(panel, mensaje, Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
 				panel.add(burbuja);
 				propietario = true;
 			}
@@ -315,9 +342,8 @@ public class MainView extends JFrame {
 	}
 	
 	void reiniciarPaneles(LinkedList<BoxChat> chats) {
-		for (BoxChat boxChat : chats) {
+		for (BoxChat boxChat : chats)
 			boxChat.setResaltar(false);
-		}
 	}
 	
 }

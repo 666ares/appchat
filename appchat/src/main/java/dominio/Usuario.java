@@ -41,16 +41,19 @@ public class Usuario {
 	}
 	
 	// Getters
-	public int 				getId() 				{ return id; }
-	public String 			getSaludo() 			{ return saludo; }
-	public String 			getImagenPerfil() 		{ return imagenPerfil; }
-	public String 			getNombre() 			{ return nombre; }
-	public String 			getFechaNacimiento() 	{ return fechaNacimiento; }	
-	public String 			getEmail() 				{ return email; }
-	public String 			getTelefono() 			{ return telefono; }
-	public String 			getLogin() 				{ return login; }
-	public String 			getPassword() 			{ return password; }
-	public List<Contacto>	getContactos()			{ return new LinkedList<Contacto>(contactos); }
+	public int 		getId() 				{ return id; }
+	public String 	getSaludo() 			{ return saludo; }
+	public String 	getImagenPerfil() 		{ return imagenPerfil; }
+	public String 	getNombre() 			{ return nombre; }
+	public String 	getFechaNacimiento() 	{ return fechaNacimiento; }	
+	public String 	getEmail() 				{ return email; }
+	public String 	getTelefono() 			{ return telefono; }
+	public String 	getLogin() 				{ return login; }
+	public String 	getPassword() 			{ return password; }
+	
+	public List<Contacto> getContactos() { 
+		return new LinkedList<Contacto>(contactos); 
+	}
 	
 	// Setters
 	public void setSaludo(String saludo) 		{ this.saludo = saludo; }

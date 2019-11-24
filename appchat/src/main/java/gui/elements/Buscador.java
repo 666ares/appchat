@@ -8,9 +8,6 @@ public class Buscador extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	
-	static final int ANCHOW = 430;
-	static final int ALTOW = 300;
-	
 	public Buscador() {
 		super();
 		setTitle("Buscador");

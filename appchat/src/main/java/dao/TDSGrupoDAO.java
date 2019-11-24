@@ -21,10 +21,7 @@ public final class TDSGrupoDAO implements GrupoDAO {
 	private static TDSGrupoDAO unicaInstancia = null;
 	
 	public static TDSGrupoDAO getUnicaInstancia() {
-		if (unicaInstancia == null)
-			return new TDSGrupoDAO();
-		else
-			return unicaInstancia;
+		return (unicaInstancia == null) ? new TDSGrupoDAO() : unicaInstancia;
 	}
 	
 	public TDSGrupoDAO() {
@@ -60,10 +57,10 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		eGrupo = new Entidad();
 		eGrupo.setNombre("Grupo");
 		eGrupo.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
-										new Propiedad("nombre", grupo.getNombre()),
-										new Propiedad("admin", String.valueOf(grupo.getId())),
-										new Propiedad("miembros", obtenerCodigosMiembros(grupo.getMiembros())),
-										new Propiedad("mensajes", obtenerCodigosMensajes(grupo.getMensajes()))
+										new Propiedad("nombre", 	grupo.getNombre()),
+										new Propiedad("admin", 		String.valueOf(grupo.getId())),
+										new Propiedad("miembros", 	obtenerCodigosMiembros(grupo.getMiembros())),
+										new Propiedad("mensajes", 	obtenerCodigosMensajes(grupo.getMensajes()))
 										))
 				);
 		
@@ -71,7 +68,6 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		eGrupo = servPersistencia.registrarEntidad(eGrupo);
 		// Asignar identificador único
 		grupo.setId(eGrupo.getId());
-		
 	}
 
 	public Grupo recuperarGrupo(int codigo) {
@@ -102,10 +98,10 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, grupo);
 		
 		// Recuperar propiedades que son objetos llamando a adaptadores
+		
 		/* Administrador */
 		TDSUsuarioDAO adaptadorU = TDSUsuarioDAO.getUnicaInstancia();
 		admin = adaptadorU.recuperarUsuario(Integer.parseInt(admin_id));
-		
 		grupo.setAdmin(admin);
 		
 		/* Miembros */
@@ -116,17 +112,14 @@ public final class TDSGrupoDAO implements GrupoDAO {
 			grupo.addMiembro(ci);
 		
 		/* Grupos */
-		m = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes"));
-		for(Mensaje mensaje : m) {
+		m = obtenerMensajesDesdeCodigos(
+				servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes"));
+		
+		for (Mensaje mensaje : m)
 			grupo.addMensaje(mensaje);
-		}
 		
 		return grupo;
 	}
-	
-	// ====================
-	// FUNCIONES AUXILIARES
-	// ====================
 
 	public void borrarGrupo(Grupo grupo) {
 		Entidad eGrupo = servPersistencia.recuperarEntidad(grupo.getId());
@@ -157,6 +150,10 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		return grupos;
 	}
 	
+	// ====================
+	// FUNCIONES AUXILIARES
+	// ====================
+	
 	public List<ContactoIndividual> obtenerMiembrosDesdeCodigos(String miembros) {
 		List<ContactoIndividual> listaMiembros = new LinkedList<ContactoIndividual>();
 		
@@ -183,9 +180,9 @@ public final class TDSGrupoDAO implements GrupoDAO {
 	
 	private String obtenerCodigosMensajes(List<Mensaje> mensajes) {
 		String aux = "";
-		for (Mensaje m : mensajes) {
+		for (Mensaje m : mensajes)
 			aux += m.getId() + " ";
-		}
+			
 		return aux.trim();
 	}
 	
@@ -199,10 +196,10 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		
 		TDSMensajeDAO adaptadorM = TDSMensajeDAO.getUnicaInstancia();
 		
-		while (strTok.hasMoreTokens()) {
+		while (strTok.hasMoreTokens())
 			listaMensajes.add(
 					adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
-		}
-		return listaMensajes;
+
+			return listaMensajes;
 	}
 }

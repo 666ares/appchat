@@ -19,6 +19,6 @@ public class PoolDAO {
 	}
 	
 	public Object 	getObjeto(int id) 					{ return pool.get(id); }
-	public boolean 	contiene(int id) 					{ return pool.containsKey(id); }
+	public boolean contiene(int id) 					{ return pool.containsKey(id); }
 	public void 	addObjeto(int id, Object objeto) 	{ pool.put(id, objeto); }
 }

@@ -10,6 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import dominio.Contacto;
+import dominio.ContactoIndividual;
+
 public class InfoUChat extends JFrame{
 
 	private static final long serialVersionUID = 1L;
@@ -17,11 +20,11 @@ public class InfoUChat extends JFrame{
 	static final int ANCHOW = 260;
 	static final int ALTOW = 250;
 	
-	public InfoUChat(String nombreUser, String telefono) {
+	public InfoUChat(Contacto c) {
 		
 		super();
 		
-		setTitle(nombreUser);
+		setTitle(c.getNombre());
 		setBounds(100, 100, ANCHOW, ALTOW);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
@@ -34,7 +37,9 @@ public class InfoUChat extends JFrame{
 		
 		JPanel panelImagen = new JPanel();
 	    
-	    ImageIcon imageIcon = new ImageIcon("icons/profile_picture.png");
+		ContactoIndividual ci = (ContactoIndividual) c;
+		
+	    ImageIcon imageIcon = new ImageIcon(ci.getUsuario().getImagenPerfil());
 		Image image = imageIcon.getImage();
 		Image newImage = image.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon imageIcon2 = new ImageIcon(newImage);
@@ -50,13 +55,13 @@ public class InfoUChat extends JFrame{
 	    // ==============
 	    // Label 'Nombre'
 	    // ==============
-	    JLabel nombreUsuario = new JLabel("      Nombre: " + nombreUser);
+	    JLabel nombreUsuario = new JLabel("      Nombre: " + ci.getNombre());
 	    panelNombreTelefono.add(nombreUsuario);
 	    
 	    // ================
 	    // Label 'Telefono'
 	    // ================
-	    JLabel telefonoUser = new JLabel("      Teléfono: " + telefono);
+	    JLabel telefonoUser = new JLabel("      Teléfono: " + ci.getTelefono());
 	    panelNombreTelefono.add(telefonoUser);
 	    
 	    getContentPane().add(panelNombreTelefono);
@@ -64,13 +69,6 @@ public class InfoUChat extends JFrame{
 		
 	}
 	
-	public void makeVisible() {
-		setVisible(true);
-	}
-	
-	public void makeInvisible() {
-		setVisible(false);
-	}
-	
-
+	public void makeVisible() 	{ setVisible(true); }
+	public void makeInvisible() { setVisible(false); }
 }

@@ -22,10 +22,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	
 	// Patrón Singleton
 	public static TDSUsuarioDAO getUnicaInstancia() {
-		if (unicaInstancia == null)
-			return new TDSUsuarioDAO();
-		else
-			return unicaInstancia;
+		return (unicaInstancia == null) ? new TDSUsuarioDAO() : unicaInstancia;
 	}
 	
 	public TDSUsuarioDAO() {
@@ -72,12 +69,15 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, u);
 		
 		// Recuperar propiedades que son objetos
+		/* Contactos individuales */
 		indiv = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
-		grupos = obtenerGruposDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "grupos"));
-		
+
 		for (Contacto ind : indiv)
 			u.addContacto(ind);
 		
+		/* Grupos */
+		grupos = obtenerGruposDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "grupos"));
+
 		for (Contacto gr : grupos)
 			u.addContacto(gr);
 
@@ -118,16 +118,16 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		
 		eUsuario.setPropiedades(
 				new ArrayList<Propiedad>(Arrays.asList(
-						new Propiedad("nombre", usuario.getNombre()),
-						new Propiedad("fechaNacimiento", usuario.getFechaNacimiento()),
-						new Propiedad("email", usuario.getEmail()),
-						new Propiedad("telefono", usuario.getTelefono()),
-						new Propiedad("login", usuario.getLogin()),
-						new Propiedad("password", usuario.getPassword()),
-						new Propiedad("imagenPerfil", usuario.getImagenPerfil()),
-						new Propiedad("saludo", usuario.getSaludo()),
-						new Propiedad("contactos", obtenerCodigosContactos(usuario.getContactos())),
-						new Propiedad("grupos", obtenerCodigosGrupos(usuario.getContactos()))
+						new Propiedad("nombre", 			usuario.getNombre()),
+						new Propiedad("fechaNacimiento", 	usuario.getFechaNacimiento()),
+						new Propiedad("email",	 			usuario.getEmail()),
+						new Propiedad("telefono", 			usuario.getTelefono()),
+						new Propiedad("login", 				usuario.getLogin()),
+						new Propiedad("password",	 		usuario.getPassword()),
+						new Propiedad("imagenPerfil", 		usuario.getImagenPerfil()),
+						new Propiedad("saludo", 			usuario.getSaludo()),
+						new Propiedad("contactos", 			obtenerCodigosContactos(usuario.getContactos())),
+						new Propiedad("grupos", 			obtenerCodigosGrupos(usuario.getContactos()))
 						))
 				);
 		
@@ -139,7 +139,6 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	
 	public void borrarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		
 		servPersistencia.borrarEntidad(eUsuario);
 	}
 	
@@ -172,6 +171,9 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		return usuarios;
 	}
 	
+	// ====================
+	// FUNCIONES AUXILIARES
+	// ====================
 	private String obtenerCodigosGrupos(List<Contacto> contactos) {
 		String aux = "";
 		for (Contacto c : contactos) {
@@ -204,10 +206,9 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		
 		TDSGrupoDAO adaptadorG = TDSGrupoDAO.getUnicaInstancia();
 		
-		while (strTok.hasMoreTokens()) {
+		while (strTok.hasMoreTokens())
 			listaGrupos.add(
 					adaptadorG.recuperarGrupo(Integer.valueOf((String) strTok.nextElement())));
-		}
 		return listaGrupos;
 	}
 
@@ -222,10 +223,9 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		
 		TDSContactoIndividualDAO adaptadorC = TDSContactoIndividualDAO.getUnicaInstancia();
 		
-		while (strTok.hasMoreTokens()) {
+		while (strTok.hasMoreTokens())
 			listaIndividuales.add(
 					adaptadorC.recuperarIndividual(Integer.valueOf((String) strTok.nextElement())));
-		}
 		return listaIndividuales;
 	}
 	

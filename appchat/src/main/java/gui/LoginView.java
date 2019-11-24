@@ -13,16 +13,10 @@ public class LoginView {
 	private JTextField textLogin;
 	private JPasswordField textPassword;
 
-	/**
-	 * Create the application.
-	 */
 	public LoginView() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frmLoginGestorEventos = new JFrame();
 		frmLoginGestorEventos.setTitle("Login AppChat");
@@ -87,7 +81,8 @@ public class LoginView {
 						window.setVisible(true);
 						frmLoginGestorEventos.dispose();
 				} else
-						JOptionPane.showMessageDialog(frmLoginGestorEventos,
+						JOptionPane.showMessageDialog(
+								frmLoginGestorEventos,
 								"Nombre de usuario o contrase\u00F1a no valido",
 								"Error", JOptionPane.ERROR_MESSAGE);
 
