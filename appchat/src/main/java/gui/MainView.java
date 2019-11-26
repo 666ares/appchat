@@ -19,6 +19,7 @@ import javax.swing.border.Border;
 
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
+import dominio.Mensaje;
 import dominio.Usuario;
 import gui.elements.BotonChat;
 import gui.elements.BoxChat;
@@ -269,7 +270,7 @@ public class MainView extends JFrame {
 		// a la función después de agregar un nuevo contacto, no se duplicarán los chats
 		// que ya existían antes de agregar al contacto
 		panel_1 = new JPanel();
-		panel_1.setBounds(10, 55, 277, 452);
+		panel_1.setBounds(0, 55, 277, 452);
 		
 		Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 		List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
@@ -310,32 +311,49 @@ public class MainView extends JFrame {
 						
 					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
 					// TODO Obtener la lista de mensajes
+					List<Mensaje> mensajes = chat.getContacto().getMensajes();
 						
-					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  "Hola ", "Respuesta de prueba");
+					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  mensajes);
+					
+					boton8.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							String texto = textField.getText();
+							textField.setText(null);
+							System.out.println("Mensaje: " + texto);
+							System.out.println("Emisor: " + usuarioAct.getNombre());
+							System.out.println("Receptor: " + chat.getContacto().getNombre());
+							
+							Mensaje mensaje = new Mensaje(usuarioAct, chat.getContacto(), texto);
+							//Añadir mensaje a la base de datos
+							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+							//Actualizar las conversaciones
+							
+							
+						}
+					});
 				}
 			});
 			panel_1.add(chat);
 		}		
 	}
 	
-	void rellenarChat(JPanel panel, String contacto,Usuario user, String ... mensajes) {
+	void rellenarChat(JPanel panel, String contacto,Usuario user, List<Mensaje> mensajes) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		panel.add(verticalStrut);
 		// TODO: Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
-		boolean propietario = true;
-		for (String mensaje : mensajes) {
-			if (propietario) {
+		for (Mensaje mensaje : mensajes) {
+			if (mensaje.getEmisor() == user) {
 				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje, Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
+				burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
 				panel.add(burbuja);
-				propietario = false;
 			} else {
 				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje, Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
+				burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
 				panel.add(burbuja);
-				propietario = true;
 			}
 			
 		}

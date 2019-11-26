@@ -15,6 +15,7 @@ public class Mensaje {
 		this.emisor = emisor;
 		this.receptor = receptor;
 		this.texto = texto;
+		this.emoticono = "";
 		this.hora = LocalDate.now();
 	}
 	
@@ -22,6 +23,7 @@ public class Mensaje {
 		this.emisor = emisor;
 		this.receptor = receptor;
 		this.emoticono = emoticono;
+		this.texto = "";
 		this.hora = LocalDate.now();
 	}
 

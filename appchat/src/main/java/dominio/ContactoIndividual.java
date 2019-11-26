@@ -12,6 +12,8 @@
 
 package dominio;
 
+import controlador.ControladorUsuarios;
+
 public class ContactoIndividual extends Contacto {
 
 	private int id;				/* Identificador único para BBDD */
@@ -21,7 +23,7 @@ public class ContactoIndividual extends Contacto {
 	public ContactoIndividual(String nombre, String telefono) {
 		super(nombre);
 		this.telefono = telefono;
-		this.usuario = null;
+		this.usuario = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(telefono);
 	}
 
 	// Getters

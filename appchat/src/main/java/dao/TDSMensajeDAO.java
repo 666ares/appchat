@@ -119,7 +119,7 @@ public final class TDSMensajeDAO implements MensajeDAO {
 		hora 		= servPersistencia.recuperarPropiedadEntidad(eMensaje, "hora");
 		
 		Mensaje mensaje;
-		if (texto == "")
+		if (texto.equals(""))
 			mensaje = new Mensaje(emoticono, null, null);
 		else
 			mensaje = new Mensaje(null, null, texto);
