@@ -112,6 +112,8 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		String mensajes = obtenerCodigosMensajes(cInd.getMensajes());
 		servPersistencia.eliminarPropiedadEntidad(eConEntidad, "mensajes");
 		servPersistencia.anadirPropiedadEntidad(eConEntidad, "mensajes", mensajes);
+		servPersistencia.eliminarPropiedadEntidad(eConEntidad, "nombre");
+		servPersistencia.anadirPropiedadEntidad(eConEntidad, "nombre", cInd.getNombre());
 		
 	}
 	

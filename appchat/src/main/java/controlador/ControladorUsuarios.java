@@ -208,6 +208,11 @@ public class ControladorUsuarios {
 		return true;
 	}	
 	
+	public boolean updateIndividual(ContactoIndividual contacto) {
+		adaptadorIndividual.modificarIndividual(contacto);
+		return true;
+	}
+	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {

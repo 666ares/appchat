@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
@@ -64,6 +65,7 @@ public class MainView extends JFrame {
 	private BotonChat boton6;
 	private BotonChat boton7;
 	private BotonChat boton8;
+	private BotonChat boton9;
 	
 	private JLabel texto_default;
 	private JScrollPane listaChat;
@@ -187,7 +189,46 @@ public class MainView extends JFrame {
 		});
 		
 		panel.add(boton4);
-		panel.add(Box.createHorizontalStrut(320));
+		
+		boton9 = new BotonChat("", "");
+		boton9.setPreferredSize(new Dimension(200, 25));
+		boton9.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField txtNombre = new JTextField();
+				Object[] campos = {
+					    "Nombre del contacto:", txtNombre
+				};
+				
+				JOptionPane.showConfirmDialog(null,
+						  campos,
+						  "Añadir contacto", 
+						  JOptionPane.OK_CANCEL_OPTION);
+				
+				String nombre = txtNombre.getText();
+				
+				if (nombre.equals("")) {
+					JOptionPane.showMessageDialog(null,
+												  "El nombre no puede estar vacíos",
+												  "Se ha producido un error",
+												  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				//Cambiar nombre del contacto
+				boton4.getContacto().setNombre(nombre);
+				
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				ControladorUsuarios.getUnicaInstancia().updateIndividual((ContactoIndividual) boton4.getContacto());
+				ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct);
+				boton9.makeVisible(false);
+				revalidate();
+			}
+		});
+		panel.add(boton9);
+		
+		panel.add(Box.createHorizontalStrut(120));
 		
 		// ===============
 		// Buscador (lupa)
@@ -353,6 +394,17 @@ public class MainView extends JFrame {
 						boton4.changeIcon("icons/profile_picture.png", 20, 20);
 					else
 						boton4.changeIcon("icons/group.png", 20, 20);
+					
+					Usuario nuevo = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(boton4.getText());
+					if(nuevo != null) {
+						boton9.setText("Añadir Contacto");
+						boton9.setBorderPainted(true);
+						boton9.setBorderPainted(true);
+						boton9.setOpaque(true);
+						boton9.setContentAreaFilled(true);
+						boton9.setBackground(Color.PINK);
+					}
+					
 					
 					boton5.makeVisible(true);
 					boton6.makeVisible(true);
