@@ -3,6 +3,8 @@ package dominio;
 import java.util.LinkedList;
 import java.util.List;
 
+import controlador.ControladorUsuarios;
+
 public class Grupo extends Contacto {
 
 	private int id;
@@ -12,7 +14,7 @@ public class Grupo extends Contacto {
 	public Grupo(String nombre) {
 		super(nombre);
 		this.miembros = new LinkedList<ContactoIndividual>();
-		this.admin = null;
+		this.admin = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 	}
 	
 	public boolean addMiembro(ContactoIndividual ci) { 

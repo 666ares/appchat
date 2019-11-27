@@ -7,14 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -206,7 +212,91 @@ public class OpcionesUser extends JFrame {
 		boton3.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-
+				
+				dispose();
+				
+				JFrame crearGrupo = new JFrame();
+				crearGrupo.setTitle("Crear Grupo");
+				crearGrupo.setBounds(150, 150, 400, 380);
+				crearGrupo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				crearGrupo.setResizable(false);
+				crearGrupo.setVisible(true);
+				
+				JPanel contentPane = new JPanel();
+				contentPane.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+				crearGrupo.setContentPane(contentPane);
+				
+				JLabel texto1 = new JLabel("Nombre del grupo:  ");
+				contentPane.add(texto1);
+				
+				JTextField textField = new JTextField();
+				textField.setColumns(21);
+				contentPane.add(textField);
+				
+				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getContactos();
+				String[] arrayCon = new String[contactos.size()];
+				int i = 0;
+				for(Contacto contacto : contactos) {
+					arrayCon[i] = contacto.getNombre();
+					i++;
+				}
+				
+				JList<String> jcontactos = new JList<String>(arrayCon);
+				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				jcontactos.setLayoutOrientation(JList.VERTICAL);
+				jcontactos.setVisibleRowCount(-1);
+				JScrollPane listaContactos = new JScrollPane(jcontactos);
+				listaContactos.setPreferredSize(new Dimension(138,250));
+				
+				
+				BotonChat addContactoGrupo = new BotonChat("icons/send.png", 30, 30);
+				addContactoGrupo.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Añadir Contacto a la otra lista
+						
+					}
+				});
+				
+				BotonChat removeContactoGrupo = new BotonChat("icons/send2.png", 30, 30);
+				removeContactoGrupo.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Eliminar Contacto de la lista y devolverlo a la otra
+						
+					}
+				});
+				
+				JPanel botones = new JPanel();
+				botones.setLayout(new BoxLayout(botones, BoxLayout.Y_AXIS));
+				botones.setBounds(0, 0, 60, 30);
+				botones.add(addContactoGrupo);
+				botones.add(removeContactoGrupo);
+				
+				JList<String> contGrupo = new JList<String>();
+				contGrupo.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				contGrupo.setLayoutOrientation(JList.VERTICAL);
+				contGrupo.setVisibleRowCount(-1);
+				JScrollPane contactosEnGrupo = new JScrollPane(jcontactos);
+				contactosEnGrupo.setPreferredSize(new Dimension(138,250));
+				
+				JButton boton1 = new JButton("Crear Grupo");
+				boton1.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Crear el grupo
+						crearGrupo.dispose();
+					}
+				});
+				
+				contentPane.add(contactosEnGrupo);
+				contentPane.add(botones);
+				contentPane.add(listaContactos);
+				contentPane.add(Box.createHorizontalStrut(100));
+				contentPane.add(boton1);
 				
 			}
 		});

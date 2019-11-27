@@ -261,6 +261,22 @@ public class MainView extends JFrame {
 		textField.setColumns(10);
 		
 		boton8 = new BotonChat("icons/send.png");
+		boton8.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String texto = textField.getText();
+				textField.setText("");
+				System.out.println("Mensaje: " + texto);
+				
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				Mensaje mensaje = new Mensaje(usuarioAct, boton4.getContacto(), texto);
+				//Añadir mensaje a la base de datos
+				ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+				//Actualizar las conversaciones
+				mostrarChats();
+			}
+		});
 		panel_3.add(boton8);
 		
 	}
@@ -304,10 +320,11 @@ public class MainView extends JFrame {
 					boton5.makeVisible(true);
 					boton6.makeVisible(true);
 						
-					chat.setResaltar(true);
-						
 					panel_2.removeAll();
+					panel_2.revalidate();
 					panel_2.repaint();
+					
+					chat.setResaltar(true);
 						
 					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
 					// TODO Obtener la lista de mensajes
@@ -315,24 +332,6 @@ public class MainView extends JFrame {
 						
 					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  mensajes);
 					
-					boton8.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							String texto = textField.getText();
-							textField.setText(null);
-							System.out.println("Mensaje: " + texto);
-							System.out.println("Emisor: " + usuarioAct.getNombre());
-							System.out.println("Receptor: " + chat.getContacto().getNombre());
-							
-							Mensaje mensaje = new Mensaje(usuarioAct, chat.getContacto(), texto);
-							//Añadir mensaje a la base de datos
-							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-							//Actualizar las conversaciones
-							
-							
-						}
-					});
 				}
 			});
 			panel_1.add(chat);
@@ -346,15 +345,16 @@ public class MainView extends JFrame {
 		panel.add(verticalStrut);
 		// TODO: Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
 		for (Mensaje mensaje : mensajes) {
-			if (mensaje.getEmisor() == user) {
-				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
-				panel.add(burbuja);
-			} else {
-				BubbleText burbuja;
-				burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
-				panel.add(burbuja);
-			}
+			
+				if (mensaje.getEmisor() == user) {
+					BubbleText burbuja;
+					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
+					panel.add(burbuja);
+				} else {
+					BubbleText burbuja;
+					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
+					panel.add(burbuja);
+				}
 			
 		}
 	}

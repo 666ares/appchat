@@ -161,15 +161,15 @@ public class ControladorUsuarios {
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual cInd = (ContactoIndividual) contacto;
 			cInd.addMensaje(mensaje);
+			adaptadorMensaje.registrarMensaje(mensaje);
 			adaptadorIndividual.modificarIndividual(cInd);
 		}
 		else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			g.addMensaje(mensaje);
+			adaptadorMensaje.registrarMensaje(mensaje);
 			adaptadorGrupo.modificarGrupo(g);
 		}
-		
-		adaptadorMensaje.registrarMensaje(mensaje);
 	}
 	
 	public boolean updateUsuario(Usuario usuario) {

@@ -39,7 +39,7 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		String telefono;
 		String usuario_id;
 		Usuario u;
-		List<Mensaje> m;
+		List<Mensaje> m = new LinkedList<Mensaje>();
 
 		eIndividual = servPersistencia.recuperarEntidad(codigo);
 
@@ -151,7 +151,6 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		while (strTok.hasMoreTokens())
 			listaMensajes.add(
 					adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
-
-			return listaMensajes;
+		return listaMensajes;
 	}	
 }

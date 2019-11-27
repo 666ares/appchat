@@ -17,6 +17,10 @@ public abstract class Contacto {
 		this.mensajes.add(mensaje);
 	}
 	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	// Getters
 	public String 			getNombre() 	{ return nombre; }
 	public List<Mensaje> 	getMensajes() 	{ return new LinkedList<Mensaje>(mensajes);  }

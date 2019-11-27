@@ -58,7 +58,7 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		eGrupo.setNombre("Grupo");
 		eGrupo.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 										new Propiedad("nombre", 	grupo.getNombre()),
-										new Propiedad("admin", 		String.valueOf(grupo.getId())),
+										new Propiedad("admin", 		String.valueOf(grupo.getAdmin().getId())),
 										new Propiedad("miembros", 	obtenerCodigosMiembros(grupo.getMiembros())),
 										new Propiedad("mensajes", 	obtenerCodigosMensajes(grupo.getMensajes()))
 										))
@@ -81,8 +81,8 @@ public final class TDSGrupoDAO implements GrupoDAO {
 		String nombre;
 		Usuario admin;
 		String admin_id;
-		List<ContactoIndividual> miembros;
-		List<Mensaje> m;
+		List<ContactoIndividual> miembros = new LinkedList<ContactoIndividual>();
+		List<Mensaje> m = new LinkedList<Mensaje>();
 		
 		// Recuperar entidad
 		eGrupo = servPersistencia.recuperarEntidad(codigo);
