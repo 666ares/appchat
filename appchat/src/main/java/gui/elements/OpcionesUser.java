@@ -314,13 +314,23 @@ public class OpcionesUser extends JFrame {
 							return;
 						}
 						
+						// Comprobar que el grupo tiene al menos 2 usuarios
+						// (sin contar el usuario que lo está creando (admin)).
+						if (contGrupo.getModel().getSize() < 2) {
+							JOptionPane.showMessageDialog(null,
+														  "El grupo debe tener al menos 2 usuarios",
+														  "Se ha producido un error",
+														  JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
 						// Crear objeto con el contacto
 						Grupo g = new Grupo(textField.getText());
 						
 						// Añadir contactos
-						for(Contacto contacto : contactos) {
-							if(contactosGrupo.contains(contacto.getNombre())) {
-								if(contacto instanceof ContactoIndividual) {
+						for (Contacto contacto : contactos) {
+							if (contactosGrupo.contains(contacto.getNombre())) {
+								if (contacto instanceof ContactoIndividual) {
 									g.addMiembro((ContactoIndividual) contacto);
 								}
 							}
