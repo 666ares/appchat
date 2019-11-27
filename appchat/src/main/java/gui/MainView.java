@@ -149,23 +149,27 @@ public class MainView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Obtener número de contactos del usuario antes de que se cierre
 				// la ventana para añadir un nuevo contacto
-				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
+				Usuario usuarioAct 
+					= ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				List<Contacto> contactos 
+					= ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
 				int size = contactos.size();
 				
 				OpcionesUser opciones = new OpcionesUser();
 				opciones.makeVisible();
 				opciones.addWindowListener(new WindowAdapter() {
 					@Override
-					public void windowClosing(WindowEvent e) {
+					public void windowClosed(WindowEvent e) {
 						// Obtener número de contactos después de cerrar la ventana para
 						// añadir un contacto
-						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-						List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
+						Usuario usuarioAct 
+							= ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						List<Contacto> contactos 
+							= ControladorUsuarios.getUnicaInstancia().obtenerContactos(usuarioAct.getLogin());
 						
 						// Si el número de contactos es distinto es porque se agregó uno nuevo
 						// Hay que repintar la lista de chats
-						if (contactos.size() == size + 1)
+						if (contactos.size() != size)
 							mostrarChats();
 					}
 				});

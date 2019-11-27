@@ -142,7 +142,10 @@ public class OpcionesUser extends JFrame {
 				List<Contacto> contactos 
 					= ControladorUsuarios.getUnicaInstancia().obtenerContactos(uAct.getLogin());
 				
-				if (contactos.size() == 0) {
+				List<ContactoIndividual> individuales
+					= ControladorUsuarios.getUnicaInstancia().obtenerIndividuales(contactos);
+				
+				if (individuales.size() == 0) {
 
 					JOptionPane.showMessageDialog(null,
 												  "Tu lista de contactos está vacía",
@@ -154,11 +157,11 @@ public class OpcionesUser extends JFrame {
 				// Obtenemos un objeto de tipo String[][] con los campos de cada contacto
 				// que se deben mostrar en la tabla
 				Object[][] contactosTabla 	= ControladorUsuarios.getUnicaInstancia().contactosATabla(contactos);
-				String[] nombresColumnas 	= {"Nombre", "Imagen", "Teléfono"}; 
+				String[] nombresColumnas 	= {"Nombre", "Imagen", "Teléfono", "Grupos en común"}; 
 				
 				JFrame ventanaTabla = new JFrame();
 				ventanaTabla.setTitle("Lista de contactos");    
-				ventanaTabla.setBounds(100, 100, 375, (contactos.size() * 60) + 52);
+				ventanaTabla.setBounds(100, 100, 500, (contactos.size() * 40));
 				ventanaTabla.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				ventanaTabla.setVisible(true);
 				ventanaTabla.setResizable(false);
@@ -172,6 +175,7 @@ public class OpcionesUser extends JFrame {
 				            case 0: return String.class;
 				            case 1: return ImageIcon.class;
 				            case 2: return String.class;
+				            case 3: return String.class;
 				            default: return Object.class;
 				        }
 				    }
@@ -223,7 +227,7 @@ public class OpcionesUser extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				dispose();
+				// dispose();
 				
 				JFrame crearGrupo = new JFrame();
 				crearGrupo.setTitle("Crear Grupo");
