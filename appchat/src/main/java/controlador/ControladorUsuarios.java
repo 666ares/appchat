@@ -127,9 +127,21 @@ public class ControladorUsuarios {
 				ImageIcon icon2 = new ImageIcon(newImage);
 				
 				datos[index][1] = icon2;
-				datos[index][2] = ci.getTelefono();
+				datos[index][2] = " " + ci.getTelefono();
 				index++;
-			}		
+			} else {
+				Grupo g = (Grupo) c;
+				datos[index][0] = g.getNombre();
+				
+				ImageIcon icon = new ImageIcon("icons/group.png");
+				Image imageIcon = icon.getImage();
+				Image newImage = imageIcon.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+				ImageIcon icon2 = new ImageIcon(newImage);
+				
+				datos[index][1] = icon2;
+				datos[index][2] = " ...";
+				index++;
+			}
 		}
 		
 		return datos;

@@ -22,7 +22,7 @@ public class BoxChat extends JButton {
 
 	private Contacto contacto;
 	
-	public BoxChat(Contacto contacto, String lastMensaje) {
+	public BoxChat(Contacto contacto, String lastMensaje, boolean grupo) {
 		
 		// Constructor como un horizontalBox
 		super();
@@ -35,8 +35,12 @@ public class BoxChat extends JButton {
 		chat.setMinimumSize(new Dimension(277, 65));
 
 		// Imagen por defecto
-		ImageIcon userPic = new ImageIcon("icons/profile_picture.png");
-		Image newImage = userPic.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon pic;
+		if(grupo)
+			pic = new ImageIcon("icons/group.png");
+		else
+			pic = new ImageIcon("icons/profile_picture.png");
+		Image newImage = pic.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon userPic2 = new ImageIcon(newImage);
 		JLabel imagelabel = new JLabel(userPic2);
 		

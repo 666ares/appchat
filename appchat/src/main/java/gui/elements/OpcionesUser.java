@@ -5,10 +5,12 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,6 +29,7 @@ import javax.swing.table.TableColumn;
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
+import dominio.Grupo;
 import dominio.Usuario;
 
 public class OpcionesUser extends JFrame {
@@ -53,6 +56,8 @@ public class OpcionesUser extends JFrame {
 		boton1.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
+				
+				dispose();
 				
 				// Obtener nombre y teléfono del contacto que se quiere agregar
 				JTextField txtNombre = new JTextField();
@@ -125,6 +130,8 @@ public class OpcionesUser extends JFrame {
 		boton2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
+				
+				dispose();
 				
 				// Obtenemos una instancia del usuario actual
 				Usuario uAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
@@ -234,28 +241,36 @@ public class OpcionesUser extends JFrame {
 				contentPane.add(textField);
 				
 				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getContactos();
-				String[] arrayCon = new String[contactos.size()];
-				int i = 0;
+				DefaultListModel<String> listmodel = new DefaultListModel<String>();
 				for(Contacto contacto : contactos) {
-					arrayCon[i] = contacto.getNombre();
-					i++;
+					if(contacto instanceof ContactoIndividual) 
+						listmodel.addElement(contacto.getNombre());
 				}
 				
-				JList<String> jcontactos = new JList<String>(arrayCon);
+				
+				JList<String> jcontactos = new JList<String>(listmodel);
 				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				jcontactos.setLayoutOrientation(JList.VERTICAL);
 				jcontactos.setVisibleRowCount(-1);
 				JScrollPane listaContactos = new JScrollPane(jcontactos);
 				listaContactos.setPreferredSize(new Dimension(138,250));
 				
+				DefaultListModel<String> contactosGrupo = new DefaultListModel<String>();
+				JList<String> contGrupo = new JList<String>(contactosGrupo);
+				contGrupo.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				contGrupo.setLayoutOrientation(JList.VERTICAL);
+				contGrupo.setVisibleRowCount(-1);
+				JScrollPane contactosEnGrupo = new JScrollPane(contGrupo);
+				contactosEnGrupo.setPreferredSize(new Dimension(138,250));
 				
 				BotonChat addContactoGrupo = new BotonChat("icons/send.png", 30, 30);
 				addContactoGrupo.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Añadir Contacto a la otra lista
-						
+						String contacto = jcontactos.getSelectedValue();
+						listmodel.removeElement(contacto);
+						contactosGrupo.addElement(contacto);
 					}
 				});
 				
@@ -264,8 +279,9 @@ public class OpcionesUser extends JFrame {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Eliminar Contacto de la lista y devolverlo a la otra
-						
+						String contacto = contGrupo.getSelectedValue();
+						contactosGrupo.removeElement(contacto);
+						listmodel.addElement(contacto);
 					}
 				});
 				
@@ -275,26 +291,57 @@ public class OpcionesUser extends JFrame {
 				botones.add(addContactoGrupo);
 				botones.add(removeContactoGrupo);
 				
-				JList<String> contGrupo = new JList<String>();
-				contGrupo.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-				contGrupo.setLayoutOrientation(JList.VERTICAL);
-				contGrupo.setVisibleRowCount(-1);
-				JScrollPane contactosEnGrupo = new JScrollPane(jcontactos);
-				contactosEnGrupo.setPreferredSize(new Dimension(138,250));
-				
 				JButton boton1 = new JButton("Crear Grupo");
 				boton1.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Crear el grupo
+						
+						// Comprobar que nombre no es vacio
+						if (textField.getText().equals("")) {
+							JOptionPane.showMessageDialog(null, 
+														  "El grupo no tiene nombre",
+														  "Se ha producido un error", 
+														  JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						// Crear objeto con el contacto
+						Grupo g = new Grupo(textField.getText());
+						
+						// Añadir contactos
+						for(Contacto contacto : contactos) {
+							if(contactosGrupo.contains(contacto.getNombre())) {
+								if(contacto instanceof ContactoIndividual) {
+									g.addMiembro((ContactoIndividual) contacto);
+								}
+							}
+						}
+						
+						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						
+						boolean registrado = false;
+						registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(usuarioAct.getLogin(), g);
+						
+						if (registrado)
+							JOptionPane.showMessageDialog(null, 
+														  "El contacto se ha añadido correctamente",
+														  "Contacto añadido", 
+														  JOptionPane.INFORMATION_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null, 
+														  "Error al crear el grupo", 
+														  "Se ha producido un error", 
+														  JOptionPane.ERROR_MESSAGE);
+						
 						crearGrupo.dispose();
 					}
 				});
 				
-				contentPane.add(contactosEnGrupo);
-				contentPane.add(botones);
 				contentPane.add(listaContactos);
+				contentPane.add(botones);
+				contentPane.add(contactosEnGrupo);
 				contentPane.add(Box.createHorizontalStrut(100));
 				contentPane.add(boton1);
 				

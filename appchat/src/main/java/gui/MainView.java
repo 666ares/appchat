@@ -19,6 +19,7 @@ import javax.swing.border.Border;
 
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
+import dominio.ContactoIndividual;
 import dominio.Mensaje;
 import dominio.Usuario;
 import gui.elements.BotonChat;
@@ -293,7 +294,15 @@ public class MainView extends JFrame {
 			
 		final LinkedList<BoxChat> chats = new LinkedList<BoxChat>();
 		for (int i = 0; i < contactos.size(); i++) {
-			BoxChat chat = new BoxChat(contactos.get(i), "ultimo mensaje");
+			List<Mensaje> mensajes = contactos.get(i).getMensajes();
+			String ultMensaje = "";
+			if(!mensajes.isEmpty())
+				mensajes.get(mensajes.size()-1).getTexto();
+			BoxChat chat;
+			if(contactos.get(i) instanceof ContactoIndividual)
+				chat = new BoxChat(contactos.get(i), ultMensaje, false);
+			else
+				chat = new BoxChat(contactos.get(i), ultMensaje, true);
 			chats.add(chat);
 		}
 			
@@ -315,8 +324,11 @@ public class MainView extends JFrame {
 					boton4.setContacto(chat.getContacto());
 					
 					// Obtener imagen del usuario del chat
-					boton4.changeIcon("icons/profile_picture.png", 20, 20);
-						
+					if(chat.getContacto() instanceof ContactoIndividual)
+						boton4.changeIcon("icons/profile_picture.png", 20, 20);
+					else
+						boton4.changeIcon("icons/group.png", 20, 20);
+					
 					boton5.makeVisible(true);
 					boton6.makeVisible(true);
 						
