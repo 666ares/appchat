@@ -57,8 +57,6 @@ public class OpcionesUser extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				dispose();
-				
 				// Obtener nombre y teléfono del contacto que se quiere agregar
 				JTextField txtNombre = new JTextField();
 				JTextField txtTelefono = new JTextField();
@@ -103,6 +101,8 @@ public class OpcionesUser extends JFrame {
 				// Asociar el contacto con el usuario correspondiente
 				ci.setUsuario(nuevo);
 				
+				//Registrar contacto nuevo a nuevo
+				
 				boolean registrado = false;
 				registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(uAct.getLogin(), ci);
 				
@@ -116,6 +116,9 @@ public class OpcionesUser extends JFrame {
 												  "Ya existe un contacto con el mismo nombre y teléfono", 
 												  "Se ha producido un error", 
 												  JOptionPane.ERROR_MESSAGE);
+				
+
+				dispose();
 				
 			}
 		});
@@ -336,6 +339,7 @@ public class OpcionesUser extends JFrame {
 														  JOptionPane.ERROR_MESSAGE);
 						
 						crearGrupo.dispose();
+						dispose();
 					}
 				});
 				

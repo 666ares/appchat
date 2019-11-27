@@ -184,6 +184,21 @@ public class ControladorUsuarios {
 		}
 	}
 	
+	public void recibirMensaje(Mensaje mensaje, Contacto contacto) {
+		if (contacto instanceof ContactoIndividual) {
+			ContactoIndividual cInd = (ContactoIndividual) contacto;
+			cInd.addMensaje(mensaje);
+			adaptadorMensaje.registrarMensaje(mensaje);
+			adaptadorIndividual.modificarIndividual(cInd);
+		} else if (contacto instanceof Grupo) {
+			Grupo g = (Grupo) contacto;
+			g.addMensaje(mensaje);
+			adaptadorMensaje.registrarMensaje(mensaje);
+			adaptadorGrupo.modificarGrupo(g);
+		}
+		
+	}
+	
 	public boolean updateUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getLogin()))
 			return false;

@@ -272,8 +272,33 @@ public class MainView extends JFrame {
 				
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 				Mensaje mensaje = new Mensaje(usuarioAct, boton4.getContacto(), texto);
+				
+				Contacto contacto = boton4.getContacto();
+				String tlf = "";
+				if(contacto instanceof ContactoIndividual) {
+					tlf = ((ContactoIndividual) contacto).getTelefono();
+				}
+				Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
+				
+				List<Contacto> con = receptor.getContactos();
+				ContactoIndividual ci2 = null;
+				for(Contacto cont : con) {
+					if(cont instanceof ContactoIndividual) {
+						if(((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
+							ci2 = (ContactoIndividual) cont;
+						}
+					}
+				}
+				//Si no lo tiene crear un contacto con el numero de telefono de usuario Act
+				if(ci2 == null) {
+					ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
+					ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
+				}
+				
 				//Añadir mensaje a la base de datos
 				ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+				ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
+				
 				//Actualizar las conversaciones
 				mostrarChats();
 			}
@@ -358,7 +383,7 @@ public class MainView extends JFrame {
 		// TODO: Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
 		for (Mensaje mensaje : mensajes) {
 			
-				if (mensaje.getEmisor() == user) {
+				if (mensaje.getEmisor().equals(user)) {
 					BubbleText burbuja;
 					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
 					panel.add(burbuja);
