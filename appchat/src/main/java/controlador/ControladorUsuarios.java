@@ -3,6 +3,7 @@ package controlador;
 import java.awt.Image;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -105,9 +106,37 @@ public class ControladorUsuarios {
 		return contactos;
 	}
 	
-	public Object[][] contactosATabla(List<Contacto> contactos) {
+	public List<ContactoIndividual> obtenerIndividuales(List<Contacto> contactos) {
 		
-		Object[][] datos = new Object[contactos.size()][3];
+		List<ContactoIndividual> individuales = new LinkedList<ContactoIndividual>();
+		
+		for (Contacto c : contactos)
+			if (c instanceof ContactoIndividual) {
+				ContactoIndividual ci = (ContactoIndividual) c;
+				individuales.add(ci);
+			}
+		return individuales;
+	}
+	
+	public List<Grupo> obtenerGrupos(List<Contacto> contactos) {
+		
+		List<Grupo> grupos = new LinkedList<Grupo>();
+		
+		for (Contacto c : contactos)
+			if (c instanceof Grupo) {
+				Grupo g = (Grupo) c;
+				grupos.add(g);
+			}
+		
+		return grupos;
+	}
+	
+	public Object[][] contactosATabla(List<Contacto> contactos) {
+
+		List<ContactoIndividual> individuales = obtenerIndividuales(contactos);
+		// List<Grupo> grupos = obtenerGrupos(contactos);
+		
+		Object[][] datos = new Object[individuales.size()][4];
 		
 		Comparator<Contacto> ordenarPorNombre 
 			= (Contacto c1, Contacto c2) -> c1.getNombre().compareTo(c2.getNombre());
@@ -115,33 +144,21 @@ public class ControladorUsuarios {
 		Collections.sort(contactos, ordenarPorNombre);
 		
 		int index = 0;
-		for (Contacto c : contactos) {
+
+		for (ContactoIndividual ci : individuales) {
 			
-			if (c instanceof ContactoIndividual) {
-				ContactoIndividual ci = (ContactoIndividual) c;
-				datos[index][0] = ci.getNombre();
+			datos[index][0] = ci.getNombre();
 				
-				ImageIcon icon = new ImageIcon(ci.getUsuario().getImagenPerfil());
-				Image imageIcon = icon.getImage();
-				Image newImage = imageIcon.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
-				ImageIcon icon2 = new ImageIcon(newImage);
+			ImageIcon icon = new ImageIcon(ci.getUsuario().getImagenPerfil());
+			Image imageIcon = icon.getImage();
+			Image newImage = imageIcon.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon icon2 = new ImageIcon(newImage);
 				
-				datos[index][1] = icon2;
-				datos[index][2] = " " + ci.getTelefono();
-				index++;
-			} else {
-				Grupo g = (Grupo) c;
-				datos[index][0] = g.getNombre();
+			datos[index][1] = icon2;
+			datos[index][2] = " " + ci.getTelefono();
 				
-				ImageIcon icon = new ImageIcon("icons/group.png");
-				Image imageIcon = icon.getImage();
-				Image newImage = imageIcon.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
-				ImageIcon icon2 = new ImageIcon(newImage);
-				
-				datos[index][1] = icon2;
-				datos[index][2] = " ...";
-				index++;
-			}
+			// TODO: Obtener grupos en comun con el usuario
+			index++;
 		}
 		
 		return datos;
