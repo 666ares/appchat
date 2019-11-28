@@ -329,15 +329,26 @@ public class OpcionesUser extends JFrame {
 						for (Contacto contacto : contactos) {
 							if (contactosGrupo.contains(contacto.getNombre())) {
 								if (contacto instanceof ContactoIndividual) {
-									g.addMiembro((ContactoIndividual) contacto);
+									ContactoIndividual cInd = (ContactoIndividual) contacto;
+									g.addMiembro(cInd);
 								}
 							}
 						}
 						
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						ContactoIndividual yo = new ContactoIndividual(usuarioAct.getNombre(), usuarioAct.getTelefono());
+						g.addMiembro(yo);
 						
 						boolean registrado = false;
 						registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(usuarioAct.getLogin(), g);
+						
+						// Crear el grupo en los miembros del grupo
+						List<ContactoIndividual> miembros = g.getMiembros();
+						for(ContactoIndividual miembro : miembros) {
+							String tlf = miembro.getTelefono();
+							Usuario user = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
+							ControladorUsuarios.getUnicaInstancia().añadirContacto(user.getLogin(), g);
+						}
 						
 						if (registrado)
 							JOptionPane.showMessageDialog(null, 
@@ -410,7 +421,7 @@ public class OpcionesUser extends JFrame {
 				
 				if(grupo == null) {
 					JOptionPane.showMessageDialog(null, 
-							  "Error, no existe el grupo " + txtNombre.getText(), 
+							  "Error, no existe el grupo " + txtNombre.getText() + " o no eres admin", 
 							  "Se ha producido un error", 
 							  JOptionPane.ERROR_MESSAGE);
 					return;

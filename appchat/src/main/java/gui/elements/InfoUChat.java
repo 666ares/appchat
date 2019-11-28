@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import controlador.ControladorUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Grupo;
@@ -105,7 +106,8 @@ public class InfoUChat extends JFrame{
 		    DefaultListModel<String> nombreMiembros= new DefaultListModel<String>();
 		    List<ContactoIndividual> contactosGrupo = grupo.getMiembros();
 		    for(ContactoIndividual contacto : contactosGrupo) {
-		    	nombreMiembros.addElement(contacto.getNombre());
+		    	if(!contacto.getNombre().equals(ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getNombre()))
+		    		nombreMiembros.addElement(contacto.getNombre());
 		    }
 		    JList<String> miembros = new JList<String>(nombreMiembros);
 		    miembros.setLayoutOrientation(JList.VERTICAL);

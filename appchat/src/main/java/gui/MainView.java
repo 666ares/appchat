@@ -25,6 +25,7 @@ import javax.swing.border.Border;
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
+import dominio.Grupo;
 import dominio.Mensaje;
 import dominio.Usuario;
 import gui.elements.BotonChat;
@@ -332,28 +333,37 @@ public class MainView extends JFrame {
 						String tlf = "";
 						if(contacto instanceof ContactoIndividual) {
 							tlf = ((ContactoIndividual) contacto).getTelefono();
-						}
-						Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
-						
-						//TODO No hacer para grupos
-						List<Contacto> con = receptor.getContactos();
-						ContactoIndividual ci2 = null;
-						for(Contacto cont : con) {
-							if(cont instanceof ContactoIndividual) {
-								if(((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
-									ci2 = (ContactoIndividual) cont;
+							
+							Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
+							
+							List<Contacto> con = receptor.getContactos();
+							ContactoIndividual ci2 = null;
+							for(Contacto cont : con) {
+								if(cont instanceof ContactoIndividual) {
+									if(((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
+										ci2 = (ContactoIndividual) cont;
+									}
 								}
 							}
+							//Si no lo tiene crear un contacto con el numero de telefono de usuario Act
+							if(ci2 == null) {
+								ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
+								ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
+							}
+							
+							//Añadir mensaje a la base de datos
+							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+							ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
 						}
-						//Si no lo tiene crear un contacto con el numero de telefono de usuario Act
-						if(ci2 == null) {
-							ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
-							ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
+						else if (contacto instanceof Grupo) {
+							Grupo grupo = (Grupo) contacto;
+							List<ContactoIndividual> miembros = grupo.getMiembros();
+							
+							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+							for(ContactoIndividual cInd : miembros) {
+								ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, cInd);
+							}
 						}
-						
-						//Añadir mensaje a la base de datos
-						ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-						ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
 						
 						//Actualizar las conversaciones
 						mostrarChats();
@@ -394,28 +404,37 @@ public class MainView extends JFrame {
 				String tlf = "";
 				if(contacto instanceof ContactoIndividual) {
 					tlf = ((ContactoIndividual) contacto).getTelefono();
-				}
-				Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
-				
-				// TODO No hacer para grupos
-				List<Contacto> con = receptor.getContactos();
-				ContactoIndividual ci2 = null;
-				for(Contacto cont : con) {
-					if(cont instanceof ContactoIndividual) {
-						if(((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
-							ci2 = (ContactoIndividual) cont;
+					
+					Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
+					
+					List<Contacto> con = receptor.getContactos();
+					ContactoIndividual ci2 = null;
+					for(Contacto cont : con) {
+						if(cont instanceof ContactoIndividual) {
+							if(((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
+								ci2 = (ContactoIndividual) cont;
+							}
 						}
 					}
+					//Si no lo tiene crear un contacto con el numero de telefono de usuario Act
+					if(ci2 == null) {
+						ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
+						ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
+					}
+					
+					//Añadir mensaje a la base de datos
+					ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+					ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
 				}
-				//Si no lo tiene crear un contacto con el numero de telefono de usuario Act
-				if(ci2 == null) {
-					ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
-					ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
+				else if(contacto instanceof Grupo) {
+					Grupo grupo = (Grupo) contacto;
+					List<ContactoIndividual> miembros = grupo.getMiembros();
+					
+					ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+					for(ContactoIndividual cInd : miembros) {
+						ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, cInd);
+					}
 				}
-				
-				//Añadir mensaje a la base de datos
-				ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-				ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
 				
 				//Actualizar las conversaciones
 				mostrarChats();
@@ -509,7 +528,6 @@ public class MainView extends JFrame {
 		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		panel.add(verticalStrut);
-		// TODO: Obtener lista de mensajes y recorrerla poniendo las burbujas en el panel
 		for (Mensaje mensaje : mensajes) {
 			
 				if (mensaje.getEmisor().equals(user)) {
