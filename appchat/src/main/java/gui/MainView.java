@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -12,10 +13,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 
 import controlador.ControladorUsuarios;
@@ -38,6 +42,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 
@@ -299,6 +304,71 @@ public class MainView extends JFrame {
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.X_AXIS));
 		
 		boton7 = new BotonChat("icons/emoji.png", 25, 25);
+		
+		JPopupMenu menuEmoji = new JPopupMenu();
+		menuEmoji.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		menuEmoji.setBounds(0, 0, 100, 100);
+		menuEmoji.setPreferredSize(new Dimension(360,145));
+		
+		for(int i = 0; i<25; i++) {
+			ImageIcon emoji = BubbleText.getEmoji(i);
+			Image imageIcon = emoji.getImage();
+			imageIcon = imageIcon.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon emoji2 = new ImageIcon(imageIcon);
+			int numEmoji = i;
+			
+			menuEmoji.add(new JMenuItem(new AbstractAction("", emoji2) {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(boton4.getContacto() != null) {
+						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						Mensaje mensaje = new Mensaje(Integer.toString(numEmoji), usuarioAct, boton4.getContacto());
+						
+						Contacto contacto = boton4.getContacto();
+						String tlf = "";
+						if(contacto instanceof ContactoIndividual) {
+							tlf = ((ContactoIndividual) contacto).getTelefono();
+						}
+						Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
+						
+						//TODO No hacer para grupos
+						List<Contacto> con = receptor.getContactos();
+						ContactoIndividual ci2 = null;
+						for(Contacto cont : con) {
+							if(cont instanceof ContactoIndividual) {
+								if(((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
+									ci2 = (ContactoIndividual) cont;
+								}
+							}
+						}
+						//Si no lo tiene crear un contacto con el numero de telefono de usuario Act
+						if(ci2 == null) {
+							ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
+							ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
+						}
+						
+						//Añadir mensaje a la base de datos
+						ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+						ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
+						
+						//Actualizar las conversaciones
+						mostrarChats();
+					}
+				}
+			}));
+		}
+		
+		boton7.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Crear PopupMenu con los emojis que se pueden mandar
+				menuEmoji.show(boton7, 0, -150);
+				
+			}
+		});
+		
 		panel_3.add(boton7);
 		panel_3.add(Box.createVerticalStrut(40));
 		
@@ -313,7 +383,6 @@ public class MainView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String texto = textField.getText();
 				textField.setText("");
-				System.out.println("Mensaje: " + texto);
 				
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 				Mensaje mensaje = new Mensaje(usuarioAct, boton4.getContacto(), texto);
@@ -325,6 +394,7 @@ public class MainView extends JFrame {
 				}
 				Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
 				
+				// TODO No hacer para grupos
 				List<Contacto> con = receptor.getContactos();
 				ContactoIndividual ci2 = null;
 				for(Contacto cont : con) {
@@ -441,11 +511,17 @@ public class MainView extends JFrame {
 			
 				if (mensaje.getEmisor().equals(user)) {
 					BubbleText burbuja;
-					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
+					if(mensaje.getEmoticono().equals(""))
+						burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
+					else
+						burbuja = new BubbleText(panel, Integer.parseInt(mensaje.getEmoticono()), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT, 12);
 					panel.add(burbuja);
 				} else {
 					BubbleText burbuja;
-					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
+					if(mensaje.getEmoticono().equals(""))
+						burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
+					else
+						burbuja = new BubbleText(panel, Integer.parseInt(mensaje.getEmoticono()), Color.GREEN, " " + contacto, BubbleText.RECEIVED, 12);
 					panel.add(burbuja);
 				}
 			
