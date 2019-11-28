@@ -6,6 +6,7 @@ public abstract class FactoriaDAO {
 	
 	private static FactoriaDAO unicaInstancia;
 	
+	@SuppressWarnings("deprecation")
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException {
 		if (unicaInstancia == null)
 			try {

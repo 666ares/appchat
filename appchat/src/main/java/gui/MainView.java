@@ -232,6 +232,7 @@ public class MainView extends JFrame {
 				ControladorUsuarios.getUnicaInstancia().updateIndividual((ContactoIndividual) boton4.getContacto());
 				ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct);
 				boton9.makeVisible(false);
+				// TODO hacer mas ancho el boton9 para que la lupa se quede bien
 				revalidate();
 			}
 		});
@@ -319,6 +320,8 @@ public class MainView extends JFrame {
 			
 			menuEmoji.add(new JMenuItem(new AbstractAction("", emoji2) {
 				
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(boton4.getContacto() != null) {

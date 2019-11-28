@@ -25,6 +25,14 @@ public class Grupo extends Contacto {
 		return false;
 	}
 	
+	public boolean removeMiembro(ContactoIndividual ci) {
+		if(miembros.contains(ci)) {
+			miembros.remove(ci);
+			return true;
+		}
+		return false;
+	}
+	
 	public int 		getId()		{ return id; }
 	public Usuario 	getAdmin() 	{ return admin; }
 	

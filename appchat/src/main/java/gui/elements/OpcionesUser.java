@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -13,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -377,7 +375,167 @@ public class OpcionesUser extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 
+				JTextField txtNombre = new JTextField();
+				Object[] campos = {
+					    "Nombre del grupo:", txtNombre
+				};
 				
+				JOptionPane.showConfirmDialog(null,
+						  campos,
+						  "Modificar grupo", 
+						  JOptionPane.OK_CANCEL_OPTION);
+				
+				if(txtNombre.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, 
+							  "Error, no existe el grupo", 
+							  "Se ha producido un error", 
+							  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				//Comprobar que el grupo existe
+
+				Grupo grupo = null;
+
+				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getContactos();	
+				
+				for(Contacto contacto : contactos) {
+					if(contacto instanceof Grupo) {
+						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						if(contacto.getNombre().equals(txtNombre.getText()) && usuarioAct.equals(((Grupo) contacto).getAdmin())) {
+							grupo = (Grupo) contacto;
+						}
+					}	
+				}
+				
+				if(grupo == null) {
+					JOptionPane.showMessageDialog(null, 
+							  "Error, no existe el grupo " + txtNombre.getText(), 
+							  "Se ha producido un error", 
+							  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				final Grupo grupoaux = grupo;
+				
+				JFrame crearGrupo = new JFrame();
+				crearGrupo.setTitle("Modificar Grupo");
+				crearGrupo.setBounds(150, 150, 400, 350);
+				crearGrupo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				crearGrupo.setResizable(false);
+				crearGrupo.setVisible(true);
+				
+				JPanel contentPane = new JPanel();
+				contentPane.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+				crearGrupo.setContentPane(contentPane);
+
+				DefaultListModel<String> listmodel = new DefaultListModel<String>();
+				DefaultListModel<String> contactosGrupo = new DefaultListModel<String>();
+				DefaultListModel<String> anadidos = new DefaultListModel<String>();
+				DefaultListModel<String> eliminados = new DefaultListModel<String>();
+				List<ContactoIndividual> contEnGrupo = grupo.getMiembros();
+				
+				for(Contacto contacto : contactos) {
+					if(contacto instanceof ContactoIndividual) {
+						if(contEnGrupo.contains(contacto)) {
+							contactosGrupo.addElement(contacto.getNombre());
+						} else {
+							listmodel.addElement(contacto.getNombre());
+						}
+					}
+				}
+				
+				JList<String> jcontactos = new JList<String>(listmodel);
+				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				jcontactos.setLayoutOrientation(JList.VERTICAL);
+				jcontactos.setVisibleRowCount(-1);
+				JScrollPane listaContactos = new JScrollPane(jcontactos);
+				listaContactos.setPreferredSize(new Dimension(138,250));
+				
+				
+				JList<String> contGrupo = new JList<String>(contactosGrupo);
+				contGrupo.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				contGrupo.setLayoutOrientation(JList.VERTICAL);
+				contGrupo.setVisibleRowCount(-1);
+				JScrollPane contactosEnGrupo = new JScrollPane(contGrupo);
+				contactosEnGrupo.setPreferredSize(new Dimension(138,250));
+				
+				// Añadir contacto
+				BotonChat addContactoGrupo = new BotonChat("icons/send.png", 30, 30);
+				addContactoGrupo.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String contacto = jcontactos.getSelectedValue();
+						listmodel.removeElement(contacto);
+						contactosGrupo.addElement(contacto);
+						anadidos.addElement(contacto);
+					}
+				});
+				
+				// Eliminar contacto
+				BotonChat removeContactoGrupo = new BotonChat("icons/send2.png", 30, 30);
+				removeContactoGrupo.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String contacto = contGrupo.getSelectedValue();
+						contactosGrupo.removeElement(contacto);
+						listmodel.addElement(contacto);
+						eliminados.addElement(contacto);
+					}
+				});
+				
+				JPanel botones = new JPanel();
+				botones.setLayout(new BoxLayout(botones, BoxLayout.Y_AXIS));
+				botones.setBounds(0, 0, 60, 30);
+				botones.add(addContactoGrupo);
+				botones.add(removeContactoGrupo);
+				
+				JButton boton1 = new JButton("Modificar Grupo");
+				boton1.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// Si las dos listas son vacias -> no hay cambios
+						if(anadidos.isEmpty() && eliminados.isEmpty()) {
+							JOptionPane.showMessageDialog(null, 
+									  "No hay cambios",
+									  "Modificar Grupo", 
+									  JOptionPane.INFORMATION_MESSAGE);
+						}
+						
+						for(Contacto contacto : contactos) {
+							if (anadidos.contains(contacto.getNombre())) {
+								if (contacto instanceof ContactoIndividual) {
+									// TODO Cuando se añade un contacto que no estaba antes, 
+									// añadirle el grupo como contacto nuevo
+									grupoaux.addMiembro((ContactoIndividual) contacto);
+								}
+							} else if (eliminados.contains(contacto.getNombre())) {
+								if (contacto instanceof ContactoIndividual) {
+									// TODO Cuando se elimina un contacto, 
+									// eliminarle el grupo que tenia en la lista contactos
+									grupoaux.removeMiembro((ContactoIndividual) contacto);
+								}
+							}
+						}
+						
+						//Modificar el grupo
+						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+						ControladorUsuarios.getUnicaInstancia().updateGrupo(grupoaux);
+						ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct);
+						
+						crearGrupo.dispose();
+						dispose();
+					}
+				});
+				
+				contentPane.add(listaContactos);
+				contentPane.add(botones);
+				contentPane.add(contactosEnGrupo);
+				contentPane.add(Box.createHorizontalStrut(90));
+				contentPane.add(boton1);
 			}
 		});
 

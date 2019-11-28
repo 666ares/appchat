@@ -230,6 +230,11 @@ public class ControladorUsuarios {
 		return true;
 	}
 	
+	public boolean updateGrupo(Grupo grupo) {
+		adaptadorGrupo.modificarGrupo(grupo);
+		return true;
+	}
+	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
