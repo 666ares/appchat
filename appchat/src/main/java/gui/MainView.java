@@ -13,12 +13,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 
@@ -34,6 +37,7 @@ import gui.elements.Buscador;
 import gui.elements.Estados;
 import gui.elements.InfoUChat;
 import gui.elements.InfoUsuario;
+import gui.elements.MenuOpciones;
 import gui.elements.OpcionesChat;
 import gui.elements.OpcionesUser;
 import tds.BubbleText;
@@ -49,6 +53,7 @@ import javax.swing.Box;
 
 import java.awt.Color;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 
 public class MainView extends JFrame {
@@ -76,6 +81,7 @@ public class MainView extends JFrame {
 	private JLabel texto_default;
 	private JScrollPane listaChat;
 	private JTextField 	textField;
+	private JScrollPane listaMensajes;
 	
 	public MainView() {
 		initialize();
@@ -151,6 +157,18 @@ public class MainView extends JFrame {
 		// Opciones de usuario
 		// ===================
 		boton3 = new BotonChat("icons/3dots.jpg", 5, 20);
+		/*
+		MenuOpciones opciones = new MenuOpciones();
+		boton3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Crear PopupMenu con los emojis que se pueden mandar
+				opciones.show(boton3, 10, 40);
+				
+			}
+		});
+		*/
 		boton3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Obtener número de contactos del usuario antes de que se cierre
@@ -179,6 +197,7 @@ public class MainView extends JFrame {
 							mostrarChats();
 					}
 				});
+				
 			}
 		});
 		
@@ -273,10 +292,14 @@ public class MainView extends JFrame {
 		// Chat de inicio (ninguno al comienzo)
 		// ====================================
 		panel_2 = new JPanel();
-		panel_2.setBounds(297, 55, 558, 419);
 		Border blackline2 = BorderFactory.createLineBorder(Color.black);
-		panel_2.setBorder(blackline2);
-		layeredPane.add(panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		listaMensajes = new JScrollPane(panel_2);
+		listaMensajes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		listaMensajes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		listaMensajes.setBorder(blackline2);
+		listaMensajes.setBounds(297, 55, 558, 419);
+		layeredPane.add(listaMensajes);
 		
 		texto_default = new JLabel("Selecciona un chat para empezar a hablar");
 		texto_default.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -437,7 +460,8 @@ public class MainView extends JFrame {
 				}
 				
 				//Actualizar las conversaciones
-				mostrarChats();
+				actualizarChat(contacto, usuarioAct, contacto.getMensajes());
+				
 			}
 		});
 		panel_3.add(boton8);
@@ -510,11 +534,9 @@ public class MainView extends JFrame {
 					panel_2.repaint();
 					
 					chat.setResaltar(true);
-						
-					// RELLENAMOS EL CHAT CON LOS MENSAJES DE LA CONVERSACION 
-					// TODO Obtener la lista de mensajes
+					// Rellenamos el chat con los mensajes del contacto
 					List<Mensaje> mensajes = chat.getContacto().getMensajes();
-						
+					
 					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct,  mensajes);
 					
 				}
@@ -536,6 +558,7 @@ public class MainView extends JFrame {
 						burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT);
 					else
 						burbuja = new BubbleText(panel, Integer.parseInt(mensaje.getEmoticono()), Color.GRAY, user.getNombre() + "  ", BubbleText.SENT, 12);
+					burbuja.setPreferredSize(new Dimension(540, 419));
 					panel.add(burbuja);
 				} else {
 					BubbleText burbuja;
@@ -543,6 +566,7 @@ public class MainView extends JFrame {
 						burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto, BubbleText.RECEIVED);
 					else
 						burbuja = new BubbleText(panel, Integer.parseInt(mensaje.getEmoticono()), Color.GREEN, " " + contacto, BubbleText.RECEIVED, 12);
+					burbuja.setPreferredSize(new Dimension(540, 419));
 					panel.add(burbuja);
 				}
 			
@@ -552,6 +576,13 @@ public class MainView extends JFrame {
 	void reiniciarPaneles(LinkedList<BoxChat> chats) {
 		for (BoxChat boxChat : chats)
 			boxChat.setResaltar(false);
+	}
+	
+	void actualizarChat(Contacto contacto, Usuario user, List<Mensaje> mensajes) {
+		panel_2.removeAll();
+		panel_2.revalidate();
+		panel_2.repaint();
+		rellenarChat(panel_2, contacto.getNombre(), user, mensajes);
 	}
 	
 }
