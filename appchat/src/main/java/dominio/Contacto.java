@@ -1,5 +1,6 @@
 package dominio;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,13 +14,48 @@ public abstract class Contacto {
 		this.mensajes = new LinkedList<Mensaje>();
 	}
 	
+	// Devuelve una lista con los mensajes comprendidos entre las fechas
+	// 'inf' y 'sup'
+	public List<Mensaje> mensajesEntreFechas(LocalDate inf, LocalDate sup) {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		
+		for (Mensaje m : this.mensajes)
+			if (m.estaEntreFechas(inf, sup))
+				mensajes.add(m);
+		
+		return mensajes;
+	}
+	
+	// Devuelve una lista con los mensajes que contienen la cadena 'texto'
+	public List<Mensaje> mensajesPorTexto(String texto) {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		
+		for (Mensaje m : this.mensajes)
+			if (m.contieneTexto(texto))
+				mensajes.add(m);
+		
+		return mensajes;
+	}
+	
+	// Devuelve una lista con los mensajes cuyo emisor tiene como 
+	// nombre 'nombre'
+	public List<Mensaje> mensajesPorUsuario(String nombre) {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		
+		for (Mensaje m : this.mensajes)
+			if (m.buscarPorNombre(nombre))
+				mensajes.add(m);
+		
+		return mensajes;
+	}
+	
+	// Permite añadir un nuevo mensaje a la colección
 	public void addMensaje(Mensaje mensaje) {
 		this.mensajes.add(mensaje);
 	}
 	
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+	// Setters
+	public void setNombre(String nombre) { this.nombre = nombre; }
 	
 	// Getters
 	public String 			getNombre() 	{ return nombre; }
