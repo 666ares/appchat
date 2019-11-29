@@ -22,7 +22,7 @@ public class BoxChat extends JButton {
 
 	private Contacto contacto;
 	
-	public BoxChat(Contacto contacto, String lastMensaje, boolean grupo) {
+	public BoxChat(Contacto contacto, String lastMensaje, String horaUltimo, boolean grupo) {
 		
 		// Constructor como un horizontalBox
 		super();
@@ -54,7 +54,7 @@ public class BoxChat extends JButton {
 		
 		Box userinfo = Box.createVerticalBox();
 		
-		JLabel label = new JLabel(contacto.getNombre() + "  ");
+		JLabel label = new JLabel(contacto.getNombre() + "  " + horaUltimo);
 		label.setFont(new Font("Arial", Font.BOLD, 13));
 		userinfo.add(label);
 		
