@@ -295,7 +295,7 @@ public class RegisterView extends JPanel {
 							txtUsuario.getText(),
 							new String(txtPassword.getPassword()),
 							"icons/profile_picture.png",
-							(txtSaludo.getText().equals("")) ? txtSaludo.getText() : "Hey there!, Im using AppChat");
+							(txtSaludo.getText().equals("")) ? "Hey there!, Im using AppChat" : txtSaludo.getText());
 							
 					if (registrado) {
 						JOptionPane.showMessageDialog(ventana, 
