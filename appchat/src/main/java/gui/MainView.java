@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -34,6 +35,7 @@ import gui.elements.Buscador;
 import gui.elements.Estados;
 import gui.elements.InfoUChat;
 import gui.elements.InfoUsuario;
+import gui.elements.MenuOpciones;
 import gui.elements.OpcionesChat;
 import gui.elements.OpcionesUser;
 import tds.BubbleText;
@@ -151,14 +153,15 @@ public class MainView extends JFrame {
 		// ===================
 		boton3 = new BotonChat("icons/3dots.jpg", 5, 20);
 		/*
-		 * MenuOpciones opciones = new MenuOpciones(); boton3.addActionListener(new
-		 * ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) { // TODO Crear
-		 * PopupMenu con los emojis que se pueden mandar opciones.show(boton3, 10, 40);
-		 * 
-		 * } });
-		 */
+		MenuOpciones opciones = new MenuOpciones(); boton3.addActionListener(new ActionListener() {
+		
+		@Override 
+		public void actionPerformed(ActionEvent e) { 
+	    	// TODO Crear PopupMenu con los emojis que se pueden mandar 
+	    	opciones.show(boton3, 10, 40);
+	  
+	    } });
+		*/
 		boton3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Obtener número de contactos del usuario antes de que se cierre
@@ -188,7 +191,6 @@ public class MainView extends JFrame {
 
 			}
 		});
-
 		panel.add(boton3);
 
 		// ======================
