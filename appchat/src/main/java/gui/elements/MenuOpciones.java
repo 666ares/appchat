@@ -37,6 +37,8 @@ public class MenuOpciones extends JPopupMenu {
 
 	private static final long serialVersionUID = 1L;
 	
+	boolean nuevoCon = false;
+	
 	public MenuOpciones() {
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		setBounds(150, 150, 135, 155);
@@ -95,12 +97,13 @@ public class MenuOpciones extends JPopupMenu {
 				boolean registrado = false;
 				registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(uAct.getLogin(), ci);
 				
-				if (registrado)
+				if (registrado) {
+					nuevoCon = true;
 					JOptionPane.showMessageDialog(null, 
 												  "El contacto se ha añadido correctamente",
 												  "Contacto añadido", 
 												  JOptionPane.INFORMATION_MESSAGE);
-				else
+				} else
 					JOptionPane.showMessageDialog(null, 
 												  "Ya existe un contacto con el mismo nombre y teléfono", 
 												  "Se ha producido un error", 
@@ -539,4 +542,11 @@ public class MenuOpciones extends JPopupMenu {
 		}));
 	}
 
+	public boolean comprobar_nuevo() {
+		if(nuevoCon) {
+			nuevoCon = false;
+			return true;
+		} else return false;
+	}
+	
 }
