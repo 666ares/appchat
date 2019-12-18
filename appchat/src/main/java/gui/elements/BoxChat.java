@@ -60,7 +60,16 @@ public class BoxChat extends JButton {
 		
 		Component verticalStrut = Box.createVerticalStrut(6);
 		userinfo.add(verticalStrut);
+		
+		//Ultimo mensaje
 		JLabel label2 = new JLabel(lastMensaje);
+		if(lastMensaje.equals("Emoticono")) {
+			ImageIcon icon = new ImageIcon("icons/emoji.png");
+			Image imageIcon = icon.getImage();
+			Image newImage2 = imageIcon.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH);
+			
+			label2.setIcon(new ImageIcon(newImage2));
+		}
 		label2.setFont(new Font("Arial", Font.PLAIN, 12));
 		userinfo.add(label2);
 		

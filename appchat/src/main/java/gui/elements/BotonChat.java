@@ -12,7 +12,7 @@ public class BotonChat extends JButton {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Contacto contacto;
+	private Contacto contacto = null;
 
 	public BotonChat(String imagen, String data) {
 		super(data);

@@ -386,6 +386,7 @@ public class MainView extends JFrame {
 						}
 
 						// Actualizar las conversaciones
+						actualizarChat(contacto, usuarioAct, contacto.getMensajes());
 						mostrarChats();
 					}
 				}
@@ -453,9 +454,6 @@ public class MainView extends JFrame {
 					List<ContactoIndividual> miembros = grupo.getMiembros();
 
 					ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-					for (ContactoIndividual cInd : miembros) {
-							ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, cInd);
-					}
 				}
 
 				// Actualizar las conversaciones
@@ -489,7 +487,10 @@ public class MainView extends JFrame {
 			String horaUltimoMensaje = "";
 			
 			if (!mensajes.isEmpty()) {
-				ultMensaje = mensajes.get(mensajes.size() - 1).getTexto();
+				Mensaje ultimo = mensajes.get(mensajes.size() - 1);
+				if(!ultimo.getEmoticono().equals("")) {
+					ultMensaje = "Emoticono";
+				} else ultMensaje = ultimo.getTexto();
 				horaUltimoMensaje = "[" + mensajes.get(mensajes.size() - 1).getHora().toString() + "]";
 			}
 			else
@@ -514,7 +515,6 @@ public class MainView extends JFrame {
 		for (BoxChat chat : chats) {
 			chat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
 					reiniciarPaneles(chats);
 
 					boton4.setText(chat.getContacto().getNombre());
@@ -551,6 +551,15 @@ public class MainView extends JFrame {
 
 				}
 			});
+			
+			
+			if (boton4.getContacto() != null) {
+				for (BoxChat chat2 : chats) {
+					if(chat2.getContacto().equals(boton4.getContacto())) {
+						chat2.setResaltar(true);
+					}
+				}
+			}
 			panel_1.add(chat);
 		}
 	}
@@ -575,11 +584,11 @@ public class MainView extends JFrame {
 			} else {
 				BubbleText burbuja;
 				if (mensaje.getEmoticono().equals(""))
-					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + contacto,
+					burbuja = new BubbleText(panel, mensaje.getTexto(), Color.GREEN, "  " + mensaje.getEmisor().getNombre(),
 							BubbleText.RECEIVED);
 				else
 					burbuja = new BubbleText(panel, Integer.parseInt(mensaje.getEmoticono()), Color.GREEN,
-							" " + contacto, BubbleText.RECEIVED, 12);
+							" " + mensaje.getEmisor().getNombre(), BubbleText.RECEIVED, 12);
 				burbuja.setPreferredSize(new Dimension(540, 419));
 				panel.add(burbuja);
 			}
