@@ -22,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
@@ -79,6 +81,8 @@ public class MainView extends JFrame {
 	private JScrollPane listaChat;
 	private JTextField textField;
 	private JScrollPane listaMensajes;
+	
+	private MainView principal = this;
 
 	public MainView() {
 		initialize();
@@ -159,6 +163,7 @@ public class MainView extends JFrame {
 			public void actionPerformed(ActionEvent e) { 
 	    		// TODO Crear PopupMenu con los emojis que se pueden mandar 
 	    		opciones.show(boton3, 10, 40);
+	    		opciones.setMainView(principal);
 	    	} 
 		});
 		
@@ -469,7 +474,7 @@ public class MainView extends JFrame {
 
 	}
 
-	void mostrarChats() {
+	public void mostrarChats() {
 		// Creamos de nuevo el panel que contiene los chats, de modo que cuando se llame
 		// a la función después de agregar un nuevo contacto, no se duplicarán los chats
 		// que ya existían antes de agregar al contacto
@@ -566,7 +571,7 @@ public class MainView extends JFrame {
 
 	void rellenarChat(JPanel panel, String contacto, Usuario user, List<Mensaje> mensajes) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
+		
 		Component verticalStrut = Box.createVerticalStrut(20);
 		panel.add(verticalStrut);
 		for (Mensaje mensaje : mensajes) {

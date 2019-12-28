@@ -34,6 +34,8 @@ public class OpcionesUser extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
+	private boolean terminado = false;
+	
 	public OpcionesUser() {
 		
 		super();
@@ -104,7 +106,7 @@ public class OpcionesUser extends JFrame {
 				boolean registrado = false;
 				registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(uAct.getLogin(), ci);
 				
-				if (registrado)
+				if (registrado) 
 					JOptionPane.showMessageDialog(null, 
 												  "El contacto se ha añadido correctamente",
 												  "Contacto añadido", 
@@ -117,7 +119,7 @@ public class OpcionesUser extends JFrame {
 				
 
 				dispose();
-				
+				terminado = true;
 			}
 		});
 		
@@ -600,5 +602,7 @@ public class OpcionesUser extends JFrame {
 	
 	public void makeVisible() 	{ setVisible(true); }
 	public void makeInvisible() { setVisible(false); }
+	public void setTermiando() { terminado = false; }
+	public boolean getTerminado() { return this.terminado; }
 
 }
