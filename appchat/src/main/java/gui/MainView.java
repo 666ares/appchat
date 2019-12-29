@@ -167,37 +167,6 @@ public class MainView extends JFrame {
 	    	} 
 		});
 		
-		/*
-		boton3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Obtener número de contactos del usuario antes de que se cierre
-				// la ventana para añadir un nuevo contacto
-				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia()
-						.obtenerContactos(usuarioAct.getLogin());
-				int size = contactos.size();
-
-				OpcionesUser opciones = new OpcionesUser();
-				opciones.makeVisible();
-				opciones.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosed(WindowEvent e) {
-						// Obtener número de contactos después de cerrar la ventana para
-						// añadir un contacto
-						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-						List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia()
-								.obtenerContactos(usuarioAct.getLogin());
-
-						// Si el número de contactos es distinto es porque se agregó uno nuevo
-						// Hay que repintar la lista de chats
-						if (contactos.size() != size)
-							mostrarChats();
-					}
-				});
-
-			}
-		});
-		*/
 		panel.add(boton3);
 
 		// ======================
@@ -281,10 +250,11 @@ public class MainView extends JFrame {
 		// Opciones de chat
 		// =================
 		boton6 = new BotonChat("icons/3dots.jpg", 5, 20);
+		OpcionesChat opciones2 = new OpcionesChat();
+		opciones2.setPrincipal(this);
 		boton6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OpcionesChat opciones = new OpcionesChat();
-				opciones.makeVisible();
+				opciones2.show(boton6, -100, 40);
 			}
 		});
 
@@ -402,7 +372,6 @@ public class MainView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Crear PopupMenu con los emojis que se pueden mandar
 				menuEmoji.show(boton7, 0, -150);
 
 			}
@@ -611,6 +580,10 @@ public class MainView extends JFrame {
 		panel_2.revalidate();
 		panel_2.repaint();
 		rellenarChat(panel_2, contacto.getNombre(), user, mensajes);
+	}
+	
+	public Contacto getContactoActivo() {
+		return boton4.getContacto();
 	}
 
 }

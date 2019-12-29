@@ -1,53 +1,121 @@
 package gui.elements;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 
-import javax.swing.JButton;
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 
-public class OpcionesChat extends JFrame{
+import controlador.ControladorUsuarios;
+import dominio.Contacto;
+import dominio.Usuario;
+import gui.MainView;
+
+public class OpcionesChat extends JPopupMenu{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	static final int ANCHOW = 430;
-	static final int ALTOW = 300;
+	MainView principal;
 	
 	public OpcionesChat() {
-		super();
-		setTitle("Opciones");
-		setBounds(100, 100, 430, 300);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setResizable(false);
+		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		setBounds(350, 150, 130, 70);
+		setPreferredSize(new Dimension(130, 70));
 		
-		JPanel contentPane = new JPanel();
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		add(new JMenuItem(new AbstractAction("Eliminar Mensajes") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				//Mostrar mensaje para confirmar la eliminacion de los mensajes
+				JTextField txtNombre = new JTextField();
+				
+				Object[] campos = {
+						"Introduce la palabra 'borrar' para confirmar:", txtNombre
+				};
+				
+				JOptionPane.showConfirmDialog(null, 
+											  campos, 
+											  "Eliminar mensajes", 
+											  JOptionPane.OK_CANCEL_OPTION);
+				
+				String nombre = txtNombre.getText();
+				if(!nombre.equals("borrar"))
+				{
+					JOptionPane.showMessageDialog(null, 
+												  "La confirmación no ha salido con exito", 
+												  "Se ha producido un error", 
+												  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				//Eliminar los mensajes del contacto actual
+				Contacto contacto = principal.getContactoActivo();
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				
+			}
+		}));
 		
-		JPanel botones = new JPanel();
-		botones.setLayout(new GridLayout(0, 1, 0, 0));
+		add(new JMenuItem(new AbstractAction("Eliminar Contacto") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				//Mostrar mensaje para confirmar la eliminacion del contacto
+				JTextField txtNombre = new JTextField();
+				
+				Object[] campos = {
+						"Nombre del usuario a eliminar:", txtNombre
+				};
+				
+				JOptionPane.showConfirmDialog(null, 
+											  campos, 
+											  "Eliminar contacto", 
+											  JOptionPane.OK_CANCEL_OPTION);
+				
+				String nombre = txtNombre.getText();
+				if(!nombre.equals(principal.getContactoActivo().getNombre()))
+				{
+					JOptionPane.showMessageDialog(null, 
+												  "El nombre no coincide con el contacto actual", 
+												  "Se ha producido un error", 
+												  JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				//Borrar el contacto
+				Contacto contacto = principal.getContactoActivo();
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				
+			}
+		}));
 		
-		JButton boton1 = new JButton("Eliminar mensajes");
-		botones.add(boton1, BorderLayout.CENTER);
-		
-		JButton boton2 = new JButton("Eliminar contacto");
-		botones.add(boton2, BorderLayout.CENTER);
-		
-		getContentPane().add(botones);
-		
+		add(new JMenuItem(new AbstractAction("Buscar Mensajes") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Ventana para buscar mensajes
+				JFrame buscar = new JFrame();
+				buscar.setTitle("Buscar Mensajes");
+				buscar.setBounds(400, 200, 400, 380);
+				buscar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				buscar.setResizable(false);
+				buscar.setVisible(true);
+			}
+		}));
 	}
 	
-	public void makeVisible() {
-		setVisible(true);
+	public void setPrincipal(MainView nPrincipal)
+	{
+		this.principal = nPrincipal;
 	}
-	
-	public void makeInvisible() {
-		setVisible(false);
-	}
-	
-
 }
