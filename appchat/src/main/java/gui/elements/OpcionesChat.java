@@ -62,6 +62,7 @@ public class OpcionesChat extends JPopupMenu{
 				Contacto contacto = principal.getContactoActivo();
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 				
+				
 			}
 		}));
 		
@@ -75,7 +76,7 @@ public class OpcionesChat extends JPopupMenu{
 				JTextField txtNombre = new JTextField();
 				
 				Object[] campos = {
-						"Nombre del usuario a eliminar:", txtNombre
+						"Nombre del contacto a eliminar:", txtNombre
 				};
 				
 				JOptionPane.showConfirmDialog(null, 
@@ -95,6 +96,18 @@ public class OpcionesChat extends JPopupMenu{
 				//Borrar el contacto
 				Contacto contacto = principal.getContactoActivo();
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				boolean borrar = ControladorUsuarios.getUnicaInstancia().eliminarContacto(usuarioAct.getLogin(), contacto);
+				if(borrar) {
+					JOptionPane.showMessageDialog(null, 
+							  "El contacto se ha eliminado correctamente",
+							  "Contacto eliminado", 
+							  JOptionPane.INFORMATION_MESSAGE);
+					principal.mostrarChats();
+				} else
+					JOptionPane.showMessageDialog(null, 
+							  "No se ha podido eliminar al contacto", 
+							  "Se ha producido un error", 
+							  JOptionPane.ERROR_MESSAGE);
 				
 			}
 		}));

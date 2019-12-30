@@ -201,6 +201,24 @@ public class ControladorUsuarios {
 		}
 	}
 	
+	public boolean eliminarContacto(String login, Contacto contacto) {
+		
+		Usuario usuario = catalogoUsuarios.getUsuario(login);
+		if(usuario.getContactos().contains(contacto)) {
+			if(contacto instanceof ContactoIndividual) {
+				ContactoIndividual cInd = (ContactoIndividual) contacto;
+				adaptadorIndividual.borrarIndividual(cInd);
+			} else if(contacto instanceof Grupo) {
+				Grupo grupo = (Grupo) contacto;
+				adaptadorGrupo.borrarGrupo(grupo);
+			}
+			usuario.getContactos().remove(contacto);
+			updateUsuario(usuario);
+			return true;
+		} 
+		return false;
+	}
+	
 	public void recibirMensaje(Mensaje mensaje, Contacto contacto) {
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual cInd = (ContactoIndividual) contacto;
