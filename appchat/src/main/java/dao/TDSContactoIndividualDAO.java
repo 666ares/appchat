@@ -119,6 +119,7 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	
 	public void borrarIndividual(ContactoIndividual cInd) {
 		Entidad eContInd = servPersistencia.recuperarEntidad(cInd.getId());
+		servPersistencia.eliminarPropiedadEntidad(eContInd, "mensajes");
 		servPersistencia.borrarEntidad(eContInd);
 	}
 
