@@ -4,15 +4,20 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
@@ -145,29 +150,67 @@ public class OpcionesChat extends JPopupMenu{
 				JButton boton = new JButton("Buscar");
 				boton.setPreferredSize(new Dimension(150, 30));
 				buscar.add(boton);
+				
+				JPanel panelMensajes = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+				panelMensajes.setPreferredSize(new Dimension(342, 240));
+				JScrollPane scrollPanel = new JScrollPane(panelMensajes);
+				scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				scrollPanel.setPreferredSize(new Dimension(342, 240));
+				buscar.add(scrollPanel);
+				
 				boton.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						//TODO Comprobar que las fechas no estan vacias
+						//Comprobar que las fechas no estan vacias
+						panelMensajes.removeAll();
+						List<Mensaje> resultadoBusqueda = new LinkedList<Mensaje>();
+						Contacto contacto = principal.getContactoActivo();
+						List<Mensaje> mensajes = contacto.getMensajes();
+						
 						if(fecha1.getDate() != null && fecha2.getDate() != null) {
-							
+							Date date1 = fecha1.getDate();
+							Date date2 = fecha2.getDate();
+							for(Mensaje msj : mensajes) {
+								//Trasnformamos LocalDate a Date
+								Date dateMsj = Date.from(msj.getHora().atStartOfDay(ZoneId.systemDefault()).toInstant());
+								//Comprobamos que el mensaje se encuentre entre la fecha1 y la fecha2
+								if(dateMsj.after(date1) && dateMsj.before(date2)) {
+									resultadoBusqueda.add(msj);
+								}
+							}
+						} else {
+							//Copiar la lista entera
+							resultadoBusqueda = mensajes;
 						}
-						//TODO Buscar el mensaje con el texto de busqueda
+						//Buscar el mensaje con el texto de busqueda
 						String textBusqueda = busqueda.getText();
+						busqueda.setText("");
 						if(!textBusqueda.equals("")) {
 							//Obtener lista de mensajes con el contacto actual
-							Contacto contacto = principal.getContactoActivo();
-							List<Mensaje> mensajes = contacto.getMensajes();
-							for(Mensaje mensaje : mensajes)
+							List<Mensaje> resultadoBusqueda2 = new LinkedList<Mensaje>();
+							for(Mensaje mensaje : resultadoBusqueda)
 							{
 								String msj = mensaje.getTexto();
 								if(msj.contains(textBusqueda))
 								{
-									System.out.println(msj);
+									resultadoBusqueda2.add(mensaje);
 								}
 							}
+							resultadoBusqueda = resultadoBusqueda2;
 						} 
+						//Mostrar los mensajes por pantalla
+						
+						for(Mensaje msj : resultadoBusqueda) {
+							String info = "<" + msj.getHora().toString() + "> " + msj.getTexto();
+							JLabel texto = new JLabel(info);
+							texto.setPreferredSize(new Dimension(342, 20));
+							panelMensajes.add(texto);
+						}
+						scrollPanel.setPreferredSize(new Dimension(342, resultadoBusqueda.size()*20));
+						panelMensajes.revalidate();
+						panelMensajes.repaint();
 					}
 				});
 			}
