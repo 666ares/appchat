@@ -14,6 +14,7 @@ public class Usuario {
 	private String password;
 	private String imagenPerfil;
 	private String saludo;
+	private boolean premium;
 	private List<Contacto> contactos;
 	
 	// Constructor
@@ -50,6 +51,7 @@ public class Usuario {
 	public String 	getTelefono() 			{ return telefono; }
 	public String 	getLogin() 				{ return login; }
 	public String 	getPassword() 			{ return password; }
+	public Boolean  getPremium()			{ return premium; }
 	
 	public List<Contacto> getContactos() { 
 		return new LinkedList<Contacto>(contactos); 
@@ -65,4 +67,5 @@ public class Usuario {
 	public void setTelefono(String telefono) 	{ this.telefono = telefono; }
 	public void setLogin(String login) 	 		{ this.login = login; }
 	public void setPassword(String password) 	{ this.password = password; }
+	public void setPremium(Boolean premium)		{ this.premium = premium; }
 }

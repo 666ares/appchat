@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -13,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -24,8 +28,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
@@ -521,8 +531,24 @@ public class MenuOpciones extends JPopupMenu {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				// TODO Ventana de estadisticas
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				if(usuarioAct.getPremium()) {
+					JFrame premium = new JFrame();
+					premium.setTitle("Estadisticas");
+					premium.setBounds(400, 200, 380, 300);
+					premium.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					premium.setResizable(false);
+					premium.setVisible(true);
+					premium.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+					
+					
+				} else {
+					JOptionPane.showMessageDialog(null, 
+							  "Esta operacion solo esta disponible si eres usuario premium", 
+							  "Error", 
+							  JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}));
 		
@@ -530,7 +556,175 @@ public class MenuOpciones extends JPopupMenu {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				// Ventana premium
+				JFrame premium = new JFrame();
+				premium.setTitle("¡Premium!");
+				premium.setBounds(400, 200, 380, 250);
+				premium.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				premium.setResizable(false);
+				premium.setVisible(true);
+				premium.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+				
+				JLabel intro = new JLabel("Hazte premium solo con un click!!");
+				premium.add(intro);
+				
+				JButton aceptar = new JButton("Convertirse en premium");
+				JButton cancelar = new JButton("Cancelar Premium");
+				
+				JButton salir = new JButton("Volver");
+				salir.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						premium.dispose();
+					}
+				});
+				
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				//TODO Añadir atributo premium al usuario
+				if (usuarioAct.getPremium()) {
+					cancelar.setPreferredSize(new Dimension(200, 30));
+					premium.add(cancelar);
+					cancelar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// Modificar el usuario para que no sea premium
+							usuarioAct.setPremium(false);
+							if(ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct)) {
+								// Cerrar la ventana
+								premium.dispose();
+								// Mostrar ventana de proceso terminado
+								JOptionPane.showMessageDialog(null, 
+										  "A partir de ahora ya no serás premium.",
+										  "Gracias!", 
+										  JOptionPane.INFORMATION_MESSAGE);
+							} else {
+								// Cerrar la ventana
+								premium.dispose();
+								// Mostrar ventana de error
+								JOptionPane.showMessageDialog(null, 
+										  "Se ha producido un error", 
+										  "Error", 
+										  JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					});
+					
+					JLabel opPremium = new JLabel("Operaciones con premium:");
+					premium.add(opPremium);
+					//Operacion Contactos -> PDF
+					JButton pdf = new JButton("Exportar contactos a pdf");
+					pdf.setPreferredSize(new Dimension(200, 30));
+					pdf.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// Empezar proceso de generacion de pdf
+							// Pregutar donde almacenar el archivo pdf
+							JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+							int returnValue = jfc.showOpenDialog(null);
+
+							File selectedFile = null;
+							
+							if (returnValue == JFileChooser.APPROVE_OPTION)
+								selectedFile = jfc.getSelectedFile();
+							else if (returnValue == JFileChooser.CANCEL_OPTION
+									|| returnValue == JFileChooser.ERROR_OPTION)
+								return;
+							
+							String filePath = selectedFile.getAbsolutePath();
+							if(!filePath.endsWith(".pdf"))
+								selectedFile = new File(filePath + ".pdf");
+							
+							// Crear archivo pdf
+							try {
+								FileOutputStream archivo = new FileOutputStream(selectedFile.getAbsoluteFile());
+								Document documento = new Document();
+								PdfWriter.getInstance(documento, archivo);
+								documento.open();
+								documento.add(new Paragraph("LISTA DE CONTACTOS"));
+								documento.add(new Paragraph("___________________"));
+								
+								//Obtener todos los contactos del usuario actual
+								Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+								List<Contacto> contactos = usuarioAct.getContactos();
+								for(Contacto contacto : contactos) {
+									if(contacto instanceof ContactoIndividual) {
+										//Guardar el nombre y telefono en el pdf
+										String info = "<Contacto: " 
+										              + contacto.getNombre() 
+													  + ", Telefono: " 
+										              + ((ContactoIndividual) contacto).getTelefono()
+										              + ">";
+										documento.add(new Paragraph(info));
+									} else if(contacto instanceof Grupo) {
+										String grupo = "<Grupo: " + contacto.getNombre();
+										documento.add(new Paragraph(grupo));
+										List<ContactoIndividual> contactosG = ((Grupo) contacto).getMiembros();
+										String ultimo = contactosG.get(contactosG.size()-1).getNombre();
+										for(ContactoIndividual miembro : contactosG) {
+											String info = "* Miembro: "
+														  + miembro.getNombre()
+														  + " , Telefono: "
+														  + miembro.getTelefono();
+											if(miembro.getNombre().equals(ultimo)) info = info + ">";
+											documento.add(new Paragraph(info));
+										}
+									}
+								}
+								documento.close();
+								
+								// Cerrar la ventana
+								premium.dispose();
+								// Mostrar ventana de proceso terminado
+								JOptionPane.showMessageDialog(null, 
+										  "El pdf ha sido creado",
+										  "Proceso terminado", 
+										  JOptionPane.INFORMATION_MESSAGE);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}	
+						}
+					});
+					premium.add(pdf);
+					
+					salir.setPreferredSize(new Dimension(200, 30));
+					premium.add(salir);
+					
+				} else {
+					premium.add(aceptar);
+					aceptar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// Modificar el usuario para que sea premium
+							usuarioAct.setPremium(true);
+							if(ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct)) {
+								// Cerrar la ventana
+								premium.dispose();
+								// Mostrar ventana de proceso terminado
+								JOptionPane.showMessageDialog(null, 
+										  "Ya eres premium!! Gracias por apoyar la aplicación.",
+										  "Gracias!", 
+										  JOptionPane.INFORMATION_MESSAGE);
+							} else {
+								// Cerrar la ventana
+								premium.dispose();
+								// Mostrar ventana de error
+								JOptionPane.showMessageDialog(null, 
+										  "Se ha producido un error", 
+										  "Error", 
+										  JOptionPane.ERROR_MESSAGE);
+							}
+							
+						}
+					});
+					premium.add(salir);
+				}
+				
+				
 				
 			}
 		}));

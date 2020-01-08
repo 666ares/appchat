@@ -45,6 +45,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String password;
 		String imagenPerfil;
 		String saludo;
+		String premium;
 		List<Contacto> indiv = new LinkedList<Contacto>();
 		List<Contacto> grupos = new LinkedList<Contacto>();
 		
@@ -60,10 +61,14 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		password 		= servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		imagenPerfil 	= servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagenPerfil");
 		saludo 			= servPersistencia.recuperarPropiedadEntidad(eUsuario, "saludo");
+		premium 		= servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium");
 
 		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, login,
 								password, imagenPerfil, saludo);
 		u.setId(codigo);
+		if(premium.equals("true")) {
+			u.setPremium(true);
+		} else u.setPremium(false);
 		
 		// Añadir el usuario al pool antes de llamar a otros adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, u);
@@ -113,6 +118,11 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 			}
 		}
 		
+		String premium;
+		if(usuario.getPremium()) {
+			premium = "true";
+		} else premium = "false";
+		
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario");
 		
@@ -126,6 +136,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 						new Propiedad("password",	 		usuario.getPassword()),
 						new Propiedad("imagenPerfil", 		usuario.getImagenPerfil()),
 						new Propiedad("saludo", 			usuario.getSaludo()),
+						new Propiedad("premium",			premium),
 						new Propiedad("contactos", 			obtenerCodigosContactos(usuario.getContactos())),
 						new Propiedad("grupos", 			obtenerCodigosGrupos(usuario.getContactos()))
 						))
@@ -152,6 +163,13 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "saludo");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "saludo", usuario.getSaludo());
 		
+		String premium;
+		if (usuario.getPremium()) {
+			premium = "true";
+		} else  premium = "false";
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "premium");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "premium", premium);
+		
 		String contactos = obtenerCodigosContactos(usuario.getContactos());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contactos");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contactos", contactos);
@@ -159,6 +177,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String grupos = obtenerCodigosGrupos(usuario.getContactos());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "grupos");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "grupos", grupos);
+	
 	}
 	
 	public List<Usuario> recuperarTodosUsuarios() {
