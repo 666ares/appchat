@@ -54,6 +54,20 @@ public abstract class Contacto {
 		this.mensajes.add(mensaje);
 	}
 	
+	public int contarMisMensajes(String nombre) {
+		int cuenta = 0;
+		for(Mensaje mensaje : mensajes) {
+			if(mensaje.getEmisor().getNombre().equals(nombre)) {
+				cuenta++;
+			}
+		}
+		return cuenta;
+	}
+	
+	public void resetearChat() {
+		this.mensajes = new LinkedList<Mensaje>();
+	}
+	
 	// Setters
 	public void setNombre(String nombre) { this.nombre = nombre; }
 	

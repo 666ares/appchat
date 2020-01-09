@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,9 +23,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+
+import com.toedter.calendar.JDateChooser;
 
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
@@ -238,8 +243,123 @@ public class MainView extends JFrame {
 		boton5 = new BotonChat("icons/lupa.jpg");
 		boton5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Buscador buscador = new Buscador();
-				buscador.makeVisible();
+				JFrame buscar = new JFrame();
+				buscar.setTitle("Buscar Mensajes");
+				buscar.setBounds(400, 200, 400, 430);
+				buscar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				buscar.setResizable(false);
+				buscar.setVisible(true);
+				buscar.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+				
+				//Area de texto para buscar en un mensaje
+				JLabel texto = new JLabel("Texto: ");
+				buscar.add(texto);
+				JTextField busqueda = new JTextField();
+				buscar.add(busqueda);
+				busqueda.setColumns(28);
+				
+				//Area de texto para nombre de usuario
+				JLabel texto2 = new JLabel("Usuario:");
+				buscar.add(texto2);
+				JTextField bUsuario = new JTextField();
+				buscar.add(bUsuario);
+				bUsuario.setColumns(27);
+				if(principal.getContactoActivo() instanceof ContactoIndividual) {
+					bUsuario.setText("Opcion solo disponible en grupos");
+					bUsuario.setEditable(false);
+				}
+				
+				//Fechas
+				JLabel texto3 = new JLabel("Fecha 1: ");
+				JLabel texto4 = new JLabel("Fecha 2: ");
+				JDateChooser fecha1 = new JDateChooser();
+				JDateChooser fecha2 = new JDateChooser();
+				buscar.add(texto3);
+				buscar.add(fecha1);
+				buscar.add(texto4);
+				buscar.add(fecha2);
+				
+				JButton boton = new JButton("Buscar");
+				boton.setPreferredSize(new Dimension(340, 30));
+				buscar.add(boton);
+				
+				JPanel panelMensajes = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+				panelMensajes.setPreferredSize(new Dimension(342, 240));
+				JScrollPane scrollPanel = new JScrollPane(panelMensajes);
+				scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				scrollPanel.setPreferredSize(new Dimension(342, 240));
+				buscar.add(scrollPanel);
+				
+				boton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						//Comprobar que las fechas no estan vacias
+						panelMensajes.removeAll();
+						List<Mensaje> resultadoBusqueda = new LinkedList<Mensaje>();
+						Contacto contacto = boton4.getContacto();
+						List<Mensaje> mensajes = contacto.getMensajes();
+						
+						List<Mensaje> resultadoBusqueda3 = new LinkedList<Mensaje>();
+						String nombreUsuario = bUsuario.getText();
+						if(contacto instanceof Grupo && !nombreUsuario.equals("")) {
+							// Comprobar autor del mensaje
+							
+							for(Mensaje msj : mensajes) {
+								if(msj.getEmisor().getNombre().equals(nombreUsuario)) {
+									resultadoBusqueda3.add(msj);
+								}
+							}
+						} else  {
+							resultadoBusqueda3 = mensajes;
+						}
+						
+						if(fecha1.getDate() != null && fecha2.getDate() != null) {
+							Date date1 = fecha1.getDate();
+							Date date2 = fecha2.getDate();
+							for(Mensaje msj : resultadoBusqueda3) {
+								// Trasnformamos LocalDate a Date
+								Date dateMsj = Date.from(msj.getHora().atStartOfDay(ZoneId.systemDefault()).toInstant());
+								// Comprobamos que el mensaje se encuentre entre la fecha1 y la fecha2
+								if(dateMsj.after(date1) && dateMsj.before(date2)) {
+									resultadoBusqueda.add(msj);
+								}
+							}
+						} else {
+							// Copiar la lista entera
+							resultadoBusqueda = mensajes;
+						}
+						// Buscar el mensaje con el texto de busqueda
+						String textBusqueda = busqueda.getText();
+						busqueda.setText("");
+						if(!textBusqueda.equals("")) {
+							//Obtener lista de mensajes con el contacto actual
+							List<Mensaje> resultadoBusqueda2 = new LinkedList<Mensaje>();
+							for(Mensaje mensaje : resultadoBusqueda)
+							{
+								String msj = mensaje.getTexto();
+								if(!msj.equals("") && msj.contains(textBusqueda)) {
+									resultadoBusqueda2.add(mensaje);
+								}
+							}
+							resultadoBusqueda = resultadoBusqueda2;
+						} 
+						//Mostrar los mensajes por pantalla
+						
+						for(Mensaje msj : resultadoBusqueda) {
+							if(!msj.getTexto().equals("")) {
+								String info = "<" + msj.getHora().toString() + "> " + msj.getTexto();
+								JLabel texto = new JLabel(info);
+								texto.setPreferredSize(new Dimension(342, 20));
+								panelMensajes.add(texto);
+							}
+						}
+						scrollPanel.setPreferredSize(new Dimension(342, resultadoBusqueda.size()*20));
+						panelMensajes.revalidate();
+						panelMensajes.repaint();
+					}
+				});
 			}
 		});
 
@@ -352,12 +472,9 @@ public class MainView extends JFrame {
 							ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
 						} else if (contacto instanceof Grupo) {
 							Grupo grupo = (Grupo) contacto;
-							List<ContactoIndividual> miembros = grupo.getMiembros();
 
 							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-							for (ContactoIndividual cInd : miembros) {
-								ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, cInd);
-							}
+							
 						}
 
 						// Actualizar las conversaciones

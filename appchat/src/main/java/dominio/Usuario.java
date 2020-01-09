@@ -1,7 +1,14 @@
 package dominio;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import graficos.PieChartGrupos;
 
 public class Usuario {
 
@@ -39,6 +46,36 @@ public class Usuario {
 			return true;
 		}
 		return false;
+	}
+	
+	// Funciones
+	public Integer[] getNumeroDeMensajesEnMeses() {
+		Integer[] mensajes = new Integer[] {0,0,0,0,0,0,0,0,0,0,0,0};
+		// TODO Cambiar a Java8
+		for(Contacto contacto : contactos) {
+			List<Mensaje> listaMsj = contacto.getMensajes();
+			for(Mensaje msj : listaMsj) {
+				int mes = msj.getHora().getMonthValue();
+				mensajes[mes-1]++;
+			}
+		}
+		return mensajes;
+	}
+	
+	public void getGruposMasActivos(PieChartGrupos chart) {
+		HashMap<Grupo, Integer> valoresGrupos = new HashMap<Grupo, Integer>();
+		for(Contacto contacto : contactos) {
+			if(contacto instanceof Grupo) {
+				int nMen = contacto.contarMisMensajes(nombre);
+				valoresGrupos.put((Grupo)contacto, nMen);
+			}
+		}
+		
+		int index = 0;
+		for(Grupo g : valoresGrupos.keySet()) {
+			if(index == 6) break;
+			chart.setSerie(g.getNombre(), valoresGrupos.get(g));
+		}
 	}
 	
 	// Getters

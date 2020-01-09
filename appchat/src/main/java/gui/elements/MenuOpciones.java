@@ -3,11 +3,13 @@ package gui.elements;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -32,6 +34,12 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.BitmapEncoder.BitmapFormat;
+import org.knowm.xchart.CategoryChart;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -42,6 +50,8 @@ import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Grupo;
 import dominio.Usuario;
+import graficos.HistogramaMensajes;
+import graficos.PieChartGrupos;
 import gui.MainView;
 
 public class MenuOpciones extends JPopupMenu {
@@ -534,14 +544,57 @@ public class MenuOpciones extends JPopupMenu {
 				// TODO Ventana de estadisticas
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 				if(usuarioAct.getPremium()) {
-					JFrame premium = new JFrame();
-					premium.setTitle("Estadisticas");
-					premium.setBounds(400, 200, 380, 300);
-					premium.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-					premium.setResizable(false);
-					premium.setVisible(true);
-					premium.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+					JFrame estadisticas = new JFrame();
+					estadisticas.setTitle("Estadisticas");
+					estadisticas.setBounds(400, 200, 1300, 680);
+					estadisticas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					estadisticas.setResizable(false);
+					estadisticas.setVisible(true);
+					estadisticas.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 					
+					// Estadistica en forma de histograma
+					HistogramaMensajes menEstadisticas = new HistogramaMensajes();
+					
+					// Obtener numero de mensajes del usuario
+					Usuario usuarioAct2 = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+					
+					Integer[] valores = usuarioAct2.getNumeroDeMensajesEnMeses();
+					menEstadisticas.addElemento(valores);
+					
+					CategoryChart histogram = menEstadisticas.getChart();
+					try {
+						BitmapEncoder.saveBitmap(histogram, "icons/histogram.png", BitmapFormat.PNG);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					ImageIcon chartFoto2 = new ImageIcon("icons/histogram.png");
+					Image imageIcon2 = chartFoto2.getImage();
+					Image newImage2 = imageIcon2.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
+					
+					JLabel chart2 = new JLabel(new ImageIcon(newImage2));
+					estadisticas.add(chart2);
+					
+					// Estadistica en forma de tarta
+					PieChartGrupos grupoEstadistico = new PieChartGrupos();
+					
+					// TODO Obtener los 6 grupos en los que mas mensajes ha puesto
+					usuarioAct2.getGruposMasActivos(grupoEstadistico);
+					
+					PieChart grupoChart = grupoEstadistico.getChart();
+					try {
+						BitmapEncoder.saveBitmap(grupoChart, "icons/piechart.png", BitmapFormat.PNG);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					// Mostrar la estadistica de grupos
+					ImageIcon chartFoto = new ImageIcon("icons/piechart.png");
+					Image imageIcon = chartFoto.getImage();
+					Image newImage = imageIcon.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
+					
+					JLabel chart1 = new JLabel(new ImageIcon(newImage));
+					estadisticas.add(chart1);
 					
 				} else {
 					JOptionPane.showMessageDialog(null, 
@@ -573,7 +626,6 @@ public class MenuOpciones extends JPopupMenu {
 				
 				JButton salir = new JButton("Volver");
 				salir.addActionListener(new ActionListener() {
-					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						premium.dispose();
