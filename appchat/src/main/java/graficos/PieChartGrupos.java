@@ -21,8 +21,8 @@ public class PieChartGrupos {
 		
 	}
 	
-	public void setSerie(String nombre, int valor) {
-		chart.addSeries(nombre, valor);
+	public void setSerie(String nombre, Long long1) {
+		chart.addSeries(nombre, long1);
 	}
 	
 	public PieChart getChart() {

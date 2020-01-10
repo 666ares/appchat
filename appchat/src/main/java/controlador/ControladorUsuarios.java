@@ -47,17 +47,18 @@ public class ControladorUsuarios {
 		     						String email, String telefono, 
 		     						String login, String password,
 		     						String imagenPerfil, String saludo) {
+		
 		if (esUsuarioRegistrado(login)) 
 			return false;
 
 		Usuario usuario = new Usuario(nombre, fechaNacimiento, email,
 									  telefono, login, password,
 									  imagenPerfil, saludo);
+		
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 		return true;
 	}
-	
 	
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
@@ -178,7 +179,8 @@ public class ControladorUsuarios {
 				Grupo g = (Grupo) c;
 				adaptadorGrupo.registrarGrupo(g);
 			}
-			updateUsuario(usuario);
+			adaptadorUsuario.modificarUsuario(usuario);
+			catalogoUsuarios.updateUsuario(usuario);
 			return true;
 		}
 		return false;
@@ -204,28 +206,34 @@ public class ControladorUsuarios {
 	public boolean eliminarContacto(String login, Contacto contacto) {
 		
 		Usuario usuario = catalogoUsuarios.getUsuario(login);
-		if(usuario.getContactos().contains(contacto)) {
-			if(contacto instanceof ContactoIndividual) {
-				ContactoIndividual cInd = (ContactoIndividual) contacto;
-				adaptadorIndividual.borrarIndividual(cInd);
-			} else if(contacto instanceof Grupo) {
-				Grupo grupo = (Grupo) contacto;
-				adaptadorGrupo.borrarGrupo(grupo);
+		
+		if (usuario.getContactos().contains(contacto)) {
+			
+			// Si el contacto es un grupo del que el usuario es administrador,
+			// el grupo se queda sin administrador
+			if (contacto instanceof Grupo) {
+				Grupo g = (Grupo) contacto;
+				g.setAdmin(null);
+				adaptadorGrupo.modificarGrupo(g);
 			}
-			usuario.getContactos().remove(contacto);
-			updateUsuario(usuario);
+			
+			usuario.removeContacto(contacto);
+			adaptadorUsuario.modificarUsuario(usuario);
+			catalogoUsuarios.updateUsuario(usuario);
 			return true;
 		} 
 		return false;
 	}
 	
 	public void recibirMensaje(Mensaje mensaje, Contacto contacto) {
+		
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual cInd = (ContactoIndividual) contacto;
 			cInd.addMensaje(mensaje);
 			adaptadorMensaje.registrarMensaje(mensaje);
 			adaptadorIndividual.modificarIndividual(cInd);
-		} else if (contacto instanceof Grupo) {
+		} 
+		else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			g.addMensaje(mensaje);
 			adaptadorMensaje.registrarMensaje(mensaje);
@@ -234,15 +242,6 @@ public class ControladorUsuarios {
 		
 	}
 	
-	public boolean updateUsuario(Usuario usuario) {
-		if (!esUsuarioRegistrado(usuario.getLogin()))
-			return false;
-		
-		adaptadorUsuario.modificarUsuario(usuario);
-		catalogoUsuarios.updateUsuario(usuario);
-		return true;
-	}	
-	
 	public boolean updateIndividual(ContactoIndividual contacto) {
 		adaptadorIndividual.modificarIndividual(contacto);
 		return true;
@@ -250,6 +249,12 @@ public class ControladorUsuarios {
 	
 	public boolean updateGrupo(Grupo grupo) {
 		adaptadorGrupo.modificarGrupo(grupo);
+		return true;
+	}
+	
+	public boolean updateUsuario(Usuario usuario) {
+		adaptadorUsuario.modificarUsuario(usuario);
+		catalogoUsuarios.updateUsuario(usuario);
 		return true;
 	}
 	

@@ -1,12 +1,11 @@
 package dominio;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import graficos.PieChartGrupos;
 
@@ -48,34 +47,51 @@ public class Usuario {
 		return false;
 	}
 	
+	public boolean removeContacto(Contacto c) {
+		return contactos.remove(c);
+	}
+
 	// Funciones
 	public Integer[] getNumeroDeMensajesEnMeses() {
-		Integer[] mensajes = new Integer[] {0,0,0,0,0,0,0,0,0,0,0,0};
-		// TODO Cambiar a Java8
-		for(Contacto contacto : contactos) {
-			List<Mensaje> listaMsj = contacto.getMensajes();
-			for(Mensaje msj : listaMsj) {
-				int mes = msj.getHora().getMonthValue();
-				mensajes[mes-1]++;
-			}
-		}
+		
+		Integer[] mensajes = new Integer[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		
+		contactos.stream()
+				 .flatMap(mset -> mset.getMensajes().stream())
+				 .forEach(m -> {
+					 int mes = m.getHora().getMonthValue();
+					 mensajes[mes - 1]++;
+				 });
+		
 		return mensajes;
 	}
 	
+	// Grupos a los que más mensajes ha mandado el usuario
 	public void getGruposMasActivos(PieChartGrupos chart) {
-		HashMap<Grupo, Integer> valoresGrupos = new HashMap<Grupo, Integer>();
-		for(Contacto contacto : contactos) {
-			if(contacto instanceof Grupo) {
-				int nMen = contacto.contarMisMensajes(nombre);
-				valoresGrupos.put((Grupo)contacto, nMen);
-			}
-		}
 		
-		int index = 0;
-		for(Grupo g : valoresGrupos.keySet()) {
-			if(index == 6) break;
-			chart.setSerie(g.getNombre(), valoresGrupos.get(g));
-		}
+		HashMap<Grupo, Long> valoresGrupos = new HashMap<Grupo, Long>();
+		
+		// Obtenemos en el mapa cada uno de los grupos y el número de mensajes
+		// que el usuario ha enviado a este
+		contactos.stream()
+				 .filter(c -> c instanceof Grupo)
+				 .forEach(g -> { 
+					 long sum = g.contarMisMensajes(nombre);
+					 valoresGrupos.put((Grupo)g, sum);
+				 });
+		
+		// Ordenamos el mapa según el número de mensajes enviado al grupo
+		valoresGrupos.entrySet().stream()
+								.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+								.collect(Collectors.toMap(Map.Entry::getKey,
+														  Map.Entry::getValue,
+														  (e1, e2) -> e2));
+		
+		// Nos quedamos con los 6 grupos a los que más mensajes ha enviado
+		valoresGrupos.keySet().stream()
+							  .limit(6)
+							  .forEach(c -> chart.setSerie(c.getNombre(),
+														   valoresGrupos.get(c)));
 	}
 	
 	// Getters
@@ -88,7 +104,7 @@ public class Usuario {
 	public String 	getTelefono() 			{ return telefono; }
 	public String 	getLogin() 				{ return login; }
 	public String 	getPassword() 			{ return password; }
-	public Boolean  getPremium()			{ return premium; }
+	public boolean  getPremium()			{ return premium; }
 	
 	public List<Contacto> getContactos() { 
 		return new LinkedList<Contacto>(contactos); 

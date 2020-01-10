@@ -135,6 +135,7 @@ public final class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	
 	private String obtenerCodigosMensajes(List<Mensaje> mensajes) {
 		String aux = "";
+		
 		for (Mensaje m : mensajes)
 			aux += m.getId() + " ";
 

@@ -45,7 +45,7 @@ public class InfoUChat extends JFrame{
 		
 		
 	    
-	    if(c instanceof ContactoIndividual) {
+	    if (c instanceof ContactoIndividual) {
 	    	JPanel panelImagen = new JPanel();
 		    
 			ContactoIndividual ci = (ContactoIndividual) c;
@@ -77,7 +77,8 @@ public class InfoUChat extends JFrame{
 		    
 		    getContentPane().add(panelNombreTelefono);
 		    getContentPane().add(Box.createVerticalStrut(10));
-	    } else {
+	    } 
+	    else {
 	    	JPanel panelImagen = new JPanel();
 	    	panelImagen.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		    
@@ -104,11 +105,13 @@ public class InfoUChat extends JFrame{
 		    panelImagen.add(texto1);
 		    
 		    DefaultListModel<String> nombreMiembros= new DefaultListModel<String>();
-		    List<ContactoIndividual> contactosGrupo = grupo.getMiembros();
-		    for(ContactoIndividual contacto : contactosGrupo) {
-		    	if(!contacto.getNombre().equals(ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getNombre()))
-		    		nombreMiembros.addElement(contacto.getNombre());
-		    }
+		    
+		    // Obtenemos los nombres de los miembros del grupo
+		    List<String> contactosGrupo = grupo.getNombresMiembros();
+	
+		    contactosGrupo.stream()
+		    			  .forEach(s -> nombreMiembros.addElement(s));
+
 		    JList<String> miembros = new JList<String>(nombreMiembros);
 		    miembros.setLayoutOrientation(JList.VERTICAL);
 		    JScrollPane listaMiembros = new JScrollPane(miembros);

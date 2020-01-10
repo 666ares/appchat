@@ -30,7 +30,7 @@ public class Mensaje {
 	// Devuelve 'true' si el nombre del emisor del mensaje coincide
 	// con el nombre pasado como parámetro
 	public boolean buscarPorNombre(String nombre) {
-		return this.getEmisor().getNombre().equals(nombre);
+		return emisor.getNombre().equals(nombre);
 	}
 	
 	// Devuelve 'true' si el mensaje sobre el que se llama el método contiene
@@ -42,13 +42,8 @@ public class Mensaje {
 	// Devuelve 'true' si la fecha del mensaje coincide con el límite superior
 	// o inferior, o si la fecha se encuentra entre el rango [inferior, superior]
 	public boolean estaEntreFechas(LocalDate inferior, LocalDate superior) {
-		if (this.hora.isAfter(inferior) && this.hora.isBefore(superior)) 
-			return true;
-		
-		if (this.hora.equals(inferior) || this.hora.equals(superior)) 
-			return true;
-		
-		return false;
+		return (this.hora.isAfter(inferior) && this.hora.isBefore(superior) 
+				|| this.hora.equals(inferior) || this.hora.equals(superior));
 	}
 	
 	// Getters

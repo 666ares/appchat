@@ -100,14 +100,11 @@ public class OpcionesChat extends JPopupMenu{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				
-				//Mostrar mensaje para confirmar la eliminacion del contacto
+				// Mostrar mensaje para confirmar la eliminacion del contacto
 				JTextField txtNombre = new JTextField();
 				
-				Object[] campos = {
-						"Nombre del contacto a eliminar:", txtNombre
-				};
+				Object[] campos = {"Nombre del contacto a eliminar:", txtNombre};
 				
 				JOptionPane.showConfirmDialog(null, 
 											  campos, 
@@ -115,7 +112,7 @@ public class OpcionesChat extends JPopupMenu{
 											  JOptionPane.OK_CANCEL_OPTION);
 				
 				String nombre = txtNombre.getText();
-				if(!nombre.equals(principal.getContactoActivo().getNombre()))
+				if (!nombre.equals(principal.getContactoActivo().getNombre()))
 				{
 					JOptionPane.showMessageDialog(null, 
 												  "El nombre no coincide con el contacto actual", 
@@ -123,21 +120,28 @@ public class OpcionesChat extends JPopupMenu{
 												  JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				//Borrar el contacto
+				// Borrar el contacto
 				Contacto contacto = principal.getContactoActivo();
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				boolean borrar = ControladorUsuarios.getUnicaInstancia().eliminarContacto(usuarioAct.getLogin(), contacto);
-				if(borrar) {
+				
+				boolean borrar 
+					= ControladorUsuarios.getUnicaInstancia().eliminarContacto(usuarioAct.getLogin(),
+																			   contacto);
+				
+				if (borrar) {
+					
 					JOptionPane.showMessageDialog(null, 
-							  "El contacto se ha eliminado correctamente",
-							  "Contacto eliminado", 
-							  JOptionPane.INFORMATION_MESSAGE);
+							  					  "El contacto se ha eliminado correctamente",
+							  					  "Contacto eliminado", 
+							  					  JOptionPane.INFORMATION_MESSAGE);
+					principal.vaciarChat();
 					principal.mostrarChats();
-				} else
+				} 
+				else
 					JOptionPane.showMessageDialog(null, 
-							  "No se ha podido eliminar al contacto", 
-							  "Se ha producido un error", 
-							  JOptionPane.ERROR_MESSAGE);
+							  					  "No se ha podido eliminar al contacto", 
+							  					  "Se ha producido un error", 
+							  					  JOptionPane.ERROR_MESSAGE);
 				
 			}
 		}));

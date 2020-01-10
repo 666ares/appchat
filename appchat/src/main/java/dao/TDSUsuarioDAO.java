@@ -66,9 +66,10 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		Usuario u = new Usuario(nombre, fechaNacimiento, email, telefono, login,
 								password, imagenPerfil, saludo);
 		u.setId(codigo);
-		if(premium.equals("true")) {
+		if (premium.equals("true"))
 			u.setPremium(true);
-		} else u.setPremium(false);
+		else 
+			u.setPremium(false);
 		
 		// Añadir el usuario al pool antes de llamar a otros adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, u);
@@ -119,9 +120,10 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		}
 		
 		String premium;
-		if(usuario.getPremium()) {
+		if (usuario.getPremium())
 			premium = "true";
-		} else premium = "false";
+		else 
+			premium = "false";
 		
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario");
@@ -164,9 +166,11 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "saludo", usuario.getSaludo());
 		
 		String premium;
-		if (usuario.getPremium()) {
+		if (usuario.getPremium())
 			premium = "true";
-		} else  premium = "false";
+		else  
+			premium = "false";
+		
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "premium");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "premium", premium);
 		

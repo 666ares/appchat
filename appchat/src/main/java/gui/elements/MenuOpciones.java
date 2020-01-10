@@ -330,8 +330,6 @@ public class MenuOpciones extends JPopupMenu {
 						}
 						
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-						ContactoIndividual yo = new ContactoIndividual(usuarioAct.getNombre(), usuarioAct.getTelefono());
-						g.addMiembro(yo);
 						
 						boolean registrado = false;
 						registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(usuarioAct.getLogin(), g);

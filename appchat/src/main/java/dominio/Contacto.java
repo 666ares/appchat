@@ -3,6 +3,7 @@ package dominio;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Contacto {
 
@@ -17,36 +18,32 @@ public abstract class Contacto {
 	// Devuelve una lista con los mensajes comprendidos entre las fechas
 	// 'inf' y 'sup'
 	public List<Mensaje> mensajesEntreFechas(LocalDate inf, LocalDate sup) {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
 		
-		for (Mensaje m : this.mensajes)
-			if (m.estaEntreFechas(inf, sup))
-				mensajes.add(m);
-		
-		return mensajes;
+		List<Mensaje> lista = mensajes.stream()
+									  .filter(m -> m.estaEntreFechas(inf, sup))
+									  .collect(Collectors.toList());
+		return lista;
 	}
 	
 	// Devuelve una lista con los mensajes que contienen la cadena 'texto'
 	public List<Mensaje> mensajesPorTexto(String texto) {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
 		
-		for (Mensaje m : this.mensajes)
-			if (m.contieneTexto(texto))
-				mensajes.add(m);
-		
-		return mensajes;
+		List<Mensaje> lista = mensajes.stream()
+									  .filter(m -> m.contieneTexto(texto))
+									  .collect(Collectors.toList());
+
+		return lista;
 	}
 	
 	// Devuelve una lista con los mensajes cuyo emisor tiene como 
 	// nombre 'nombre'
 	public List<Mensaje> mensajesPorUsuario(String nombre) {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
 		
-		for (Mensaje m : this.mensajes)
-			if (m.buscarPorNombre(nombre))
-				mensajes.add(m);
+		List<Mensaje> lista = mensajes.stream()
+									  .filter(m -> m.buscarPorNombre(nombre))
+									  .collect(Collectors.toList());
 		
-		return mensajes;
+		return lista;
 	}
 	
 	// Permite añadir un nuevo mensaje a la colección
@@ -54,14 +51,13 @@ public abstract class Contacto {
 		this.mensajes.add(mensaje);
 	}
 	
-	public int contarMisMensajes(String nombre) {
-		int cuenta = 0;
-		for(Mensaje mensaje : mensajes) {
-			if(mensaje.getEmisor().getNombre().equals(nombre)) {
-				cuenta++;
-			}
-		}
-		return cuenta;
+	public long contarMisMensajes(String nombre) {
+		
+		long num = mensajes.stream()
+					   	   .filter(m -> m.getEmisor().getNombre().equals(nombre))
+					   	   .count();
+		
+		return num;
 	}
 	
 	public void resetearChat() {

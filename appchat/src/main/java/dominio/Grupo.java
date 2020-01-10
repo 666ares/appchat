@@ -2,6 +2,7 @@ package dominio;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import controlador.ControladorUsuarios;
 
@@ -26,11 +27,7 @@ public class Grupo extends Contacto {
 	}
 	
 	public boolean removeMiembro(ContactoIndividual ci) {
-		if(miembros.contains(ci)) {
-			miembros.remove(ci);
-			return true;
-		}
-		return false;
+		return miembros.remove(ci);
 	}
 	
 	public int 		getId()		{ return id; }
@@ -38,6 +35,18 @@ public class Grupo extends Contacto {
 	
 	public List<ContactoIndividual> getMiembros() 	{ 
 		return new LinkedList<ContactoIndividual>(miembros); 
+	}
+	
+	public List<String> getNombresMiembros() {
+		List<String> lista;
+		
+		lista = miembros.stream()
+						.map(ContactoIndividual::getNombre)
+						.collect(Collectors.toList());
+		
+		if (admin != null)
+			lista.add(admin.getNombre());
+		return lista;
 	}
 	
 	// Setters
