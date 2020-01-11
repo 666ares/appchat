@@ -545,7 +545,7 @@ public class MenuOpciones extends JPopupMenu {
 				if(usuarioAct.getPremium()) {
 					JFrame estadisticas = new JFrame();
 					estadisticas.setTitle("Estadisticas");
-					estadisticas.setBounds(400, 200, 1300, 680);
+					estadisticas.setBounds(400, 200, 1300, 700);
 					estadisticas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					estadisticas.setResizable(false);
 					estadisticas.setVisible(true);
@@ -576,8 +576,6 @@ public class MenuOpciones extends JPopupMenu {
 					
 					// Estadistica en forma de tarta
 					PieChartGrupos grupoEstadistico = new PieChartGrupos();
-					
-					// TODO Obtener los 6 grupos en los que mas mensajes ha puesto
 					usuarioAct2.getGruposMasActivos(grupoEstadistico);
 					
 					PieChart grupoChart = grupoEstadistico.getChart();
@@ -594,6 +592,74 @@ public class MenuOpciones extends JPopupMenu {
 					
 					JLabel chart1 = new JLabel(new ImageIcon(newImage));
 					estadisticas.add(chart1);
+					
+					// TODO Hacer dos botones para exportar las imagenes 
+					JButton exportar1 = new JButton("Exportar Histograma");
+					JButton exportar2 = new JButton("Exportar PieChart");
+					exportar1.setPreferredSize(new Dimension(600,30));
+					exportar2.setPreferredSize(new Dimension(600,30));
+					estadisticas.add(exportar1);
+					estadisticas.add(exportar2);
+					
+					exportar1.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+							int returnValue = jfc.showOpenDialog(null);
+
+							File selectedFile = null;
+							
+							if (returnValue == JFileChooser.APPROVE_OPTION)
+								selectedFile = jfc.getSelectedFile();
+							else if (returnValue == JFileChooser.CANCEL_OPTION
+									|| returnValue == JFileChooser.ERROR_OPTION)
+								return;
+							
+							String filePath = selectedFile.getAbsolutePath();
+							if(!filePath.endsWith(".png"))
+								selectedFile = new File(filePath + ".png");
+							
+							// Exportar el grafico
+							CategoryChart histogram = menEstadisticas.getChart();
+							try {
+								BitmapEncoder.saveBitmap(histogram, filePath, BitmapFormat.PNG);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						}
+					});
+					
+					exportar2.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+							int returnValue = jfc.showOpenDialog(null);
+
+							File selectedFile = null;
+							
+							if (returnValue == JFileChooser.APPROVE_OPTION)
+								selectedFile = jfc.getSelectedFile();
+							else if (returnValue == JFileChooser.CANCEL_OPTION
+									|| returnValue == JFileChooser.ERROR_OPTION)
+								return;
+							
+							String filePath = selectedFile.getAbsolutePath();
+							if(!filePath.endsWith(".png"))
+								selectedFile = new File(filePath + ".png");
+							
+							// Exportar el grafico
+							PieChart grupoChart = grupoEstadistico.getChart();
+							try {
+								BitmapEncoder.saveBitmap(grupoChart, filePath, BitmapFormat.PNG);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						}
+					});
 					
 				} else {
 					JOptionPane.showMessageDialog(null, 

@@ -130,7 +130,6 @@ public class OpcionesChat extends JPopupMenu{
 																			   contacto);
 				
 				if (borrar) {
-					
 					JOptionPane.showMessageDialog(null, 
 							  					  "El contacto se ha eliminado correctamente",
 							  					  "Contacto eliminado", 

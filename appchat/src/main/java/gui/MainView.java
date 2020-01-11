@@ -286,10 +286,11 @@ public class MainView extends JFrame {
 				
 				JPanel panelMensajes = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
 				panelMensajes.setPreferredSize(new Dimension(342, 240));
-				JScrollPane scrollPanel = new JScrollPane(panelMensajes);
+				JScrollPane scrollPanel = new JScrollPane();
 				scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 				scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 				scrollPanel.setPreferredSize(new Dimension(342, 240));
+				scrollPanel.setViewportView(panelMensajes);
 				buscar.add(scrollPanel);
 				
 				boton.addActionListener(new ActionListener() {
@@ -355,9 +356,9 @@ public class MainView extends JFrame {
 								panelMensajes.add(texto);
 							}
 						}
-						scrollPanel.setPreferredSize(new Dimension(342, resultadoBusqueda.size()*20));
-						panelMensajes.revalidate();
-						panelMensajes.repaint();
+						panelMensajes.setPreferredSize(new Dimension(342, resultadoBusqueda.size()*32));
+						scrollPanel.revalidate();
+						scrollPanel.repaint();
 					}
 				});
 			}
@@ -387,12 +388,13 @@ public class MainView extends JFrame {
 		panel_2 = new JPanel();
 		Border blackline2 = BorderFactory.createLineBorder(Color.black);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		listaMensajes = new JScrollPane(panel_2);
+		listaMensajes = new JScrollPane();
 		listaMensajes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		listaMensajes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		listaMensajes.setBorder(blackline2);
 		listaMensajes.setBounds(297, 55, 558, 419);
 		layeredPane.add(listaMensajes);
+		listaMensajes.setViewportView(panel_2);
 
 		texto_default = new JLabel("Selecciona un chat para empezar a hablar");
 		texto_default.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -645,6 +647,7 @@ public class MainView extends JFrame {
 					// Rellenamos el chat con los mensajes del contacto
 					
 					List<Mensaje> mensajes = chat.getContacto().getMensajes();
+					panel_2.setPreferredSize(new Dimension(277, 80*mensajes.size()) );
 					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct, mensajes);
 
 				}
@@ -703,6 +706,7 @@ public class MainView extends JFrame {
 		panel_2.removeAll();
 		panel_2.revalidate();
 		panel_2.repaint();
+		panel_2.setPreferredSize(new Dimension(277, 80*mensajes.size()) );
 		rellenarChat(panel_2, contacto.getNombre(), user, mensajes);
 	}
 	
