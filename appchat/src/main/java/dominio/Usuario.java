@@ -68,17 +68,17 @@ public class Usuario {
 		return mensajes;
 	}
 	
+	// Número de mensajes que ha mandado el usuario
 	public int getNumMensajes() {
-		int nmensajes = 0;
 		
-		for(Contacto contacto : this.contactos) {
-			for(Mensaje msj : contacto.getMensajes()) {
-				if(msj.getEmisor().getNombre().equals(nombre))
-					nmensajes++;
-			}
-		}
-		return nmensajes;
-		// TODO Hacer en Java8
+		long numMensajes 
+			= contactos.stream()
+					   .flatMap(mset -> mset.getMensajes().stream())
+					   .filter(m -> m.getEmisor().getNombre().equals(nombre))
+					   .count();
+		
+		return (int) numMensajes;
+
 	}
 	
 	// Grupos a los que más mensajes ha mandado el usuario
@@ -110,22 +110,27 @@ public class Usuario {
 	}
 	
 	public double getDescuento() {
-		String[] fecha = fechaNacimiento.split(" ");
-		String age = fecha[fecha.length-1];
-		int age2 = Integer.parseInt(age);
-		// El descuento de estudiante va entre las edades de 12 a 22 años
-		LocalDate now = LocalDate.now();
-		int ahora = now.getYear();
-		int rangoInf = ahora - 22;
-		int rangoSup = ahora - 12;
 		
-		// Si el usuario tiene entre 12 y 22 se aplica descuento de estudiante
-		if(age2 >= rangoInf && age2 <= rangoSup ) {
-			descuento = new DescuentoEstudiante();
-		} else {
-			// Sino se aplica el descuento estandar
-			descuento = new DescuentoFijo();
+		// Comprobar que cuando el usuario se registró introdujo una fecha
+		// y no dejo el campo en blanco
+		if (!fechaNacimiento.equals("")) {
+			
+			String[] fecha = fechaNacimiento.split(" ");
+			String age = fecha[fecha.length - 1];
+			
+			int age2 = Integer.parseInt(age);
+			int ahora = LocalDate.now().getYear();
+			int rangoInf = ahora - 22;
+			int rangoSup = ahora - 12;
+			
+			// Si el usuario tiene entre 12 y 22 se aplica descuento de estudiante
+			if (age2 >= rangoInf && age2 <= rangoSup)
+				descuento = new DescuentoEstudiante();
+			
 		}
+		else
+			descuento = new DescuentoFijo();
+		
 		return descuento.calcDescuento(this);
 	}
 	
@@ -155,5 +160,5 @@ public class Usuario {
 	public void setTelefono(String telefono) 	{ this.telefono = telefono; }
 	public void setLogin(String login) 	 		{ this.login = login; }
 	public void setPassword(String password) 	{ this.password = password; }
-	public void setPremium(Boolean premium)		{ this.premium = premium; }
+	public void setPremium(boolean premium)		{ this.premium = premium; }
 }
