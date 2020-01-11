@@ -175,13 +175,16 @@ public class MainView extends JFrame {
 		// Botón del otro usuario
 		// ======================
 		boton4 = new BotonChat("", "");
+		boton4.setVisible(false);
 		boton4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Al llamar a mostrarChats(), para cada chat, se guardará
 				// el contacto en el botón4
-				Contacto contacto = boton4.getContacto();
-				InfoUChat infochat = new InfoUChat(contacto);
-				infochat.makeVisible();
+				if(boton4.isVisible()) {
+					Contacto contacto = boton4.getContacto();
+					InfoUChat infochat = new InfoUChat(contacto);
+					infochat.makeVisible();
+				}
 			}
 		});
 
@@ -197,37 +200,38 @@ public class MainView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JTextField txtNombre = new JTextField();
-				Object[] campos = { "Nombre del contacto:", txtNombre };
+				if(!boton9.getText().equals("")) {
+					JTextField txtNombre = new JTextField();
+					Object[] campos = { "Nombre del contacto:", txtNombre };
 
-				JOptionPane.showConfirmDialog(null, 
-											  campos, 
-											  "Añadir contacto", 
-											  JOptionPane.OK_CANCEL_OPTION);
+					JOptionPane.showConfirmDialog(null, 
+												  campos, 
+												  "Añadir contacto", 
+												  JOptionPane.OK_CANCEL_OPTION);
 
-				String nombre = txtNombre.getText();
+					String nombre = txtNombre.getText();
 
-				if (nombre.equals("")) {
-					JOptionPane.showMessageDialog(null,
-												  "El nombre no puede estar vacío",
-												  "Se ha producido un error",
-												  JOptionPane.ERROR_MESSAGE);
-					return;
+					if (nombre.equals("")) {
+						JOptionPane.showMessageDialog(null,
+													  "El nombre no puede estar vacío",
+													  "Se ha producido un error",
+													  JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					// Cambiar nombre del contacto
+					boton4.getContacto().setNombre(nombre);
+					// Actualizar el botón para que muestre el nombre
+					boton4.revalidate();
+
+					Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+					ControladorUsuarios.getUnicaInstancia().updateIndividual((ContactoIndividual) boton4.getContacto());
+					ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct);
+					boton9.makeVisible(false);
+					
+					// Llamar a mostrarChats() para que se actualice el nombre en la lista de chats
+					mostrarChats();
 				}
-
-				// Cambiar nombre del contacto
-				boton4.getContacto().setNombre(nombre);
-				// Actualizar el botón para que muestre el nombre
-				boton4.revalidate();
-
-				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				ControladorUsuarios.getUnicaInstancia().updateIndividual((ContactoIndividual) boton4.getContacto());
-				ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct);
-				boton9.makeVisible(false);
-				
-				// TODO hacer mas ancho el boton9 para que la lupa se quede bien
-				// Llamar a mostrarChats() para que se actualice el nombre en la lista de chats
-				mostrarChats();
 			}
 		});
 		panel.add(boton9);
@@ -343,7 +347,9 @@ public class MainView extends JFrame {
 						
 						for(Mensaje msj : resultadoBusqueda) {
 							if(!msj.getTexto().equals("")) {
-								String info = "<" + msj.getHora().toString() + "> " + msj.getTexto();
+								String info = "<" + msj.getHora().toString() + "> " 
+											  + msj.getEmisor().getNombre() + ": " 
+											  + msj.getTexto();
 								JLabel texto = new JLabel(info);
 								texto.setPreferredSize(new Dimension(342, 20));
 								panelMensajes.add(texto);
@@ -606,6 +612,9 @@ public class MainView extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					reiniciarPaneles(chats);
 
+					boton4.setVisible(true);
+					boton5.setVisible(true);
+					boton6.setVisible(true);
 					boton4.setText(chat.getContacto().getNombre());
 					boton4.setContacto(chat.getContacto());
 
@@ -698,7 +707,16 @@ public class MainView extends JFrame {
 	}
 	
 	public void vaciarChat() {
+		// Esconder los botones del panel superior
 		boton4.setVisible(false);
+		boton5.setVisible(false);
+		boton6.setVisible(false);
+		panel_2.removeAll();
+		panel_2.revalidate();
+		panel_2.repaint();
+	}
+	
+	public void vaciarChat2() {
 		panel_2.removeAll();
 		panel_2.revalidate();
 		panel_2.repaint();

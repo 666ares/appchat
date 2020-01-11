@@ -2,6 +2,6 @@ package dominio;
 
 public interface Descuento {
 	
-	public double calcDescuento();
+	public double calcDescuento(Usuario usuario);
 	
 }

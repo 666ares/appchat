@@ -93,6 +93,7 @@ public class OpcionesChat extends JPopupMenu{
 				ControladorUsuarios.getUnicaInstancia().updateUsuario(usuarioAct);
 				
 				// TODO actualizar pantalla principal
+				principal.vaciarChat2();
 			}
 		}));
 		

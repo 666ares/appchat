@@ -3,6 +3,7 @@ package gui.elements;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -161,7 +162,7 @@ public class MenuOpciones extends JPopupMenu {
 				
 				JFrame ventanaTabla = new JFrame();
 				ventanaTabla.setTitle("Lista de contactos");    
-				ventanaTabla.setBounds(100, 100, 500, (contactos.size() * 40));
+				ventanaTabla.setBounds(100, 100, 500, 500);
 				ventanaTabla.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				ventanaTabla.setVisible(true);
 				ventanaTabla.setResizable(false);
@@ -610,7 +611,7 @@ public class MenuOpciones extends JPopupMenu {
 				// Ventana premium
 				JFrame premium = new JFrame();
 				premium.setTitle("¡Premium!");
-				premium.setBounds(400, 200, 380, 250);
+				premium.setBounds(400, 200, 380, 300);
 				premium.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				premium.setResizable(false);
 				premium.setVisible(true);
@@ -631,7 +632,6 @@ public class MenuOpciones extends JPopupMenu {
 				});
 				
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				//TODO Añadir atributo premium al usuario
 				if (usuarioAct.getPremium()) {
 					cancelar.setPreferredSize(new Dimension(200, 30));
 					premium.add(cancelar);
@@ -745,6 +745,19 @@ public class MenuOpciones extends JPopupMenu {
 					
 				} else {
 					premium.add(aceptar);
+					
+					// Añadir descuento disponible
+					double descuento = usuarioAct.getDescuento();
+					JLabel precio = new JLabel("Precio: 10€/mes " + ", con un descuento de: " + descuento + "€.");
+					premium.add(precio);
+					int precioFinal = (int) (10 - descuento);
+					JLabel pfinal = new JLabel("Precio final: " + precioFinal + "€.");
+					Font font = pfinal.getFont();
+					pfinal.setFont(new Font(font.getFontName(), Font.BOLD, 25));
+					premium.add(pfinal);
+					
+					salir.setPreferredSize(new Dimension(150, 30));
+					
 					aceptar.addActionListener(new ActionListener() {
 						
 						@Override
