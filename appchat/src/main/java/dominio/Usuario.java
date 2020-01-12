@@ -8,6 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.swing.DefaultListModel;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+
 import graficos.PieChartGrupos;
 
 public class Usuario {
@@ -132,6 +138,116 @@ public class Usuario {
 			descuento = new DescuentoFijo();
 		
 		return descuento.calcDescuento(this);
+	}
+	
+	public DefaultListModel<String> obtenerNombreContactos() {
+		DefaultListModel<String> listmodel = new DefaultListModel<String>();
+		for(Contacto contacto : contactos) {
+			if(contacto instanceof ContactoIndividual)
+				listmodel.addElement(contacto.getNombre());
+		}
+		return listmodel;
+	}
+	
+	public void addContactosGrupo(DefaultListModel<String> contactosGrupo, Grupo g) {
+		for(Contacto contacto : contactos) {
+			if(contactosGrupo.contains(contacto.getNombre())) {
+				if(contacto instanceof ContactoIndividual) {
+					ContactoIndividual cInd = (ContactoIndividual)contacto;
+					g.addMiembro(cInd);
+				}
+			}
+		}
+	}
+	
+	public Grupo comprobarGrupo(String nombre) {
+		for(Contacto contacto : contactos) {
+			if(contacto instanceof Grupo) {
+				if(contacto.getNombre().equals(nombre) 
+				   && ((Grupo)contacto).getAdmin().equals(this)) {
+					  return (Grupo) contacto; 
+				   }
+			}
+		}
+		return null;
+	}
+	
+	public void actualizarDatosGrupo(List<ContactoIndividual> contEnGrupo, 
+									 DefaultListModel<String> contactosGrupo, 
+			                         DefaultListModel<String> listmodel) {
+		for(Contacto contacto : contactos) {
+			if(contacto instanceof ContactoIndividual) {
+				if(contEnGrupo.contains(contacto))
+					contactosGrupo.addElement(contacto.getNombre());
+				else
+					listmodel.addElement(contacto.getNombre());
+			}
+		}
+	}
+	
+	public void modificarGrupo(Grupo g, DefaultListModel<String> anadidos, 
+			                   DefaultListModel<String> eliminados) {
+		for(Contacto contacto : contactos) {
+			if (anadidos.contains(contacto.getNombre())) {
+				if (contacto instanceof ContactoIndividual) {
+					g.addMiembro((ContactoIndividual) contacto);
+				}
+			} else if (eliminados.contains(contacto.getNombre())) {
+				if (contacto instanceof ContactoIndividual) {
+					g.removeMiembro((ContactoIndividual) contacto);
+				}
+			}
+		}
+	}
+	
+	public void crearDocumento(Document documento) {
+		for(Contacto contacto : contactos) {
+			if(contacto instanceof ContactoIndividual) {
+				//Guardar el nombre y telefono en el pdf
+				String info = "<Contacto: " 
+				              + contacto.getNombre() 
+							  + ", Telefono: " 
+				              + ((ContactoIndividual) contacto).getTelefono()
+				              + ">";
+				try {
+					documento.add(new Paragraph(info));
+				} catch (DocumentException e) {
+					e.printStackTrace();
+				}
+			} else if(contacto instanceof Grupo) {
+				String grupo = "<Grupo: " + contacto.getNombre();
+				try {
+					documento.add(new Paragraph(grupo));
+				} catch (DocumentException e) {
+					e.printStackTrace();
+				}
+				List<ContactoIndividual> contactosG = ((Grupo) contacto).getMiembros();
+				String ultimo = contactosG.get(contactosG.size()-1).getNombre();
+				for(ContactoIndividual miembro : contactosG) {
+					String info = "* Miembro: "
+								  + miembro.getNombre()
+								  + " , Telefono: "
+								  + miembro.getTelefono();
+					if(miembro.getNombre().equals(ultimo)) info = info + ">";
+					try {
+						documento.add(new Paragraph(info));
+					} catch (DocumentException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	public ContactoIndividual buscarContacto(String tlf) {
+		for(Contacto contacto : contactos) {
+			if(contacto instanceof ContactoIndividual) {
+				if(((ContactoIndividual) contacto).getTelefono().equals(tlf)) {
+					return (ContactoIndividual)contacto;
+				}
+			}
+		}
+		return null;
 	}
 	
 	// Getters

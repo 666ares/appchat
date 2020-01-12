@@ -16,7 +16,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import controlador.ControladorUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Grupo;

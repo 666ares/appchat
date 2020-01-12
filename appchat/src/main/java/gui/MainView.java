@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +51,6 @@ import javax.swing.Box;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.Timer;
 
 public class MainView extends JFrame {
 
@@ -163,7 +160,6 @@ public class MainView extends JFrame {
 		boton3.addActionListener(new ActionListener() {
 			@Override 
 			public void actionPerformed(ActionEvent e) { 
-	    		// TODO Crear PopupMenu con los emojis que se pueden mandar 
 	    		opciones.show(boton3, 10, 40);
 	    		opciones.setMainView(principal);
 	    	} 
@@ -301,51 +297,9 @@ public class MainView extends JFrame {
 						panelMensajes.removeAll();
 						List<Mensaje> resultadoBusqueda = new LinkedList<Mensaje>();
 						Contacto contacto = boton4.getContacto();
-						List<Mensaje> mensajes = contacto.getMensajes();
+						resultadoBusqueda = contacto.buscadorMensajes(bUsuario.getText(), fecha1, fecha2, busqueda);
 						
-						List<Mensaje> resultadoBusqueda3 = new LinkedList<Mensaje>();
-						String nombreUsuario = bUsuario.getText();
-						if (contacto instanceof Grupo && !nombreUsuario.equals("")) {
-							// Comprobar autor del mensaje
-							
-							for (Mensaje msj : mensajes)
-								if (msj.getEmisor().getNombre().equals(nombreUsuario))
-									resultadoBusqueda3.add(msj);
-						} else
-							resultadoBusqueda3 = mensajes;
-						
-						if (fecha1.getDate() != null && fecha2.getDate() != null) {
-							Date date1 = fecha1.getDate();
-							Date date2 = fecha2.getDate();
-							for (Mensaje msj : resultadoBusqueda3) {
-								// Trasnformamos LocalDate a Date
-								Date dateMsj = Date.from(msj.getHora().atStartOfDay(ZoneId.systemDefault()).toInstant());
-								// Comprobamos que el mensaje se encuentre entre la fecha1 y la fecha2
-								if(dateMsj.after(date1) && dateMsj.before(date2)) {
-									resultadoBusqueda.add(msj);
-								}
-							}
-						} else {
-							// Copiar la lista entera
-							resultadoBusqueda = mensajes;
-						}
-						// Buscar el mensaje con el texto de busqueda
-						String textBusqueda = busqueda.getText();
-						busqueda.setText("");
-						if(!textBusqueda.equals("")) {
-							//Obtener lista de mensajes con el contacto actual
-							List<Mensaje> resultadoBusqueda2 = new LinkedList<Mensaje>();
-							for(Mensaje mensaje : resultadoBusqueda)
-							{
-								String msj = mensaje.getTexto();
-								if(!msj.equals("") && msj.contains(textBusqueda)) {
-									resultadoBusqueda2.add(mensaje);
-								}
-							}
-							resultadoBusqueda = resultadoBusqueda2;
-						} 
 						//Mostrar los mensajes por pantalla
-						
 						for(Mensaje msj : resultadoBusqueda) {
 							if(!msj.getTexto().equals("")) {
 								String info = "<" + msj.getHora().toString() + "> " 
@@ -454,15 +408,9 @@ public class MainView extends JFrame {
 
 							Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
 
-							List<Contacto> con = receptor.getContactos();
 							ContactoIndividual ci2 = null;
-							for (Contacto cont : con) {
-								if (cont instanceof ContactoIndividual) {
-									if (((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono())) {
-										ci2 = (ContactoIndividual) cont;
-									}
-								}
-							}
+							
+							ci2 = receptor.buscarContacto(usuarioAct.getTelefono());
 							// Si no lo tiene crear un contacto con el numero de telefono de usuario Act
 							if (ci2 == null) {
 								ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
@@ -473,12 +421,8 @@ public class MainView extends JFrame {
 							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
 							ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
 						} else if (contacto instanceof Grupo) {
-							Grupo grupo = (Grupo) contacto;
-
 							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-							
 						}
-
 						// Actualizar las conversaciones
 						actualizarChat(contacto, usuarioAct, contacto.getMensajes());
 						mostrarChats();
@@ -525,14 +469,9 @@ public class MainView extends JFrame {
 
 					Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
 
-					List<Contacto> con = receptor.getContactos();
 					ContactoIndividual ci2 = null;
 					
-					for (Contacto cont : con)
-						if (cont instanceof ContactoIndividual)
-							if (((ContactoIndividual) cont).getTelefono().equals(usuarioAct.getTelefono()))
-								ci2 = (ContactoIndividual) cont;
-					
+					ci2 = receptor.buscarContacto(usuarioAct.getTelefono());
 					// Si no lo tiene crear un contacto con el numero de telefono de usuario Act
 					if (ci2 == null) {
 						ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
@@ -644,8 +583,8 @@ public class MainView extends JFrame {
 					panel_2.repaint();
 
 					chat.setResaltar(true);
-					// Rellenamos el chat con los mensajes del contacto
 					
+					// Rellenamos el chat con los mensajes del contacto
 					List<Mensaje> mensajes = chat.getContacto().getMensajes();
 					panel_2.setPreferredSize(new Dimension(277, 80*mensajes.size()) );
 					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct, mensajes);

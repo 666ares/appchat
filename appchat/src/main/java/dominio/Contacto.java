@@ -1,9 +1,15 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.swing.JTextField;
+
+import com.toedter.calendar.JDateChooser;
 
 public abstract class Contacto {
 
@@ -62,6 +68,49 @@ public abstract class Contacto {
 	
 	public void resetearChat() {
 		this.mensajes = new LinkedList<Mensaje>();
+	}
+	
+	public List<Mensaje> buscadorMensajes(String nombre, JDateChooser fecha1, 
+			                              JDateChooser fecha2, JTextField busqueda) {
+		List<Mensaje> resultadoBusqueda = new LinkedList<Mensaje>();
+		List<Mensaje> resultadoBusqueda2 = new LinkedList<Mensaje>();
+		List<Mensaje> resultadoBusqueda3 = new LinkedList<Mensaje>();
+		
+		if(this instanceof Grupo && !nombre.equals("")) {
+			for (Mensaje msj : mensajes)
+				if (msj.getEmisor().getNombre().equals(nombre))
+					resultadoBusqueda3.add(msj);
+		} else resultadoBusqueda3 = mensajes;
+		
+		if (fecha1.getDate() != null && fecha2.getDate() != null) {
+			Date date1 = fecha1.getDate();
+			Date date2 = fecha2.getDate();
+			for (Mensaje msj : resultadoBusqueda3) {
+				// Trasnformamos LocalDate a Date
+				Date dateMsj = Date.from(msj.getHora().atStartOfDay(ZoneId.systemDefault()).toInstant());
+				// Comprobamos que el mensaje se encuentre entre la fecha1 y la fecha2
+				if(dateMsj.after(date1) && dateMsj.before(date2)) {
+					resultadoBusqueda.add(msj);
+				}
+			}
+		} else // Copiar la lista entera
+			resultadoBusqueda = mensajes;
+			
+		String textBusqueda = busqueda.getText();
+		busqueda.setText("");
+		if(!textBusqueda.equals("")) {
+			//Obtener lista de mensajes con el contacto actual
+			for(Mensaje mensaje : resultadoBusqueda)
+			{
+				String msj = mensaje.getTexto();
+				if(!msj.equals("") && msj.contains(textBusqueda)) {
+					resultadoBusqueda2.add(mensaje);
+				}
+			}
+			resultadoBusqueda = resultadoBusqueda2;
+		} 
+		
+		return resultadoBusqueda;
 	}
 	
 	// Setters

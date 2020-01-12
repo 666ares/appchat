@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -37,12 +36,10 @@ import javax.swing.table.TableColumn;
 
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.PieChart;
-import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.CategoryChart;
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -61,6 +58,7 @@ public class MenuOpciones extends JPopupMenu {
 	
 	MainView principal;
 	
+	@SuppressWarnings("serial")
 	public MenuOpciones() {
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		setBounds(150, 150, 135, 155);
@@ -240,13 +238,9 @@ public class MenuOpciones extends JPopupMenu {
 				textField.setColumns(21);
 				contentPane.add(textField);
 				
-				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getContactos();
-				DefaultListModel<String> listmodel = new DefaultListModel<String>();
-				for(Contacto contacto : contactos) {
-					if(contacto instanceof ContactoIndividual) 
-						listmodel.addElement(contacto.getNombre());
-				}
-				
+				// Obtener lista de nombres de contactos
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
+				DefaultListModel<String> listmodel = usuarioAct.obtenerNombreContactos();
 				
 				JList<String> jcontactos = new JList<String>(listmodel);
 				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -296,7 +290,7 @@ public class MenuOpciones extends JPopupMenu {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Crear el grupo
+						// Crear el grupo
 						
 						// Comprobar que nombre no es vacio
 						if (textField.getText().equals("")) {
@@ -321,14 +315,7 @@ public class MenuOpciones extends JPopupMenu {
 						Grupo g = new Grupo(textField.getText());
 						
 						// Añadir contactos
-						for (Contacto contacto : contactos) {
-							if (contactosGrupo.contains(contacto.getNombre())) {
-								if (contacto instanceof ContactoIndividual) {
-									ContactoIndividual cInd = (ContactoIndividual) contacto;
-									g.addMiembro(cInd);
-								}
-							}
-						}
+						usuarioAct.addContactosGrupo(contactosGrupo, g);
 						
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 						
@@ -391,19 +378,10 @@ public class MenuOpciones extends JPopupMenu {
 				}
 				
 				//Comprobar que el grupo existe
-
 				Grupo grupo = null;
-
-				List<Contacto> contactos = ControladorUsuarios.getUnicaInstancia().getUsuarioActual().getContactos();	
+				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();	
 				
-				for(Contacto contacto : contactos) {
-					if(contacto instanceof Grupo) {
-						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-						if(contacto.getNombre().equals(txtNombre.getText()) && usuarioAct.equals(((Grupo) contacto).getAdmin())) {
-							grupo = (Grupo) contacto;
-						}
-					}	
-				}
+				grupo = usuarioAct.comprobarGrupo(txtNombre.getText());
 				
 				if(grupo == null) {
 					JOptionPane.showMessageDialog(null, 
@@ -432,15 +410,7 @@ public class MenuOpciones extends JPopupMenu {
 				DefaultListModel<String> eliminados = new DefaultListModel<String>();
 				List<ContactoIndividual> contEnGrupo = grupo.getMiembros();
 				
-				for(Contacto contacto : contactos) {
-					if(contacto instanceof ContactoIndividual) {
-						if(contEnGrupo.contains(contacto)) {
-							contactosGrupo.addElement(contacto.getNombre());
-						} else {
-							listmodel.addElement(contacto.getNombre());
-						}
-					}
-				}
+				usuarioAct.actualizarDatosGrupo(contEnGrupo, contactosGrupo, listmodel);
 				
 				JList<String> jcontactos = new JList<String>(listmodel);
 				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -502,21 +472,7 @@ public class MenuOpciones extends JPopupMenu {
 									  JOptionPane.INFORMATION_MESSAGE);
 						}
 						
-						for(Contacto contacto : contactos) {
-							if (anadidos.contains(contacto.getNombre())) {
-								if (contacto instanceof ContactoIndividual) {
-									// TODO Cuando se añade un contacto que no estaba antes, 
-									// añadirle el grupo como contacto nuevo
-									grupoaux.addMiembro((ContactoIndividual) contacto);
-								}
-							} else if (eliminados.contains(contacto.getNombre())) {
-								if (contacto instanceof ContactoIndividual) {
-									// TODO Cuando se elimina un contacto, 
-									// eliminarle el grupo que tenia en la lista contactos
-									grupoaux.removeMiembro((ContactoIndividual) contacto);
-								}
-							}
-						}
+						usuarioAct.modificarGrupo(grupoaux, anadidos, eliminados);
 						
 						//Modificar el grupo
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
@@ -540,7 +496,7 @@ public class MenuOpciones extends JPopupMenu {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Ventana de estadisticas
+				// Ventana de estadisticas
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 				if(usuarioAct.getPremium()) {
 					JFrame estadisticas = new JFrame();
@@ -593,7 +549,7 @@ public class MenuOpciones extends JPopupMenu {
 					JLabel chart1 = new JLabel(new ImageIcon(newImage));
 					estadisticas.add(chart1);
 					
-					// TODO Hacer dos botones para exportar las imagenes 
+					// Botones para exportar las imagenes 
 					JButton exportar1 = new JButton("Exportar Histograma");
 					JButton exportar2 = new JButton("Exportar PieChart");
 					exportar1.setPreferredSize(new Dimension(600,30));
@@ -763,33 +719,9 @@ public class MenuOpciones extends JPopupMenu {
 								documento.add(new Paragraph("LISTA DE CONTACTOS"));
 								documento.add(new Paragraph("___________________"));
 								
-								//Obtener todos los contactos del usuario actual
+								// Obtener todos los contactos del usuario actual
 								Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-								List<Contacto> contactos = usuarioAct.getContactos();
-								for(Contacto contacto : contactos) {
-									if(contacto instanceof ContactoIndividual) {
-										//Guardar el nombre y telefono en el pdf
-										String info = "<Contacto: " 
-										              + contacto.getNombre() 
-													  + ", Telefono: " 
-										              + ((ContactoIndividual) contacto).getTelefono()
-										              + ">";
-										documento.add(new Paragraph(info));
-									} else if(contacto instanceof Grupo) {
-										String grupo = "<Grupo: " + contacto.getNombre();
-										documento.add(new Paragraph(grupo));
-										List<ContactoIndividual> contactosG = ((Grupo) contacto).getMiembros();
-										String ultimo = contactosG.get(contactosG.size()-1).getNombre();
-										for(ContactoIndividual miembro : contactosG) {
-											String info = "* Miembro: "
-														  + miembro.getNombre()
-														  + " , Telefono: "
-														  + miembro.getTelefono();
-											if(miembro.getNombre().equals(ultimo)) info = info + ">";
-											documento.add(new Paragraph(info));
-										}
-									}
-								}
+								usuarioAct.crearDocumento(documento);
 								documento.close();
 								
 								// Cerrar la ventana
