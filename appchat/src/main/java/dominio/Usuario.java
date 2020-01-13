@@ -132,10 +132,8 @@ public class Usuario {
 			// Si el usuario tiene entre 12 y 22 se aplica descuento de estudiante
 			if (age2 >= rangoInf && age2 <= rangoSup)
 				descuento = new DescuentoEstudiante();
-			
-		}
-		else
-			descuento = new DescuentoFijo();
+			else descuento = new DescuentoFijo();
+		} else descuento = new DescuentoFijo();
 		
 		return descuento.calcDescuento(this);
 	}

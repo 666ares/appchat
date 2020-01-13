@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +23,10 @@ import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileSystemView;
+
 import com.toedter.calendar.JDateChooser;
 
 import controlador.ControladorUsuarios;
@@ -52,6 +57,9 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import pulsador.IEncendidoListener;
+import pulsador.Luz;
+
 public class MainView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -65,7 +73,6 @@ public class MainView extends JFrame {
 	private JLayeredPane layeredPane;
 
 	private BotonChat boton1;
-	private BotonChat boton2;
 	private BotonChat boton3;
 	private BotonChat boton4;
 	private BotonChat boton5;
@@ -80,6 +87,7 @@ public class MainView extends JFrame {
 	private JScrollPane listaMensajes;
 	
 	private MainView principal = this;
+	private Luz luz;
 
 	public MainView() {
 		initialize();
@@ -138,19 +146,48 @@ public class MainView extends JFrame {
 
 		panel.add(boton1);
 
-		// ========
-		// Estados
-		// ========
-		boton2 = new BotonChat("icons/status_icon.png");
-		boton2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Estados estados = new Estados();
-				estados.makeVisible();
+		// ===================
+		// Opciones de usuario
+		// ===================
+		luz = new Luz();
+		panel.add(luz);
+		luz.addEncendidoListener(new IEncendidoListener() {
+			
+			@Override
+			public void enteradoCambioEncendido(EventObject arg0) {
+				if(luz.isEncendido()) {
+					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+					int returnValue = jfc.showOpenDialog(null);
+
+					// Seleccionamos el archivo txt
+					File selectedFile = null;
+					
+					if (returnValue == JFileChooser.APPROVE_OPTION)
+						selectedFile = jfc.getSelectedFile();
+					else if (returnValue == JFileChooser.CANCEL_OPTION
+							|| returnValue == JFileChooser.ERROR_OPTION)
+						return;
+					
+					// Seleccionamos el tipo de formato 
+					// "d/M/yy H:mm:ss", "d/M/yy H:mm", "d/M/yyyy H:mm"
+					JTextField txtFormato = new JTextField();
+					Object[] campos = { "Tipo de formato (IOS, Android1, Android2):", txtFormato };
+
+					JOptionPane.showConfirmDialog(null, 
+												  campos, 
+												  "Añadir formato", 
+												  JOptionPane.OK_CANCEL_OPTION);
+
+					String formato = txtFormato.getText();
+					
+					ControladorUsuarios.getUnicaInstancia().importarMensajes(selectedFile.getAbsolutePath(), formato);
+					
+					luz.setEncendido(false);
+				}
 			}
 		});
-
-		panel.add(boton2);
-
+		
 		// ===================
 		// Opciones de usuario
 		// ===================
@@ -246,20 +283,20 @@ public class MainView extends JFrame {
 				buscar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				buscar.setResizable(false);
 				buscar.setVisible(true);
-				buscar.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+				buscar.getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
 				
 				// Área de texto para buscar en un mensaje
 				JLabel texto = new JLabel("Texto: ");
-				buscar.add(texto);
+				buscar.getContentPane().add(texto);
 				JTextField busqueda = new JTextField();
-				buscar.add(busqueda);
+				buscar.getContentPane().add(busqueda);
 				busqueda.setColumns(28);
 				
 				// Área de texto para nombre de usuario
 				JLabel texto2 = new JLabel("Usuario:");
-				buscar.add(texto2);
+				buscar.getContentPane().add(texto2);
 				JTextField bUsuario = new JTextField();
-				buscar.add(bUsuario);
+				buscar.getContentPane().add(bUsuario);
 				bUsuario.setColumns(27);
 				if (principal.getContactoActivo() instanceof ContactoIndividual) {
 					bUsuario.setText("Opcion solo disponible en grupos");
@@ -271,14 +308,14 @@ public class MainView extends JFrame {
 				JLabel texto4 = new JLabel("Fecha 2: ");
 				JDateChooser fecha1 = new JDateChooser();
 				JDateChooser fecha2 = new JDateChooser();
-				buscar.add(texto3);
-				buscar.add(fecha1);
-				buscar.add(texto4);
-				buscar.add(fecha2);
+				buscar.getContentPane().add(texto3);
+				buscar.getContentPane().add(fecha1);
+				buscar.getContentPane().add(texto4);
+				buscar.getContentPane().add(fecha2);
 				
 				JButton boton = new JButton("Buscar");
 				boton.setPreferredSize(new Dimension(340, 30));
-				buscar.add(boton);
+				buscar.getContentPane().add(boton);
 				
 				JPanel panelMensajes = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
 				panelMensajes.setPreferredSize(new Dimension(342, 240));
@@ -287,7 +324,7 @@ public class MainView extends JFrame {
 				scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 				scrollPanel.setPreferredSize(new Dimension(342, 240));
 				scrollPanel.setViewportView(panelMensajes);
-				buscar.add(scrollPanel);
+				buscar.getContentPane().add(scrollPanel);
 				
 				boton.addActionListener(new ActionListener() {
 					
@@ -586,7 +623,7 @@ public class MainView extends JFrame {
 					
 					// Rellenamos el chat con los mensajes del contacto
 					List<Mensaje> mensajes = chat.getContacto().getMensajes();
-					panel_2.setPreferredSize(new Dimension(277, 80*mensajes.size()) );
+					panel_2.setPreferredSize(new Dimension(277, 90*mensajes.size()) );
 					rellenarChat(panel_2, chat.getContacto().getNombre(), usuarioAct, mensajes);
 
 				}

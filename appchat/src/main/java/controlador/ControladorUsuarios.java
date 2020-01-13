@@ -1,13 +1,19 @@
 package controlador;
 
 import java.awt.Image;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 
+import componente.CargadorMensajes;
+import componente.MensajeEvent;
+import componente.MensajeListener;
 import dao.ContactoIndividualDAO;
 import dao.DAOException;
 import dao.FactoriaDAO;
@@ -20,8 +26,9 @@ import dominio.ContactoIndividual;
 import dominio.Grupo;
 import dominio.Mensaje;
 import dominio.Usuario;
+import modelo.MensajeWhatsApp;
 
-public class ControladorUsuarios {
+public class ControladorUsuarios implements MensajeListener {
 
 	private static ControladorUsuarios unicaInstancia;
 	
@@ -158,7 +165,6 @@ public class ControladorUsuarios {
 			datos[index][1] = icon2;
 			datos[index][2] = " " + ci.getTelefono();
 				
-			// TODO: Obtener grupos en comun con el usuario
 			index++;
 		}
 		
@@ -258,6 +264,12 @@ public class ControladorUsuarios {
 		return true;
 	}
 	
+	public void importarMensajes(String ruta, String formato) {
+		CargadorMensajes cargador = new CargadorMensajes();
+		cargador.addMensajesListener(ControladorUsuarios.getUnicaInstancia());
+		cargador.setFichero(ruta, formato);	
+	}
+	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
@@ -274,5 +286,52 @@ public class ControladorUsuarios {
 	
 	private void inicializarCatalogo() {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+	}
+
+	@Override
+	public void nuevosMensajes(MensajeEvent mensajeEvent) {
+		List<MensajeWhatsApp> listaMensajes = mensajeEvent.getLista();
+		
+		// Transformar mensajes
+		String contacto = listaMensajes.stream()
+									   .map(MensajeWhatsApp::getAutor)
+									   .distinct()
+									   .filter(s -> !s.equals(usuarioActual.getNombre()))
+									   .findAny()
+									   .orElse("");
+		
+		Contacto con = usuarioActual.getContactos().stream()
+                							       .filter(s -> s.getNombre().equals(contacto))
+                							       .findAny()
+                							       .orElse(null);
+		
+		System.out.println(contacto);
+		if(con != null) {
+			for(MensajeWhatsApp msj : listaMensajes) {
+				String autor = msj.getAutor();
+				String nombreUsuarioAct = usuarioActual.getNombre();
+				
+				if(autor.equals(nombreUsuarioAct)) {
+					Mensaje mensaje = new Mensaje(usuarioActual, con, msj.getTexto());
+					LocalDate fecha = msj.getFecha().toLocalDate();
+					mensaje.setHora(fecha);
+					
+					enviarMensaje(mensaje);
+				} else {
+					Usuario aux = null;
+					Contacto aux_con = new ContactoIndividual(usuarioActual.getNombre(), usuarioActual.getTelefono());
+					if(con instanceof ContactoIndividual) {
+						aux = _buscarUsuario(((ContactoIndividual) con).getTelefono());
+					}
+						
+					//System.out.println("prueba: " +  aux.getNombre() );
+					Mensaje mensaje = new Mensaje(aux, aux_con, msj.getTexto());
+					LocalDate fecha = msj.getFecha().toLocalDate();
+					mensaje.setHora(fecha);
+					
+					recibirMensaje(mensaje, con);
+				}
+			}
+		}
 	}
 }
