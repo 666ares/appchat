@@ -159,15 +159,11 @@ public class Usuario {
 	}
 	
 	public Grupo comprobarGrupo(String nombre) {
-		for(Contacto contacto : contactos) {
-			if(contacto instanceof Grupo) {
-				if(contacto.getNombre().equals(nombre) 
-				   && ((Grupo)contacto).getAdmin().equals(this)) {
-					  return (Grupo) contacto; 
-				   }
-			}
-		}
-		return null;
+		return (Grupo) contactos.stream()
+								.filter(c -> c instanceof Grupo)
+								.filter(c -> c.getNombre().equals(nombre) && ((Grupo)c).getAdmin().equals(this))
+								.findAny()
+								.orElse(null);
 	}
 	
 	public void actualizarDatosGrupo(List<ContactoIndividual> contEnGrupo, 
@@ -181,6 +177,7 @@ public class Usuario {
 					listmodel.addElement(contacto.getNombre());
 			}
 		}
+				 
 	}
 	
 	public void modificarGrupo(Grupo g, DefaultListModel<String> anadidos, 
@@ -238,14 +235,12 @@ public class Usuario {
 	}
 	
 	public ContactoIndividual buscarContacto(String tlf) {
-		for(Contacto contacto : contactos) {
-			if(contacto instanceof ContactoIndividual) {
-				if(((ContactoIndividual) contacto).getTelefono().equals(tlf)) {
-					return (ContactoIndividual)contacto;
-				}
-			}
-		}
-		return null;
+		return (ContactoIndividual) contactos.stream()
+				        					 .filter(c -> c instanceof ContactoIndividual)
+				        					 .filter(c -> ((ContactoIndividual)c).getTelefono().equals(tlf))
+				        					 .findAny()
+				        					 .orElse(null);
+		
 	}
 	
 	// Getters

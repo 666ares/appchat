@@ -6,10 +6,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+
+import com.itextpdf.text.Document;
 
 import componente.CargadorMensajes;
 import componente.MensajeEvent;
@@ -248,6 +249,59 @@ public class ControladorUsuarios implements MensajeListener {
 		
 	}
 	
+	public void mandarMensajeEmoji(int numEmoji, Contacto contacto) {
+		Mensaje mensaje = new Mensaje(Integer.toString(numEmoji), usuarioActual, contacto);
+
+		String tlf = "";
+		if (contacto instanceof ContactoIndividual) {
+			tlf = ((ContactoIndividual) contacto).getTelefono();
+
+			Usuario receptor = _buscarUsuario(tlf);
+
+			ContactoIndividual ci2 = null;
+			
+			ci2 = receptor.buscarContacto(usuarioActual.getTelefono());
+			// Si no lo tiene crear un contacto con el numero de telefono de usuario Act
+			if (ci2 == null) {
+				ci2 = new ContactoIndividual(usuarioActual.getTelefono(), usuarioActual.getTelefono());
+				añadirContacto(receptor.getLogin(), ci2);
+			}
+
+			// Añadir mensaje a la base de datos
+			enviarMensaje(mensaje);
+			recibirMensaje(mensaje, ci2);
+		} else if (contacto instanceof Grupo) {
+			enviarMensaje(mensaje);
+		}
+	}
+	
+	public void mandarMensajeTexto(String texto, Contacto contacto) {
+		Mensaje mensaje = new Mensaje(usuarioActual, contacto, texto);
+
+		String tlf = "";
+		
+		if (contacto instanceof ContactoIndividual) {
+			tlf = ((ContactoIndividual) contacto).getTelefono();
+
+			Usuario receptor = _buscarUsuario(tlf);
+
+			ContactoIndividual ci2 = null;
+			
+			ci2 = receptor.buscarContacto(usuarioActual.getTelefono());
+			// Si no lo tiene crear un contacto con el numero de telefono de usuario Act
+			if (ci2 == null) {
+				ci2 = new ContactoIndividual(usuarioActual.getTelefono(), usuarioActual.getTelefono());
+				añadirContacto(receptor.getLogin(), ci2);
+			}
+
+			// Añadir mensaje a la base de datos
+			enviarMensaje(mensaje);
+			recibirMensaje(mensaje, ci2);
+		} 
+		else if (contacto instanceof Grupo)
+			enviarMensaje(mensaje);
+	}
+	
 	public boolean updateIndividual(ContactoIndividual contacto) {
 		adaptadorIndividual.modificarIndividual(contacto);
 		return true;
@@ -287,7 +341,34 @@ public class ControladorUsuarios implements MensajeListener {
 	private void inicializarCatalogo() {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
-
+	
+	public DefaultListModel<String> obtenerNombreContactos() {
+		return usuarioActual.obtenerNombreContactos();
+	}
+	
+	public void addContactosGrupo(DefaultListModel<String> contactosGrupo, Grupo g) {
+		usuarioActual.addContactosGrupo(contactosGrupo, g);
+	}
+	
+	public Grupo comprobarGrupo(String nombre) {
+		return usuarioActual.comprobarGrupo(nombre);
+	}
+	
+	public void actualizarDatosGrupo(List<ContactoIndividual> contEnGrupo, 
+			 						 DefaultListModel<String> contactosGrupo, 
+			 						 DefaultListModel<String> listmodel) {
+		usuarioActual.actualizarDatosGrupo(contEnGrupo, contactosGrupo, listmodel);
+	}
+	
+	public void modificarGrupo(Grupo g, DefaultListModel<String> anadidos, 
+            				   DefaultListModel<String> eliminados) {
+		usuarioActual.modificarGrupo(g, anadidos, eliminados);
+	}
+	
+	public void crearDocumento(Document documento) {
+		usuarioActual.crearDocumento(documento);
+	}
+	
 	@Override
 	public void nuevosMensajes(MensajeEvent mensajeEvent) {
 		List<MensajeWhatsApp> listaMensajes = mensajeEvent.getLista();

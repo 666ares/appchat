@@ -239,8 +239,7 @@ public class MenuOpciones extends JPopupMenu {
 				contentPane.add(textField);
 				
 				// Obtener lista de nombres de contactos
-				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				DefaultListModel<String> listmodel = usuarioAct.obtenerNombreContactos();
+				DefaultListModel<String> listmodel = ControladorUsuarios.getUnicaInstancia().obtenerNombreContactos();
 				
 				JList<String> jcontactos = new JList<String>(listmodel);
 				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -315,7 +314,7 @@ public class MenuOpciones extends JPopupMenu {
 						Grupo g = new Grupo(textField.getText());
 						
 						// Añadir contactos
-						usuarioAct.addContactosGrupo(contactosGrupo, g);
+						ControladorUsuarios.getUnicaInstancia().addContactosGrupo(contactosGrupo, g);
 						
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
 						
@@ -379,9 +378,7 @@ public class MenuOpciones extends JPopupMenu {
 				
 				//Comprobar que el grupo existe
 				Grupo grupo = null;
-				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();	
-				
-				grupo = usuarioAct.comprobarGrupo(txtNombre.getText());
+				grupo = ControladorUsuarios.getUnicaInstancia().comprobarGrupo(txtNombre.getText());
 				
 				if(grupo == null) {
 					JOptionPane.showMessageDialog(null, 
@@ -410,7 +407,7 @@ public class MenuOpciones extends JPopupMenu {
 				DefaultListModel<String> eliminados = new DefaultListModel<String>();
 				List<ContactoIndividual> contEnGrupo = grupo.getMiembros();
 				
-				usuarioAct.actualizarDatosGrupo(contEnGrupo, contactosGrupo, listmodel);
+				ControladorUsuarios.getUnicaInstancia().actualizarDatosGrupo(contEnGrupo, contactosGrupo, listmodel);
 				
 				JList<String> jcontactos = new JList<String>(listmodel);
 				jcontactos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -472,7 +469,7 @@ public class MenuOpciones extends JPopupMenu {
 									  JOptionPane.INFORMATION_MESSAGE);
 						}
 						
-						usuarioAct.modificarGrupo(grupoaux, anadidos, eliminados);
+						ControladorUsuarios.getUnicaInstancia().modificarGrupo(grupoaux, anadidos, eliminados);
 						
 						//Modificar el grupo
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
@@ -720,8 +717,7 @@ public class MenuOpciones extends JPopupMenu {
 								documento.add(new Paragraph("___________________"));
 								
 								// Obtener todos los contactos del usuario actual
-								Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-								usuarioAct.crearDocumento(documento);
+								ControladorUsuarios.getUnicaInstancia().crearDocumento(documento);
 								documento.close();
 								
 								// Cerrar la ventana

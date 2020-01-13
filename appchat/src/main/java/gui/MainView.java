@@ -32,12 +32,10 @@ import com.toedter.calendar.JDateChooser;
 import controlador.ControladorUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
-import dominio.Grupo;
 import dominio.Mensaje;
 import dominio.Usuario;
 import gui.elements.BotonChat;
 import gui.elements.BoxChat;
-import gui.elements.Estados;
 import gui.elements.InfoUChat;
 import gui.elements.InfoUsuario;
 import gui.elements.MenuOpciones;
@@ -436,30 +434,8 @@ public class MainView extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					if (boton4.getContacto() != null) {
 						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-						Mensaje mensaje = new Mensaje(Integer.toString(numEmoji), usuarioAct, boton4.getContacto());
-
+						ControladorUsuarios.getUnicaInstancia().mandarMensajeEmoji(numEmoji, boton4.getContacto());
 						Contacto contacto = boton4.getContacto();
-						String tlf = "";
-						if (contacto instanceof ContactoIndividual) {
-							tlf = ((ContactoIndividual) contacto).getTelefono();
-
-							Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
-
-							ContactoIndividual ci2 = null;
-							
-							ci2 = receptor.buscarContacto(usuarioAct.getTelefono());
-							// Si no lo tiene crear un contacto con el numero de telefono de usuario Act
-							if (ci2 == null) {
-								ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
-								ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
-							}
-
-							// Añadir mensaje a la base de datos
-							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-							ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
-						} else if (contacto instanceof Grupo) {
-							ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-						}
 						// Actualizar las conversaciones
 						actualizarChat(contacto, usuarioAct, contacto.getMensajes());
 						mostrarChats();
@@ -496,31 +472,8 @@ public class MainView extends JFrame {
 				textField.setText("");
 
 				Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-				Mensaje mensaje = new Mensaje(usuarioAct, boton4.getContacto(), texto);
-
 				Contacto contacto = boton4.getContacto();
-				String tlf = "";
-				
-				if (contacto instanceof ContactoIndividual) {
-					tlf = ((ContactoIndividual) contacto).getTelefono();
-
-					Usuario receptor = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
-
-					ContactoIndividual ci2 = null;
-					
-					ci2 = receptor.buscarContacto(usuarioAct.getTelefono());
-					// Si no lo tiene crear un contacto con el numero de telefono de usuario Act
-					if (ci2 == null) {
-						ci2 = new ContactoIndividual(usuarioAct.getTelefono(), usuarioAct.getTelefono());
-						ControladorUsuarios.getUnicaInstancia().añadirContacto(receptor.getLogin(), ci2);
-					}
-
-					// Añadir mensaje a la base de datos
-					ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
-					ControladorUsuarios.getUnicaInstancia().recibirMensaje(mensaje, ci2);
-				} 
-				else if (contacto instanceof Grupo)
-					ControladorUsuarios.getUnicaInstancia().enviarMensaje(mensaje);
+				ControladorUsuarios.getUnicaInstancia().mandarMensajeTexto(texto, contacto);
 
 				// Actualizar las conversaciones
 				actualizarChat(contacto, usuarioAct, contacto.getMensajes());
