@@ -310,24 +310,9 @@ public class MenuOpciones extends JPopupMenu {
 							return;
 						}
 						
-						// Crear objeto con el contacto
-						Grupo g = new Grupo(textField.getText());
-						
-						// Añadir contactos
-						ControladorUsuarios.getUnicaInstancia().addContactosGrupo(contactosGrupo, g);
-						
-						Usuario usuarioAct = ControladorUsuarios.getUnicaInstancia().getUsuarioActual();
-						
+						// Añadir contactos y crear el grupo
 						boolean registrado = false;
-						registrado = ControladorUsuarios.getUnicaInstancia().añadirContacto(usuarioAct.getLogin(), g);
-						
-						// Crear el grupo en los miembros del grupo
-						List<ContactoIndividual> miembros = g.getMiembros();
-						for(ContactoIndividual miembro : miembros) {
-							String tlf = miembro.getTelefono();
-							Usuario user = ControladorUsuarios.getUnicaInstancia()._buscarUsuario(tlf);
-							ControladorUsuarios.getUnicaInstancia().añadirContacto(user.getLogin(), g);
-						}
+						registrado = ControladorUsuarios.getUnicaInstancia().crearGrupo(textField.getText(), contactosGrupo);
 						
 						if (registrado) {
 							JOptionPane.showMessageDialog(null, 

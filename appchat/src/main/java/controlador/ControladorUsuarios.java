@@ -346,8 +346,18 @@ public class ControladorUsuarios implements MensajeListener {
 		return usuarioActual.obtenerNombreContactos();
 	}
 	
-	public void addContactosGrupo(DefaultListModel<String> contactosGrupo, Grupo g) {
-		usuarioActual.addContactosGrupo(contactosGrupo, g);
+	public boolean crearGrupo(String nombre, DefaultListModel<String> contactosGrupo) {
+		Grupo grupo = new Grupo(nombre);
+		usuarioActual.addContactosGrupo(contactosGrupo, grupo);
+		boolean registro = añadirContacto(usuarioActual.getLogin(), grupo);
+		if(registro) {
+			for(ContactoIndividual miembro : grupo.getMiembros()) {
+				String tlf = miembro.getTelefono();
+				Usuario user = _buscarUsuario(tlf);
+				añadirContacto(user.getLogin(), grupo);
+			}
+		}
+		return registro;
 	}
 	
 	public Grupo comprobarGrupo(String nombre) {

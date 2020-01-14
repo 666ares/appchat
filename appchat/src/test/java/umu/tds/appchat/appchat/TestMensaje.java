@@ -16,7 +16,7 @@ public class TestMensaje {
 	Mensaje mensaje;
 	
 	@Before
-	public void inicializarTestUsuario() {
+	public void inicializarTestMensaje() {
 		usuario = new Usuario("Pepe", LocalDate.now().toString(), "pepe@um.es", "695214568", "Pepe", "contra", "", "");
 		mensaje = new Mensaje(usuario, null, "prueba");
 	}
